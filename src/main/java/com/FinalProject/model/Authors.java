@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.FinalProject.model.Books;
+import org.hibernate.annotations.CreationTimestamp;
 
 
 @Entity
@@ -22,6 +23,7 @@ public class Authors {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String fullName;
+    @CreationTimestamp
     private LocalDate birthDate;
     private String email;
     private String address;

@@ -41,15 +41,18 @@
             <th> Author phone</th>
             <th> Author email</th>
             <th> Author address</th>
+            <th> Author birthDate</th>
+
         </tr>
         </thead>
 
         <tbody>
         <tr th:each="author: ${author}" class="col-lg-6">
             <td th:text="${author.fullName}"></td>
-            <td th:text="${author.address}"></td>
             <td th:text="${author.phone}"></td>
             <td th:text="${author.email}"></td>
+            <td th:text="${author.address}"></td>
+            <td th:text="${author.birthDate}"></td>
 
             <td>
                 <a th:href="@{/author/{authorId}/edit(authorId=${author.id})}"
