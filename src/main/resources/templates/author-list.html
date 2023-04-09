@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Book Management System</title>
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+</head>
+<body>
+<nav class="navbar navbar-expand-md bg-dark navbar-dark">
+    <a class="navbar-brand" href="#">Book Management System</a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+</nav>
+<div class="container">
+    <div class="row">
+        <h1> List Author </h1>
+    </div>
+
+    <div class="row gx-5">
+        <div>
+            <form th:action="@{/author/search}" class="nav-link p-3">
+                <input name="query" class="form-control mr-sm-2 mb-5" type="search" placeholder="Search Author"
+                       aria-label="Search">
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-3">
+            <a th:href="@{/author/new}" class="btn btn-primary btn-sm mb-3"> Add Author</a>
+        </div>
+    </div>
+    <table class="table table-striped table-bordered">
+        <thead class="table-dark">
+        <tr>
+            <th> Author Name</th>
+            <th> Author phone</th>
+            <th> Author email</th>
+            <th> Author address</th>
+            <th> Author birthDate</th>
+
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="author: ${author}" class="col-lg-6">
+            <td th:text="${author.fullName}"></td>
+            <td th:text="${author.phone}"></td>
+            <td th:text="${author.email}"></td>
+            <td th:text="${author.address}"></td>
+            <td th:text="${author.birthDate}"></td>
+
+            <td>
+                <a th:href="@{/author/{authorId}/edit(authorId=${author.id})}"
+                   class="btn btn-primary">Update</a>
+
+                <a th:href="@{/{authorId}/delete(authorId=${author.id})}"
+                   class="btn btn-danger">Delete</a>
+
+            </td>
+        </tr>
+
+        </tbody>
+
+    </table>
+</div>
+</body>
+</html>
