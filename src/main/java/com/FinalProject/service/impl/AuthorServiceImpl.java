@@ -9,6 +9,7 @@ import com.FinalProject.service.AuthorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 public class AuthorServiceImpl implements AuthorService {
     private final AuthorRepository authorRepository;
     private final AuthorsMapper authorsMapper;
+
 
 
     @Override
@@ -34,6 +36,7 @@ public class AuthorServiceImpl implements AuthorService {
     public void createAuthor(AuthorsDto authorsDto) {
         var author = authorsMapper.fromAuthorDtoToModel(authorsDto);
         author.setDelete(false);
+        author.setBirthDate(authorsDto.getBirthDate());
         authorRepository.save(author);
     }
 
