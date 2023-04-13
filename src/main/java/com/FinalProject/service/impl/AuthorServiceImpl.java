@@ -1,24 +1,26 @@
 package com.FinalProject.service.impl;
 
 import com.FinalProject.dto.AuthorsDto;
+import com.FinalProject.dto.BookDto;
 import com.FinalProject.exception.AuthorsNotFoundException;
 import com.FinalProject.mapper.AuthorsMapper;
 import com.FinalProject.model.Authors;
+import com.FinalProject.model.Books;
 import com.FinalProject.repository.AuthorRepository;
+import com.FinalProject.repository.BookRepository;
 import com.FinalProject.service.AuthorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class AuthorServiceImpl implements AuthorService {
     private final AuthorRepository authorRepository;
     private final AuthorsMapper authorsMapper;
+    private final BookRepository bookRepository;
 
 
 
@@ -70,10 +72,29 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
+    public List<BookDto> showAuthorBooks(Long authorId) {
+        List<Books> fromDb = bookRepository.findBooksByAuthorId(authorId);
+        List<BookDto> bookDtoList = new ArrayList<>();
+        for (Books books : fromDb){
+            bookDtoList.add(fromDbToModel(books));
+        }
+        return bookDtoList;
+    }
+
+    @Override
     public void deleteAuthor(Long id) {
         Authors author = authorRepository.findById(id).orElseThrow();
         author.setDelete(true);
         authorRepository.save(author);
     }
+
+    private BookDto fromDbToModel(Books books){
+        return BookDto.builder()
+                .id(books.getId())
+                .name(books.getName())
+                .category(books.getCategory())
+                .build();
+    }
+
 
 }
