@@ -7,7 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @AllArgsConstructor
@@ -23,4 +25,9 @@ public class Books {
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
     private List<AuthorBook> authorBooks = new ArrayList<>();
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @JoinTable(name = "books_categories", joinColumns = { @JoinColumn(name = "book_id") }, inverseJoinColumns = {
+            @JoinColumn(name = "category_id") })
+    private Set<Category> categories = new HashSet<Category>();
 }
