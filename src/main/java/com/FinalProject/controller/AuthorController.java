@@ -1,17 +1,18 @@
 package com.FinalProject.controller;
 
 import com.FinalProject.dto.AuthorsDto;
+import com.FinalProject.dto.BookDto;
 import com.FinalProject.service.AuthorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class AuthorController {
     private final AuthorService authorService;
@@ -24,7 +25,9 @@ public class AuthorController {
     }
 
     @PostMapping("/author/new")
-    public String saveAuthor(@ModelAttribute("author") AuthorsDto author, BindingResult result, Model model) {
+    public String saveAuthor(@ModelAttribute("author") AuthorsDto author,
+                             BindingResult result,
+                             @Valid Model model) {
         if (result.hasErrors()) {
             model.addAttribute("author", author);
             return "author-create";
@@ -39,6 +42,7 @@ public class AuthorController {
         model.addAttribute("author", author);
         return "author-list";
     }
+
     @GetMapping("/{authorId}/delete")
     public String deleteAuthor(@PathVariable("authorId") Long authorId) {
         authorService.deleteAuthor(authorId);
@@ -46,7 +50,8 @@ public class AuthorController {
     }
 
     @GetMapping("/author/search")
-    public String searchAuthor(@RequestParam(value = "query") String query, Model model) {
+    public String searchAuthor(@RequestParam(value = "query") String query,
+                               Model model) {
         List<AuthorsDto> author = authorService.searchBook(query);
         model.addAttribute("author", author);
         return "author-list";
@@ -61,8 +66,8 @@ public class AuthorController {
 
     @PostMapping("/author/{authorId}/edit")
     public String updateAuthor(@PathVariable("authorId") Long authorId,
-                             @Valid @ModelAttribute("author") AuthorsDto author,
-                             BindingResult result, Model model) {
+                               @Valid @ModelAttribute("author") AuthorsDto author,
+                               BindingResult result, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("author", author);
             return "author-update";
@@ -71,7 +76,10 @@ public class AuthorController {
         return "redirect:/authors";
     }
 
-
+    @GetMapping("/authorBooks/{authorId}")
+    public ResponseEntity<List<BookDto>> authorBooks(@PathVariable("authorId") Long authorId) {
+        return ResponseEntity.ok(authorService.showAuthorBooks(authorId));
+    }
 
 
 }

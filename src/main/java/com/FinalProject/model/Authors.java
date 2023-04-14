@@ -1,6 +1,7 @@
 package com.FinalProject.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
 
@@ -8,7 +9,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.FinalProject.model.Books;
 import org.hibernate.annotations.CreationTimestamp;
 
 
@@ -22,11 +22,13 @@ public class Authors {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotEmpty
     private String fullName;
     @CreationTimestamp
     private LocalDate birthDate;
     private String email;
     private String address;
+    @NotEmpty
     private String phone;
     private Boolean delete;
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)

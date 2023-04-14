@@ -1,6 +1,7 @@
 package com.FinalProject.service;
 
 import com.FinalProject.dto.AuthorsDto;
+import com.FinalProject.dto.BookDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public interface AuthorService {
     AuthorsDto viewAuthor(Long id);
     void deleteAuthor(Long id);
     List<AuthorsDto> searchBook(String query);
-    //showAuthorBooks
+    List<BookDto> showAuthorBooks(Long authorId);
 
 
 }

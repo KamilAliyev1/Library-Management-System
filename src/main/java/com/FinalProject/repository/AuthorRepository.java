@@ -1,6 +1,5 @@
 package com.FinalProject.repository;
 
-import com.FinalProject.dto.AuthorsDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import com.FinalProject.model.Authors;
 import org.springframework.data.jpa.repository.Query;
