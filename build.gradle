@@ -19,6 +19,8 @@ repositories {
 }
 
 dependencies {
+
+	runtimeOnly 'com.mysql:mysql-connector-j'
 	implementation group: 'org.mapstruct', name: 'mapstruct', version: '1.5.3.Final'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
 	implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.0.2'
