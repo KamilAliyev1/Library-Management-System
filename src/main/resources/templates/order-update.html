@@ -41,12 +41,6 @@
                     <div class="form-group">
                         <label> Books ID </label>
                         <table>
-                            <thead>
-                            <tr>
-                                <th> Title</th>
-                                <th> Author</th>
-                            </tr>
-                            </thead>
                             <tbody>
                             <tr th:each="book, itemStat : *{books}">
                                 <td><input th:field="*{books[__${itemStat.index}__]}" /></td>
