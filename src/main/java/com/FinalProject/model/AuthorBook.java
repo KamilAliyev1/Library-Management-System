@@ -23,6 +23,6 @@ public class AuthorBook {
 
     @ManyToOne
     @JoinColumn(name = "book_id")
-    private Books book;
+    private Book book;
 
 }

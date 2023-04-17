@@ -6,7 +6,7 @@ import com.FinalProject.dto.OrderPOSTv1;
 import com.FinalProject.exception.NotChangeableException;
 import com.FinalProject.exception.NotFoundException;
 import com.FinalProject.mapper.OrderMapper;
-import com.FinalProject.model.Books;
+import com.FinalProject.model.Book;
 import com.FinalProject.model.Order;
 import com.FinalProject.repository.OrderRepo;
 import com.FinalProject.service.OrderService;
@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -66,18 +67,18 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
 
         Order order = optional.get();
 
-        if(order.getInProgress()==false)throw new NotChangeableException("Cannot be changeable");
+        if(!order.getInProgress())throw new NotChangeableException("Cannot be changeable");
 
         if(!order.getCreatedAt().toLocalDate().equals(LocalDate.now()))throw new NotChangeableException("create new order");
 
         // TODO: 4/15/2023 check available
-        var dtoBooks= dto.getBooks().stream().filter(t->t!=null).map(t-> Books.builder().id(t).build()).collect(Collectors.toSet());
+        var dtoBooks= dto.getBooks().stream().filter(Objects::nonNull).map(t-> Book.builder().id(t).build()).collect(Collectors.toSet());
 
 
-        var newBooks = dtoBooks.stream().filter(t->!order.getBooks().contains(t)).collect(Collectors.toList());
+        var newBooks = dtoBooks.stream().filter(t->!order.getBooks().contains(t)).toList();
         // TODO: 4/15/2023 -1 stock newBooks
 
-        var returnedBooks = order.getBooks().stream().filter(t->!dtoBooks.contains(t)).collect(Collectors.toList());
+        var returnedBooks = order.getBooks().stream().filter(t->!dtoBooks.contains(t)).toList();
         // TODO: 4/15/2023 +1 stock
 
 

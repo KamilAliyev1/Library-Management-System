@@ -1,6 +1,6 @@
 package com.FinalProject.dto;
 
-import com.FinalProject.model.Books;
+import com.FinalProject.model.Book;
 import lombok.*;
 
 import java.util.HashSet;
@@ -16,5 +16,5 @@ public class CategoryDto {
 
     private String name;
 
-    private Set<Books> books = new HashSet<>();
+    private Set<Book> books = new HashSet<>();
 }

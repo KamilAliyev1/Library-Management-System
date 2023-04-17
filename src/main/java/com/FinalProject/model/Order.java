@@ -2,14 +2,11 @@ package com.FinalProject.model;
 
 
 import jakarta.persistence.*;
-import jdk.jfr.Timestamp;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
-import java.time.Period;
-import java.util.List;
 import java.util.Set;
 
 
@@ -31,7 +28,7 @@ public class Order {
 
 
     @ManyToMany(fetch = FetchType.EAGER,cascade = {CascadeType.REFRESH,CascadeType.DETACH})
-    Set<Books> books;
+    Set<Book> books;
 
 
     @JoinColumn(name="student_id", nullable=false,unique = true)
@@ -72,11 +69,11 @@ public class Order {
         this.ID = ID;
     }
 
-    public Set<Books> getBooks() {
+    public Set<Book> getBooks() {
         return books;
     }
 
-    public void setBooks(Set<Books> books) {
+    public void setBooks(Set<Book> books) {
         this.books = books;
     }
 
@@ -112,7 +109,7 @@ public class Order {
         this.finishedAt = finishedAt;
     }
 
-    public void addBook(Books books){
+    public void addBook(Book books){
         this.books.add(books);
     }
 
