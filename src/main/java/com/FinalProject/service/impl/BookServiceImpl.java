@@ -1,7 +1,7 @@
 package com.FinalProject.service.impl;
 
-import com.FinalProject.dto.BookRequest;
 import com.FinalProject.dto.BookDto;
+import com.FinalProject.dto.BookRequest;
 import com.FinalProject.exception.BookNotFoundException;
 import com.FinalProject.model.Authors;
 import com.FinalProject.model.Book;
@@ -30,7 +30,7 @@ public class BookServiceImpl {
 
     private static List<BookDto> entityListToResponseList(List<Book> books) {
         return books.stream().map(book -> new BookDto(
-                book.getId(), book.getName(), book.getIsbn(), book.getStock(), book.getAuthor().getFullName(),book.getCategory().getName())).toList();
+                book.getId(), book.getName(), book.getIsbn(), book.getStock(), book.getAuthor().getFullName(), book.getCategory().getName())).toList();
     }
 
     private static BookDto entityToResponse(Book book) {
@@ -121,6 +121,10 @@ public class BookServiceImpl {
 
     public List<BookDto> findAll() {
         return entityListToResponseList(bookRepository.findAll());
+    }
+
+    public boolean areAllBooksInStock(List<Long> id) {
+        return bookRepository.areAllBooksInStock(id);
     }
 
 

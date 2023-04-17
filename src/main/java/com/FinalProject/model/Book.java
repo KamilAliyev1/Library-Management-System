@@ -9,7 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@EqualsAndHashCode(of = "id")
+@EqualsAndHashCode(of = "isbn")
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +26,7 @@ public class Book {
     private Category category;
 
     public void setBookCategory(Category bookCategory) {
-        bookCategory.getBooks().add(this);
+        bookCategory.getBook().add(this);
         this.category = bookCategory;
     }
 

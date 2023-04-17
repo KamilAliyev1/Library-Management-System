@@ -5,6 +5,7 @@ import com.FinalProject.model.Book;
 import com.FinalProject.model.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,6 +19,9 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Query(value = "select b from Book b where b.isbn in :isbn")
     Set<Book> findByIsbn(Set<String> isbn);
+
+    @Query("SELECT CASE WHEN COUNT(b) > 0 THEN false ELSE true END FROM Book b WHERE b.id IN :id AND b.stock = 0")
+    boolean areAllBooksInStock(@Param("isbns") List<Long> id);
 
     List<Book> findByCategory(Category bookCategory);
 

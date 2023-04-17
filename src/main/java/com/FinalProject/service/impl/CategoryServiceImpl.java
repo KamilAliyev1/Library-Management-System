@@ -52,7 +52,7 @@ public class CategoryServiceImpl implements CategoryService {
     public void createCategory(CategoryDto category) {
         Category category1 = categoryMapper.categoryDtoToCategory(category);
 
-        categoryRepository.save(new Category(category1.getId(), category1.getName(), category1.getBooks()));
+        categoryRepository.save(new Category(category1.getId(), category1.getName(), category1.getBook()));
 
         throw new CategoryAlreadyExistsException("Tutorial already exists!");
 
