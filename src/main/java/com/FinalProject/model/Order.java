@@ -2,13 +2,17 @@ package com.FinalProject.model;
 
 
 import jakarta.persistence.*;
+import jdk.jfr.Timestamp;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.util.List;
+import java.util.Set;
 
-// TODO: 4/11/2023 TIMEFORMAT change
+
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
@@ -17,29 +21,47 @@ import java.util.List;
 @ToString(of = "ID")
 @EqualsAndHashCode(of = "ID")
 @Entity(name = "order")
-@Table(name = "orders")
+@Table(name = "orders",uniqueConstraints={@UniqueConstraint(columnNames={"student_id"})})
 public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long ID;
 
-    @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-    List<Books> books;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+
+    @ManyToMany(fetch = FetchType.EAGER,cascade = {CascadeType.REFRESH,CascadeType.DETACH})
+    Set<Books> books;
+
+
+    @JoinColumn(name="student_id", nullable=false,unique = true)
+    @ManyToOne(cascade = CascadeType.REFRESH)
     Student student;
 
     Boolean inProgress;
 
+    Boolean inDelay;
+
+    @CreationTimestamp
     LocalDateTime createdAt;
 
     LocalDateTime finishedAt;
 
 
     @PrePersist
-    private void setDate(){
+    private void init(){
         this.setCreatedAt(LocalDateTime.now());
+        this.setInDelay(false);
+        this.setInProgress(true);
+    }
+
+
+    public Boolean getInDelay() {
+        return inDelay;
+    }
+
+    public void setInDelay(Boolean inDelay) {
+        this.inDelay = inDelay;
     }
 
     public Long getID() {
@@ -50,11 +72,11 @@ public class Order {
         this.ID = ID;
     }
 
-    public List<Books> getBooks() {
+    public Set<Books> getBooks() {
         return books;
     }
 
-    public void setBooks(List<Books> books) {
+    public void setBooks(Set<Books> books) {
         this.books = books;
     }
 
@@ -89,4 +111,9 @@ public class Order {
     public void setFinishedAt(LocalDateTime finishedAt) {
         this.finishedAt = finishedAt;
     }
+
+    public void addBook(Books books){
+        this.books.add(books);
+    }
+
 }
