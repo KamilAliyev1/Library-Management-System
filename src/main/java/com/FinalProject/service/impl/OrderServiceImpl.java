@@ -40,7 +40,7 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
 
         List<Long> books = new HashSet<>(dto.getBooks()).stream().toList();
 
-        if(!bookService.areAllBooksInStock(books))
+        if(bookService.areAllBooksInStock(books))
             throw new StockNotEnoughException();
         
         order = orderRepo.saveAndFlush(order);
@@ -76,7 +76,7 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
 
         var bookIds = dto.getBooks().stream().filter(Objects::nonNull).distinct().collect(Collectors.toCollection(ArrayList::new));
 
-        if(!bookService.areAllBooksInStock(bookIds))
+        if(bookService.areAllBooksInStock(bookIds))
             throw new StockNotEnoughException();
 
         var dtoBooks= bookIds.stream().map(t-> Book.builder().id(t).build()).collect(Collectors.toSet());

@@ -57,7 +57,7 @@ public class BookServiceImpl {
     }
 
     @Transactional
-    public void create(List<BookRequest> bookRequests) {
+    public List<BookDto> create(List<BookRequest> bookRequests) {
 
         List<Book> books = requestListToEntityList(bookRequests);
         List<Book> newBooks = new ArrayList<>();
@@ -73,7 +73,7 @@ public class BookServiceImpl {
             }
             newBooks.add(book);
         }
-        bookRepository.saveAll(newBooks);
+        return entityListToResponseList(bookRepository.saveAll(newBooks));
     }
 
     public BookDto update(String isbn, BookRequest bookRequest) {
@@ -105,7 +105,7 @@ public class BookServiceImpl {
 
     public List<BookDto> findByCategory(String category) {
         if (bookRepository.findByCategory(category).isEmpty())
-            throw new BookNotFoundException("Book not found with category : " + category);
+            throw new BookNotFoundException("Book not found with category :  " + category);
         return entityListToResponseList(bookRepository.findByCategory(category));
     }
 
