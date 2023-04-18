@@ -12,6 +12,7 @@ import com.FinalProject.repository.CategoryRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
@@ -125,6 +126,11 @@ public class BookServiceImpl {
 
     public boolean areAllBooksInStock(List<Long> id) {
         return bookRepository.areAllBooksInStock(id);
+    }
+
+
+    public void updateStockNumbersByIdIn(List<Long> ids,int amount){
+        bookRepository.updateStockNumbersByIdIn(ids,amount);
     }
 
 
