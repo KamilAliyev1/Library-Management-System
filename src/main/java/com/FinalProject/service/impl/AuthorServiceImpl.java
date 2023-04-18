@@ -73,7 +73,7 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public List<BookDto> showAuthorBooks(Long authorId) {
-        List<Book> fromDb = bookRepository.findBooksByAuthorId(authorId);
+        List<Book> fromDb = bookRepository.findByAuthorId(authorId);
         List<BookDto> bookDtoList = new ArrayList<>();
         for (Book books : fromDb){
             bookDtoList.add(fromDbToModel(books));

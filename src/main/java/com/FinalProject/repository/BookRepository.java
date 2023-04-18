@@ -3,9 +3,7 @@ package com.FinalProject.repository;
 import com.FinalProject.model.Authors;
 import com.FinalProject.model.Book;
 import com.FinalProject.model.Category;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -34,7 +32,4 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     Optional<Book> findByIsbn(String isbn);
 
-    @Modifying
-    @Query("UPDATE Book b SET b.stockNumber = b.stockNumber + :amount WHERE b.id IN :ids")
-    void updateStockNumbersByIdIn(@Param("ids") List<Long> ids, @Param("amount") int amount);
 }

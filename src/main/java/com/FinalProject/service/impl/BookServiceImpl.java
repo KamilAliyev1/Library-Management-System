@@ -15,9 +15,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -45,36 +45,44 @@ public class BookServiceImpl {
                 .build();
     }
 
-    public void create(List<Book> book) {
+    private static List<Book> requestListToEntityList(List<BookRequest> bookRequests) {
+        return bookRequests.stream().map(bookRequest ->
+                new Book(bookRequest.getIsbn(), bookRequest.getName(), bookRequest.getStock(),
+                        Authors.builder()
+                                .fullName(bookRequest.getFullName())
+                                .build(), Category.builder()
+                        .name(bookRequest.getCategory())
+                        .build()
+                )).toList();
 
-        var a = bookRepository.findByIsbn(book.stream().map(Book::getIsbn).collect(Collectors.toSet()));
-        List<Book> newBooks = new LinkedList<>(a);
+    }
 
+    @Transactional
+    public void create(List<BookRequest> bookRequests) {
 
-        first:
-        for (var t : book) {
-            for (var i : newBooks) {
-                if (i.getIsbn().equals(t.getIsbn())) {
-                    i.setStock(i.getStock() + t.getStock());
-                    continue first;
-                }
+        List<Book> books = requestListToEntityList(bookRequests);
+        List<Book> newBooks = new ArrayList<>();
+        for (Book book : books) {
+            Optional<Category> category = categoryRepository.findByName(book.getCategory().getName());
+            if (category.isPresent()) {
+                book.setCategory(category.get());
+            } else {
+                Category newCategory = new Category();
+                newCategory.setName(book.getCategory().getName());
+                categoryRepository.save(newCategory);
+                book.setCategory(newCategory);
             }
-            newBooks.add(t);
-
+            newBooks.add(book);
         }
-
-        categoryRepository.saveAll(book.stream().map(Book::getCategory).collect(Collectors.toSet()));
         bookRepository.saveAll(newBooks);
-
-
     }
 
     public BookDto update(String isbn, BookRequest bookRequest) {
         Category bookCategory = Category.builder()
-                .name(bookRequest.getCategory().getName())
+                .name(bookRequest.getCategory())
                 .build();
         Authors author = Authors.builder()
-                .fullName(bookRequest.getAuthor().getFullName())
+                .fullName(bookRequest.getFullName())
                 .build();
         Book book = bookRepository.findByIsbn(isbn).orElseThrow(() -> new BookNotFoundException("Book not found with isbn : " + isbn));
         book.setCategory(bookCategory);
@@ -97,12 +105,9 @@ public class BookServiceImpl {
     }
 
     public List<BookDto> findByCategory(String category) {
-
-        Category bookCategory = new Category();
-        bookCategory.setName(category);
-        if (bookRepository.findByCategory(bookCategory).isEmpty())
-            throw new BookNotFoundException("Book not found with category : " + bookCategory.getName());
-        return entityListToResponseList(bookRepository.findByCategory(bookCategory));
+        if (bookRepository.findByCategory(category).isEmpty())
+            throw new BookNotFoundException("Book not found with category : " + category);
+        return entityListToResponseList(bookRepository.findByCategory(category));
     }
 
     public BookDto findByIsbn(String isbn) {

@@ -25,10 +25,17 @@ public class Book {
     @JoinColumn(name = "category_id")
     private Category category;
 
+
     public void setBookCategory(Category bookCategory) {
         bookCategory.getBook().add(this);
         this.category = bookCategory;
     }
 
-
+    public Book(String isbn, String name, int stock, Authors author, Category category) {
+        this.isbn = isbn;
+        this.name = name;
+        this.stock = stock;
+        this.author = author;
+        this.category = category;
+    }
 }

@@ -3,13 +3,11 @@ package com.FinalProject.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
-
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.hibernate.annotations.CreationTimestamp;
 
 
 @Entity
@@ -30,9 +28,8 @@ public class Authors {
     private String nickName;
     private String email;
     private String address;
-    @NotEmpty
     private String phone;
     private Boolean delete;
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
-    private List<AuthorBook> authorBooks = new ArrayList<>();
+    private List<Book> authorBooks = new ArrayList<>();
 }
