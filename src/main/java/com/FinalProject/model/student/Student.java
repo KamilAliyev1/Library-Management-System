@@ -21,13 +21,13 @@ public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ID;
-    @Column(name = "name", nullable = false)
+    @Column(nullable = false)
     private String name;
-    @Column(name = "sur_name", nullable = false)
+    @Column( nullable = false)
     private String surname;
     @Column(name = "faculty",nullable = false)
     private Faculty faculty;
-    @Column(name = "FIN", length = 7, unique = true, nullable = false)
+    @Column(length = 7, unique = true, nullable = false)
     private String studentFIN;
     @Column(updatable = false)
     private boolean deleteStatus;

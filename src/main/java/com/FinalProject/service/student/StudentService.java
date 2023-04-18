@@ -1,6 +1,6 @@
 package com.FinalProject.service;
 
-import com.FinalProject.dto.StudentDto;
+import com.FinalProject.dto.studentdto.StudentDto;
 import com.FinalProject.model.Student;
 
 import java.util.List;

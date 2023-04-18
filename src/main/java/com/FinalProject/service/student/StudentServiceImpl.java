@@ -1,6 +1,6 @@
 package com.FinalProject.service.impl;
 
-import com.FinalProject.dto.StudentDto;
+import com.FinalProject.dto.studentdto.StudentDto;
 import com.FinalProject.model.Student;
 import com.FinalProject.repository.StudentRepository;
 import com.FinalProject.service.StudentService;
@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
