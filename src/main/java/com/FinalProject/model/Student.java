@@ -1,24 +1,34 @@
 package com.FinalProject.model;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import enums.Faculty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+
+import javax.persistence.*;
 
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Data
 @Entity
 public class Student {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long ID;
+    private Long ID;
+    @Column(name = "name", nullable = false)
+    private String name;
+    @Column(name = "sur_name", nullable = false)
+    private String surname;
+    @Column(name = "faculty",nullable = false)
+    private Faculty faculty;
+    @Column(name = "FIN", length = 7, unique = true, nullable = false)
+    private String studentFIN;
 
 
     public Long getID() {
