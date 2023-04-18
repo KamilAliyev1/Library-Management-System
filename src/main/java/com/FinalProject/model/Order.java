@@ -1,15 +1,13 @@
 package com.FinalProject.model;
 
 
+import com.FinalProject.model.student.Student;
 import jakarta.persistence.*;
-import jdk.jfr.Timestamp;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
-import java.time.Period;
-import java.util.List;
 import java.util.Set;
 
 

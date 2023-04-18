@@ -1,6 +1,6 @@
 package com.FinalProject.repository;
 
-import com.FinalProject.model.Student;
+import com.FinalProject.model.student.Student;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

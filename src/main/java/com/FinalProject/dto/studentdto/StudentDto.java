@@ -1,4 +1,4 @@
-package com.FinalProject.dto;
+package com.FinalProject.dto.studentdto;
 
 import enums.Faculty;
 import lombok.AllArgsConstructor;

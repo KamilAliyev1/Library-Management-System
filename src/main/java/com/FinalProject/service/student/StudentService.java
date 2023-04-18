@@ -1,14 +1,17 @@
-package com.FinalProject.service;
+package com.FinalProject.service.student;
 
 import com.FinalProject.dto.studentdto.StudentDto;
-import com.FinalProject.model.Student;
+import com.FinalProject.model.student.Student;
 
 import java.util.List;
 
 public interface StudentService {
-    List<Student> getStudentList();
-    void create(StudentDto studentDto);
+    List<StudentDto> getStudentList();
+    void createStudent(StudentDto studentDto);
     void  deleteStudentById(Long id);
-    Student update(StudentDto studentDto,Long id);
+    Student updateStudent(StudentDto studentDto, Long id);
+//View
 
+
+//Orders
 }
