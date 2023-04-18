@@ -29,6 +29,8 @@ public class Student {
     private Faculty faculty;
     @Column(name = "FIN", length = 7, unique = true, nullable = false)
     private String studentFIN;
+    @Column(updatable = false)
+    private boolean deleteStatus;
 
 
     public Long getID() {

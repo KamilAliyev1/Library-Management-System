@@ -6,8 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.mapstruct.Mapper;
 
-import javax.persistence.Column;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -17,4 +15,5 @@ public class StudentDto {
     private String surname;
     private Faculty faculty;
     private String studentFIN;
+    private boolean deleteStatus;
 }
