@@ -12,7 +12,6 @@ import com.FinalProject.repository.CategoryRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -134,8 +133,8 @@ public class BookServiceImpl {
     }
 
 
-    public void updateStockNumbersByIdIn(List<Long> ids,int amount){
-        bookRepository.updateStockNumbersByIdIn(ids,amount);
+    public void updateStockNumbersByIdIn(List<Long> ids, int amount) {
+        bookRepository.updateStockNumbersByIdIn(ids, amount);
     }
 
 
