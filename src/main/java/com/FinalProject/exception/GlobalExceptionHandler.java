@@ -1,14 +1,17 @@
 package com.FinalProject.exception;
 
+import org.hibernate.annotations.TimeZoneColumn;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@RestControllerAdvice
+@ControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(AuthorsNotFoundException.class)
@@ -37,4 +40,14 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse("Category Already Exists !", detail);
         return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }
+    @ExceptionHandler({NotChangeableException.class, NotFoundException.class})
+    public ResponseEntity<?> userExceptions(Exception userException){
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(userException.getMessage());
+    }
+    @ExceptionHandler(BindException.class)
+    public ResponseEntity<?> validationException(BindException e){
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getFieldError().getDefaultMessage());
+    }
+
+
 }

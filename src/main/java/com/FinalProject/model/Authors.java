@@ -26,6 +26,8 @@ public class Authors {
     private String fullName;
     @CreationTimestamp
     private LocalDate birthDate;
+
+    private String nickName;
     private String email;
     private String address;
     @NotEmpty

@@ -15,7 +15,10 @@ public interface OrderRepo extends JpaRepository<Order,Long> {
 
     @Modifying
     @Query("UPDATE order o SET o.inProgress=false,o.finishedAt=:time where o.id=:id")
-        int disableProgress(@Param("id") Long id, @Param("time") LocalDateTime time);
+    int disableProgress(@Param("id") Long id, @Param("time") LocalDateTime time);
+
+    @Query("SELECT o.inProgress FROM order o WHERE o.id=:id")
+    boolean isInProgress(@Param("id") Long id);
 
 
 }
