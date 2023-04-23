@@ -1,48 +1,51 @@
 package com.FinalProject.controller;
 
 import com.FinalProject.dto.CategoryDto;
+import com.FinalProject.repository.CategoryRepository;
 import com.FinalProject.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 
 @Controller
-@RequestMapping("categories")
 public class CategoryController {
     @Autowired
     CategoryService categoryService;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
-    @GetMapping("/all")
+    @GetMapping("/categories")
     public String findAll(Model model) {
         final List<CategoryDto> categoryList = categoryService.findAllCategories();
         model.addAttribute("categories", categoryList);
         return "categories-list";
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/category/{id}")
     public String findById(@PathVariable("id") Long id, Model model) {
         final CategoryDto category = categoryService.findCategoryById(id);
         model.addAttribute("category", category);
         return "category-list";
     }
 
-    @GetMapping("/add")
-    public String categoryForm(CategoryDto category) {
+    @GetMapping("/categories/new")
+    public String categoryForm(Model model) {
+        CategoryDto categoryDto = new CategoryDto();
+        model.addAttribute("category", categoryDto);
         return "category-create";
     }
 
-    @PostMapping("/save")
-    public String createCategory(@ModelAttribute("category") CategoryDto category, BindingResult bindingResult, Model model) {
-        if (bindingResult.hasErrors()) {
-            return "category-create";
-        }
+    @PostMapping("/categories")
+    public String createCategory(@ModelAttribute("category") CategoryDto category) {
         categoryService.createCategory(category);
-        model.addAttribute("category", categoryService.findAllCategories());
-        return "redirect:/all";
+        return "redirect:/categories";
     }
 
 
@@ -55,15 +58,12 @@ public class CategoryController {
     }
 
 
-    @RequestMapping("/update-category/{id}")
-    public String updateCategory(@PathVariable("id") Long id, CategoryDto category, BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            category.setId(id);
-            return "category-update";
-        }
-
-        categoryService.updateCategory(category);
-        model.addAttribute("category", categoryService.findAllCategories());
+    @PostMapping("/update-category/{id}")
+    public String updateCategory(@PathVariable("id") Long id, @ModelAttribute("category") String category) {
+        CategoryDto categoryDto = categoryService.findCategoryById(id);
+        categoryDto.setId(id);
+        categoryDto.setName(category);
+        categoryService.updateCategory(categoryDto);
         return "redirect:/categories";
     }
 
@@ -72,6 +72,6 @@ public class CategoryController {
     public String deleteCategory(@PathVariable Long id, Model model) {
         categoryService.deleteCategory(id);
         model.addAttribute("category", categoryService.findAllCategories());
-        return "redirect:/all";
+        return "redirect:/categories";
     }
 }
