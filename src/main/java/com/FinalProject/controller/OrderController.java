@@ -27,7 +27,8 @@ public class OrderController {
 
     @GetMapping("/add")
     String addPage(Model model){
-        model.addAttribute("order", orderMapper.toGetDto(new Order()));
+        var s = orderMapper.toGetDto(new Order());
+        model.addAttribute("order", s);
         return "order-create";
     }
 
