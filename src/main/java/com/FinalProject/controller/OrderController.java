@@ -1,12 +1,13 @@
 package com.FinalProject.controller;
 
 
+import com.FinalProject.dto.OrderGETv1;
 import com.FinalProject.dto.OrderPOSTv1;
+import com.FinalProject.mapper.OrderMapper;
+import com.FinalProject.model.Order;
 import com.FinalProject.service.OrderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,10 +22,19 @@ public class OrderController {
 
     private final OrderService orderService;
 
-    @ResponseBody
-    @PostMapping
-    ResponseEntity<?> add(@RequestBody OrderPOSTv1 dto){
-        return new ResponseEntity<>(orderService.add(dto), HttpStatus.CREATED);
+    private final OrderMapper orderMapper;
+
+
+    @GetMapping("/add")
+    String addPage(Model model){
+        model.addAttribute("order", orderMapper.toGetDto(new Order()));
+        return "order-create";
+    }
+
+    @PostMapping("/add")
+    String addOrder(Model model,@ModelAttribute("order") @Valid OrderPOSTv1 orderPOSTv1){
+        orderService.add(orderPOSTv1);
+        return "redirect:/orders";
     }
 
 

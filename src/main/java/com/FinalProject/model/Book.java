@@ -3,8 +3,8 @@ package com.FinalProject.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Entity
-@Table(name = "book")
+@Entity(name = "Book")
+@Table(name = "books")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

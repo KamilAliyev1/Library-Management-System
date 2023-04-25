@@ -35,10 +35,13 @@ public class Order {
     @ManyToOne(cascade = CascadeType.REFRESH)
     Student student;
 
+    @Column(nullable = false)
     Boolean inProgress;
 
+    @Column(nullable = false)
     Boolean inDelay;
 
+    @Column(nullable = false)
     @CreationTimestamp
     LocalDateTime createdAt;
 
