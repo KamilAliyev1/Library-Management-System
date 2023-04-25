@@ -1,7 +1,6 @@
 package com.FinalProject.model;
 
 
-import com.FinalProject.model.student.Student;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -34,7 +33,7 @@ public class Order {
     Set<Book> books;
 
 
-    @JoinColumn(name = "student_id", nullable = false, unique = true)
+    @JoinColumn(name = "student_id", nullable = false)
     @ManyToOne(cascade = CascadeType.REFRESH)
     Student student;
 

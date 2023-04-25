@@ -1,9 +1,11 @@
-package com.FinalProject.service.student;
+package com.FinalProject.service.impl;
 
 import com.FinalProject.dto.studentdto.StudentDto;
+import com.FinalProject.exception.StudentNotFoundException;
 import com.FinalProject.mapper.studentMapper.StudentMapper;
-import com.FinalProject.model.student.Student;
+import com.FinalProject.model.Student;
 import com.FinalProject.repository.StudentRepository;
+import com.FinalProject.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -45,9 +47,19 @@ public class StudentServiceImpl implements StudentService {
         return studentRepository
                 .findById(id).map(student -> studentMapper.mapDtoToEntity(studentDto))
                 .orElseThrow();
-
     }
-//View
+
+    @Override
+    public Student findById(Long id) {
+
+        var optional = studentRepository.findById(id);
+
+        if(optional.isEmpty()) throw new StudentNotFoundException();
+
+        return optional.get();
+    }
+
+    //View
 
 
 //Orders

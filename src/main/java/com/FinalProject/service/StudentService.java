@@ -1,7 +1,7 @@
-package com.FinalProject.service.student;
+package com.FinalProject.service;
 
 import com.FinalProject.dto.studentdto.StudentDto;
-import com.FinalProject.model.student.Student;
+import com.FinalProject.model.Student;
 
 import java.util.List;
 
@@ -10,6 +10,10 @@ public interface StudentService {
     void createStudent(StudentDto studentDto);
     void  deleteStudentById(Long id);
     Student updateStudent(StudentDto studentDto, Long id);
+
+    Student findById(Long id);
+
+
 //View
 
 

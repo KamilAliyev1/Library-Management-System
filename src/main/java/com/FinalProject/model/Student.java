@@ -1,20 +1,44 @@
-package com.FinalProject.dto.studentdto;
+package com.FinalProject.model;
+
+
 import enums.Faculty;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
-import org.mapstruct.Mapper;
+
+import java.util.Set;
+
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Mapper
-public class StudentRequest {
+@Builder
+@Entity
+public class Student {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ID;
+    @Column(nullable = false)
     private String name;
+    @Column( nullable = false)
     private String surname;
+    @Column(name = "faculty",nullable = false)
     private Faculty faculty;
+    @Column(length = 7, unique = true, nullable = false)
     private String studentFIN;
+    @Column(updatable = false)
     private boolean deleteStatus;
+    @OneToMany(mappedBy = "student",cascade = {CascadeType.REFRESH,CascadeType.PERSIST})
+    private Set<Order> orders;
+
+    public Set<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Set<Order> orders) {
+        this.orders = orders;
+    }
 
     public Long getID() {
         return ID;
