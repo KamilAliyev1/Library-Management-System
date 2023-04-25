@@ -43,11 +43,7 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
         if(!bookService.areAllBooksInStock(books))
             throw new StockNotEnoughException();
 
-        System.out.println(order.getBooks().size()+" sssssss");
-
         order = orderRepo.saveAndFlush(order);
-
-        System.out.println(order.getBooks().size()+" xccxcxcx");
 
         bookService.updateStockNumbersByIdIn(books,-1);
 
