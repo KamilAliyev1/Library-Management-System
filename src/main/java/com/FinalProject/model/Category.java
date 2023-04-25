@@ -19,9 +19,9 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", length = 50, nullable = false, unique = true)
+    @Column(name = "name", length = 50, unique = true)
     private String name;
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "category")
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "category")
     private Set<Book> book = new HashSet<>();
 
 }

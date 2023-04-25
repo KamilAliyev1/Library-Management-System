@@ -1,7 +1,6 @@
 package com.FinalProject.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -20,7 +19,6 @@ public class Authors {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotEmpty
     private String fullName;
     @CreationTimestamp
     private LocalDate birthDate;

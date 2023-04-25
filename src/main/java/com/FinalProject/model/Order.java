@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 
-
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
 @AllArgsConstructor
@@ -18,7 +17,7 @@ import java.util.Set;
 @ToString(of = "ID")
 @EqualsAndHashCode(of = "ID")
 @Entity(name = "order")
-@Table(name = "orders",uniqueConstraints={@UniqueConstraint(columnNames={"student_id"})})
+@Table(name = "orders", uniqueConstraints = {@UniqueConstraint(columnNames = {"student_id"})})
 public class Order {
 
     @Id
@@ -26,12 +25,11 @@ public class Order {
     Long ID;
 
 
-
-    @ManyToMany(fetch = FetchType.EAGER,cascade = {CascadeType.REFRESH,CascadeType.DETACH})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH, CascadeType.DETACH})
     Set<Book> books;
 
 
-    @JoinColumn(name="student_id", nullable=false,unique = true)
+    @JoinColumn(name = "student_id", nullable = false, unique = true)
     @ManyToOne(cascade = CascadeType.REFRESH)
     Student student;
 
@@ -49,7 +47,7 @@ public class Order {
 
 
     @PrePersist
-    private void init(){
+    private void init() {
         this.setCreatedAt(LocalDateTime.now());
         this.setInDelay(false);
         this.setInProgress(true);
@@ -112,7 +110,7 @@ public class Order {
         this.finishedAt = finishedAt;
     }
 
-    public void addBook(Book books){
+    public void addBook(Book books) {
         this.books.add(books);
     }
 

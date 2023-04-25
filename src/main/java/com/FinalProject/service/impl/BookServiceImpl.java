@@ -2,11 +2,11 @@ package com.FinalProject.service.impl;
 
 import com.FinalProject.dto.BookDto;
 import com.FinalProject.dto.BookRequest;
+import com.FinalProject.exception.BookAlreadyFoundException;
 import com.FinalProject.exception.BookNotFoundException;
 import com.FinalProject.model.Authors;
 import com.FinalProject.model.Book;
 import com.FinalProject.model.Category;
-import com.FinalProject.repository.AuthorRepository;
 import com.FinalProject.repository.BookRepository;
 import com.FinalProject.repository.CategoryRepository;
 import jakarta.transaction.Transactional;
@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,7 +24,6 @@ public class BookServiceImpl {
 
     private final BookRepository bookRepository;
     private final CategoryRepository categoryRepository;
-    private final AuthorRepository authorRepository;
 
 
     private static List<BookDto> entityListToResponseList(List<Book> books) {
@@ -45,10 +43,11 @@ public class BookServiceImpl {
     }
 
     private static List<Book> requestListToEntityList(List<BookRequest> bookRequests) {
+
         return bookRequests.stream().map(bookRequest ->
                 new Book(bookRequest.getIsbn(), bookRequest.getName(), bookRequest.getStock(),
                         Authors.builder()
-                                .fullName(bookRequest.getFullName())
+                                .fullName(bookRequest.getAuthorName())
                                 .build(), Category.builder()
                         .name(bookRequest.getCategory())
                         .build()
@@ -57,39 +56,58 @@ public class BookServiceImpl {
     }
 
     @Transactional
-    public List<BookDto> create(List<BookRequest> bookRequests) {
+    public void create(BookRequest bookRequests) {
 
-        List<Book> books = requestListToEntityList(bookRequests);
-        List<Book> newBooks = new ArrayList<>();
-        for (Book book : books) {
-            Optional<Category> category = categoryRepository.findByName(book.getCategory().getName());
-            if (category.isPresent()) {
-                book.setCategory(category.get());
-            } else {
-                Category newCategory = new Category();
-                newCategory.setName(book.getCategory().getName());
-                categoryRepository.save(newCategory);
-                book.setCategory(newCategory);
-            }
-            newBooks.add(book);
-        }
-        return entityListToResponseList(bookRepository.saveAll(newBooks));
+        var book = requestToEntity(bookRequests);
+        Category category = Category.builder()
+                .name(bookRequests.getCategory())
+                .build();
+        book.setCategory(category);
+        Optional<Book> bookOptional = bookRepository.findByIsbn(book.getIsbn());
+        if (bookOptional.isPresent())
+            throw new BookAlreadyFoundException("Book already found with isbn : " + bookOptional.get().getIsbn());
+        Optional<Category> categoryOptional = categoryRepository.findByName(bookRequests.getCategory());
+        if (categoryOptional.isPresent())
+            book.setCategory(categoryOptional.get());
+        else
+            categoryRepository.save(category);
+
+
+        bookRepository.save(book);
+
     }
+
+    public Book requestToEntity(BookRequest bookRequest) {
+        return Book.builder()
+                .isbn(bookRequest.getIsbn())
+                .name(bookRequest.getName())
+                .stock(bookRequest.getStock())
+                .author(Authors.builder().
+                        fullName(bookRequest.getAuthorName())
+                        .build())
+                .build();
+    }
+
 
     public BookDto update(String isbn, BookRequest bookRequest) {
         Category bookCategory = Category.builder()
                 .name(bookRequest.getCategory())
                 .build();
         Authors author = Authors.builder()
-                .fullName(bookRequest.getFullName())
+                .fullName(bookRequest.getAuthorName())
                 .build();
         Book book = bookRepository.findByIsbn(isbn).orElseThrow(() -> new BookNotFoundException("Book not found with isbn : " + isbn));
-        book.setCategory(bookCategory);
+        Optional<Category> category = categoryRepository.findByName(bookCategory.getName());
+        if (category.isPresent()) {
+            book.setCategory(category.get());
+        } else {
+            categoryRepository.save(bookCategory);
+            book.setCategory(bookCategory);
+        }
         book.setAuthor(author);
         book.setStock(bookRequest.getStock());
         book.setIsbn(bookRequest.getIsbn());
         book.setName(bookRequest.getName());
-        categoryRepository.save(bookCategory);
         return entityToResponse(bookRepository.save(book));
     }
 
@@ -132,10 +150,14 @@ public class BookServiceImpl {
         return bookRepository.areAllBooksInStock(id);
     }
 
-
-    public void updateStockNumbersByIdIn(List<Long> ids, int amount) {
-        bookRepository.updateStockNumbersByIdIn(ids, amount);
+    public void updateStockNumbersByIdIn(List<Long> books, int i) {
+        bookRepository.updateStockNumbersByIdIn(books, i);
     }
+
+
+//    public void updateStockNumbersByIdIn(List<Long> ids, int amount) {
+//        bookRepository.(ids, amount);
+//    }
 
 
 }

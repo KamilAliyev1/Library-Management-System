@@ -3,7 +3,6 @@ package com.FinalProject.repository;
 import com.FinalProject.model.Authors;
 import com.FinalProject.model.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -23,7 +22,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("SELECT CASE WHEN COUNT(b) > 0 THEN false ELSE true END FROM Book b WHERE b.id IN :id AND b.stock = 0")
     boolean areAllBooksInStock(@Param("id") List<Long> id);
 
-    @Query("select b from Book b where b.category.name in :category")
+    @Query("select b from Book b where b.category.name ilike :category")
     List<Book> findByCategory(String category);
 
     void deleteByIsbn(String isbn);
@@ -33,9 +32,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     Optional<Book> findByIsbn(String isbn);
 
-
-    @Modifying
-    @Query("UPDATE Book b SET b.stock = b.stock + :amount WHERE b.id IN :ids")
-    void updateStockNumbersByIdIn(@Param("ids") List<Long> ids, @Param("amount") int amount);
-
+    @Query("SELECT CASE WHEN COUNT(b) > 0 THEN false ELSE true END FROM Book b WHERE b.isbn IN :isbns AND b.stock = 0")
+    boolean updateStockNumbersByIdIn(@Param("isbns") List<Long> isbn, int i);
 }
