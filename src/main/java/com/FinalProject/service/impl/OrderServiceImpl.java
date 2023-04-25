@@ -1,6 +1,7 @@
 package com.FinalProject.service.impl;
 
 
+import com.FinalProject.dto.BookRequest;
 import com.FinalProject.dto.OrderGETv1;
 import com.FinalProject.dto.OrderPOSTv1;
 import com.FinalProject.exception.NotChangeableException;
@@ -9,9 +10,15 @@ import com.FinalProject.exception.StockNotEnoughException;
 import com.FinalProject.mapper.OrderMapper;
 import com.FinalProject.model.Book;
 import com.FinalProject.model.Order;
+import com.FinalProject.model.Student;
+import com.FinalProject.repository.BookRepository;
 import com.FinalProject.repository.OrderRepo;
+import com.FinalProject.repository.StudentRepo;
 import com.FinalProject.service.OrderService;
+import jakarta.annotation.PostConstruct;
+import jakarta.persistence.PrePersist;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,7 +47,7 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
 
         List<Long> books = new HashSet<>(dto.getBooks()).stream().toList();
 
-        if(bookService.areAllBooksInStock(books))
+        if(!bookService.areAllBooksInStock(books))
             throw new StockNotEnoughException();
         
         order = orderRepo.saveAndFlush(order);
@@ -58,6 +65,7 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
         if(order.isEmpty()) throw new NotFoundException("not founded");
 
         return orderMapper.toGetDto(order.get());
+
     }
 
     @Transactional
@@ -76,7 +84,9 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
 
         var bookIds = dto.getBooks().stream().filter(Objects::nonNull).distinct().collect(Collectors.toCollection(ArrayList::new));
 
-        if(bookService.areAllBooksInStock(bookIds))
+        if(bookIds.isEmpty())delete(id);
+
+        else if(!bookService.areAllBooksInStock(bookIds))
             throw new StockNotEnoughException();
 
         var dtoBooks= bookIds.stream().map(t-> Book.builder().id(t).build()).collect(Collectors.toSet());

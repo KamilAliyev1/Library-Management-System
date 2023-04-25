@@ -34,8 +34,9 @@ public interface OrderMapper {
 
     @Named("books")
     default List<Long> map(Set<Book> books){
-        List<Long> temp = books.stream().map(Book::getId).collect(Collectors.toCollection(LinkedList::new));
-        for (int i = 0; i < 15-books.size(); i++) {
+        List<Long> temp =  books==null || books.isEmpty()?new LinkedList():books.stream().map(Book::getId).collect(Collectors.toCollection(LinkedList::new));
+        var size = temp.size();
+        for (int i = 0; i < 15-size; i++) {
             temp.add(null);
         }
 
