@@ -4,7 +4,7 @@ import com.FinalProject.dto.OrderGETv1;
 import com.FinalProject.dto.OrderPOSTv1;
 import com.FinalProject.model.Book;
 import com.FinalProject.model.Order;
-import com.FinalProject.model.Student;
+import com.FinalProject.model.student.Student;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;

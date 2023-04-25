@@ -1,6 +1,7 @@
 package com.FinalProject.model;
 
 
+import com.FinalProject.model.student.Student;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;

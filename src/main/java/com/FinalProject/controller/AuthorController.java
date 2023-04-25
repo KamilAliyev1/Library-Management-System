@@ -22,7 +22,7 @@ public class AuthorController {
     public String createAuthorForm(Model model) {
         AuthorsDto author = new AuthorsDto();
         model.addAttribute("author", author);
-        return "author-create";
+        return "author-createStudent";
     }
 
     @PostMapping("/author/new")
@@ -31,7 +31,7 @@ public class AuthorController {
                              @Valid Model model) {
         if (result.hasErrors()) {
             model.addAttribute("author", author);
-            return "author-create";
+            return "author-createStudent";
         }
         authorService.createAuthor(author);
         return "redirect:/authors";
@@ -62,7 +62,7 @@ public class AuthorController {
     public String editAuthorForm(@PathVariable("authorId") Long authorId, Model model) {
         AuthorsDto author = authorService.viewAuthor(authorId);
         model.addAttribute("author", author);
-        return "author-update";
+        return "author-updateStudent";
     }
 
     @PostMapping("/author/{authorId}/edit")
@@ -71,7 +71,7 @@ public class AuthorController {
                                BindingResult result, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("author", author);
-            return "author-update";
+            return "author-updateStudent";
         }
         authorService.updateAuthor(authorId, author);
         return "redirect:/authors";
