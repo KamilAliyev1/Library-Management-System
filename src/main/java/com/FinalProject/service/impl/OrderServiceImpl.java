@@ -5,12 +5,14 @@ import com.FinalProject.dto.OrderGETv1;
 import com.FinalProject.dto.OrderPOSTv1;
 import com.FinalProject.exception.NotChangeableException;
 import com.FinalProject.exception.OrderNotFoundException;
+import com.FinalProject.exception.OrderStudentUniqueException;
 import com.FinalProject.exception.StockNotEnoughException;
 import com.FinalProject.mapper.OrderMapper;
 import com.FinalProject.model.Book;
 import com.FinalProject.model.Order;
 import com.FinalProject.repository.OrderRepo;
 import com.FinalProject.service.OrderService;
+import com.FinalProject.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -18,7 +20,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -31,10 +36,16 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
 
     private final BookServiceImpl bookService;
 
+    private final StudentService studentService;
+
 
     @Transactional
     @Override
     public OrderGETv1 add(OrderPOSTv1 dto) {
+
+        var student  = studentService.findById(dto.studentId);
+
+        if(student.getOrders() !=null && !student.getOrders().isEmpty() && student.getOrders().stream().anyMatch(Order::getInProgress))throw new OrderStudentUniqueException();
 
         Order order = orderMapper.toEntity(dto);
 
@@ -65,6 +76,10 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
     @Override
     public OrderGETv1 update(Long id,OrderPOSTv1 dto) {
 
+        var student  = studentService.findById(dto.studentId);
+
+        if(student.getOrders() !=null && !student.getOrders().isEmpty() && student.getOrders().stream().anyMatch(Order::getInProgress))throw new OrderStudentUniqueException();
+
         var optional = orderRepo.findById(id);
 
         if(optional.isEmpty()) throw new OrderNotFoundException();
@@ -73,7 +88,7 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
 
         if(!order.getInProgress())throw new NotChangeableException("Cannot be changeable");
 
-        if(!order.getCreatedAt().toLocalDate().equals(LocalDate.now()))throw new NotChangeableException("createStudent new order");
+        if(!order.getCreatedAt().toLocalDate().equals(LocalDate.now()))throw new NotChangeableException("create new order");
 
         var bookIds = dto.getBooks().stream().filter(Objects::nonNull).distinct().collect(Collectors.toCollection(ArrayList::new));
 
