@@ -2,7 +2,7 @@ package com.FinalProject.mapper.studentMapper;
 
 import com.FinalProject.dto.studentdto.StudentDto;
 import com.FinalProject.dto.studentdto.StudentRequest;
-import com.FinalProject.model.student.Student;
+import com.FinalProject.model.Student;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
