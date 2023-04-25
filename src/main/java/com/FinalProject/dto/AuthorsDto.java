@@ -1,9 +1,10 @@
 package com.FinalProject.dto;
 
-import com.FinalProject.model.Books;
+import com.FinalProject.model.Book;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Builder
@@ -18,5 +19,5 @@ public class AuthorsDto {
     private String email;
     private String address;
     private String phone;
-    private List<Books> books;
+    private List<Book> books = new ArrayList<>();
 }

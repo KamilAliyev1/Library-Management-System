@@ -38,7 +38,7 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse("Category Already Exists !", detail);
         return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }
-    @ExceptionHandler({NotChangeableException.class, NotFoundException.class})
+    @ExceptionHandler({NotChangeableException.class, OrderNotFoundException.class,StockNotEnoughException.class})
     public ResponseEntity<?> userExceptions(Exception userException){
         return ResponseEntity.status(HttpStatus.CONFLICT).body(userException.getMessage());
     }

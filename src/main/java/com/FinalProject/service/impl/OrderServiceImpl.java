@@ -4,9 +4,10 @@ package com.FinalProject.service.impl;
 import com.FinalProject.dto.OrderGETv1;
 import com.FinalProject.dto.OrderPOSTv1;
 import com.FinalProject.exception.NotChangeableException;
-import com.FinalProject.exception.NotFoundException;
+import com.FinalProject.exception.OrderNotFoundException;
+import com.FinalProject.exception.StockNotEnoughException;
 import com.FinalProject.mapper.OrderMapper;
-import com.FinalProject.model.Books;
+import com.FinalProject.model.Book;
 import com.FinalProject.model.Order;
 import com.FinalProject.repository.OrderRepo;
 import com.FinalProject.service.OrderService;
@@ -17,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -28,8 +29,7 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
 
     private final OrderMapper orderMapper = OrderMapper.INSTANCE;
 
-
-    // TODO: 4/11/2023 ADD Book service
+    private final BookServiceImpl bookService;
 
 
     @Transactional
@@ -38,11 +38,14 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
 
         Order order = orderMapper.toEntity(dto);
 
-        // TODO: 4/13/2023 check available
-        
+        List<Long> books = new HashSet<>(dto.getBooks()).stream().toList();
+
+        if(!bookService.areAllBooksInStock(books))
+            throw new StockNotEnoughException();
+
         order = orderRepo.saveAndFlush(order);
 
-        // TODO: 4/11/2023 -1 from book stock
+        bookService.updateStockNumbersByIdIn(books,-1);
 
         return orderMapper.toGetDto(order);
     }
@@ -52,34 +55,40 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
 
         var order = orderRepo.findById(ID);
 
-        if(order.isEmpty()) throw new NotFoundException("not founded");
+        if(order.isEmpty()) throw new OrderNotFoundException("not founded");
 
         return orderMapper.toGetDto(order.get());
+
     }
 
+    @Transactional
     @Override
     public OrderGETv1 update(Long id,OrderPOSTv1 dto) {
 
         var optional = orderRepo.findById(id);
 
-        if(optional.isEmpty()) throw new NotFoundException();
+        if(optional.isEmpty()) throw new OrderNotFoundException();
 
         Order order = optional.get();
 
-        if(order.getInProgress()==false)throw new NotChangeableException("Cannot be changeable");
+        if(!order.getInProgress())throw new NotChangeableException("Cannot be changeable");
 
         if(!order.getCreatedAt().toLocalDate().equals(LocalDate.now()))throw new NotChangeableException("createStudent new order");
 
-        // TODO: 4/15/2023 check available
-        var dtoBooks= dto.getBooks().stream().filter(t->t!=null).map(t-> Books.builder().id(t).build()).collect(Collectors.toSet());
+        var bookIds = dto.getBooks().stream().filter(Objects::nonNull).distinct().collect(Collectors.toCollection(ArrayList::new));
 
+        var entityBooksids= order.getBooks().stream().map(Book::getId).collect(Collectors.toList());
 
-        var newBooks = dtoBooks.stream().filter(t->!order.getBooks().contains(t)).collect(Collectors.toList());
-        // TODO: 4/15/2023 -1 stock newBooks
+        if(bookIds.isEmpty())delete(id);
 
-        var returnedBooks = order.getBooks().stream().filter(t->!dtoBooks.contains(t)).collect(Collectors.toList());
-        // TODO: 4/15/2023 +1 stock
+        else if(!bookService.areAllBooksInStock(bookIds.stream().filter(t->!entityBooksids.contains(t)).collect(Collectors.toList())))
+            throw new StockNotEnoughException();
 
+        var dtoBooks= bookIds.stream().map(t-> Book.builder().id(t).build()).collect(Collectors.toSet());
+
+        bookService.updateStockNumbersByIdIn(entityBooksids,1);
+
+        bookService.updateStockNumbersByIdIn(bookIds,-1);
 
         var newOrder = orderMapper.change(dto,order);
 
@@ -117,8 +126,23 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
     @Transactional
     @Override
     public void disableProgress(Long ID) {
-        orderRepo.disableProgress(ID,LocalDateTime.now());
-        // TODO: 4/11/2023 +1 to book stock
+
+        var optional = orderRepo.findById(ID);
+
+        if(optional.isEmpty())throw new OrderNotFoundException();
+
+        var order = optional.get();
+
+        order.setFinishedAt(LocalDateTime.now());
+
+        order.setInProgress(false);
+
+        order.setInDelay(false);
+
+        bookService.updateStockNumbersByIdIn(order.getBooks().stream().map(Book::getId).toList(),1);
+
+        orderRepo.save(order);
+
     }
 
     @Override

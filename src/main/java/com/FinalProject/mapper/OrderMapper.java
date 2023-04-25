@@ -2,7 +2,7 @@ package com.FinalProject.mapper;
 
 import com.FinalProject.dto.OrderGETv1;
 import com.FinalProject.dto.OrderPOSTv1;
-import com.FinalProject.model.Books;
+import com.FinalProject.model.Book;
 import com.FinalProject.model.Order;
 import com.FinalProject.model.student.Student;
 import org.mapstruct.Mapper;
@@ -12,6 +12,7 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -22,7 +23,7 @@ public interface OrderMapper {
 
     default Order toEntity(OrderPOSTv1 dto){
         return Order.builder().student(Student.builder().ID(dto.getStudentId()).build())
-                .books(dto.getBooks().stream().map(t-> Books.builder().id(t).build()).collect(Collectors.toSet()))
+                .books(dto.getBooks().stream().filter(Objects::nonNull).map(t-> Book.builder().id(t).build()).collect(Collectors.toSet()))
                 .build();
     };
 
@@ -33,9 +34,10 @@ public interface OrderMapper {
 
 
     @Named("books")
-    default List<Long> map(Set<Books> books){
-        List<Long> temp = new LinkedList<>(books.stream().map(t->t.getId()).collect(Collectors.toList()));
-        for (int i = 0; i < 15-books.size(); i++) {
+    default List<Long> map(Set<Book> books){
+        List<Long> temp =  books==null || books.isEmpty()?new LinkedList():books.stream().map(Book::getId).collect(Collectors.toCollection(LinkedList::new));
+        var size = temp.size();
+        for (int i = 0; i < 15-size; i++) {
             temp.add(null);
         }
 
@@ -46,7 +48,7 @@ public interface OrderMapper {
 
     default Order change(OrderPOSTv1 dto,Order entity){
         entity.setStudent(Student.builder().ID(dto.getStudentId()).build());
-        entity.setBooks(entity.getBooks());
+        entity.setBooks(dto.getBooks().stream().map(t->Book.builder().id(t).build()).collect(Collectors.toSet()));
         return entity;
     }
 

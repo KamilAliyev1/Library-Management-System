@@ -11,12 +11,13 @@
 <body>
 <nav class="navbar navbar-expand-md bg-dark navbar-dark">
     <!-- Brand -->
-    <a class="navbar-brand" href="#">Books Management System</a>
+    <a class="navbar-brand" href="#">Book Management System</a>
 
     <!-- Toggler/collapsibe Button -->
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
         <span class="navbar-toggler-icon"></span>
     </button>
+
 
 </nav>
 <br>
@@ -24,72 +25,71 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-6 col-md-6 col-sm-6 container justify-content-center card">
-            <h1 class="text-center"> Create New Author </h1>
+            <h1 class="text-center"> Update Book </h1>
             <div class="card-body">
-                <form th:action="@{/author/new}" th:object="${author}" method="POST" enctype="multipart/form-data">
+                <form role="form" method="post" th:action="@{/book/{isbn}/update(isbn=${bookRequest.getIsbn()})}"
+                      th:object="${bookRequest}">
                     <div class="form-group">
-                        <label> Author Name </label>
+                        <label> Book ISBN </label>
                         <input
                                 type="text"
-                                name="bookName"
-                                th:field="*{fullName}"
+                                name="isbn"
+                                th:field="*{isbn}"
                                 class="form-control"
-                                placeholder="Enter Author  Name"
+                                placeholder="Enter Book ISBN"
                         />
                     </div>
-
                     <div class="form-group">
-                        <label> Author birthDate </label>
+                        <label> Book Name </label>
                         <input
-                                type="date"
-                                name="birthDate"
-                                th:field="*{birthDate}"
+                                type="text"
+                                name="name"
+                                th:field="*{name}"
                                 class="form-control"
-                                placeholder="Enter Author birthDate"
+                                placeholder="Enter Book Name"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label> Book Stock </label>
+                        <input
+                                type="number"
+                                name="studentId"
+                                th:field="*{stock}"
+                                class="form-control"
+                                placeholder="Enter Book Stock"
                         />
                     </div>
 
                     <div class="form-group">
-                        <label> Author email </label>
+                        <label> Author </label>
                         <input
                                 type="text"
                                 name="author"
-                                th:field="*{email}"
+                                th:field="*{authorName}"
                                 class="form-control"
-                                placeholder="Enter Author Email"
+                                placeholder="Enter Book Author"
                         />
                     </div>
 
                     <div class="form-group">
-                        <label> Address </label>
+                        <label> Category </label>
                         <input
                                 type="text"
-                                name="address"
-                                th:field="*{address}"
+                                name="category"
+                                th:field="*{category}"
                                 class="form-control"
-                                placeholder="Enter address"
+                                placeholder="Enter Book Category"
                         />
                     </div>
-
-                    <div class="form-group">
-                        <label> Phone Number </label>
-                        <input
-                                type="text"
-                                name="Phone Number"
-                                th:field="*{phone}"
-                                class="form-control"
-                                placeholder="Enter Phone Number"
-                        />
+                    <div>
+                        <button>submit</button>
                     </div>
 
-                    <div class="box-footer">
-                        <button type="submit" class="btn btn-primary">
-                            Submit
-                        </button>
-                    </div>
+
                 </form>
 
             </div>
+
         </div>
     </div>
 </div>
