@@ -1,24 +1,17 @@
 package com.FinalProject.service.impl;
 
 
-import com.FinalProject.dto.BookRequest;
 import com.FinalProject.dto.OrderGETv1;
 import com.FinalProject.dto.OrderPOSTv1;
 import com.FinalProject.exception.NotChangeableException;
-import com.FinalProject.exception.NotFoundException;
+import com.FinalProject.exception.OrderNotFoundException;
 import com.FinalProject.exception.StockNotEnoughException;
 import com.FinalProject.mapper.OrderMapper;
 import com.FinalProject.model.Book;
 import com.FinalProject.model.Order;
-import com.FinalProject.model.Student;
-import com.FinalProject.repository.BookRepository;
 import com.FinalProject.repository.OrderRepo;
-import com.FinalProject.repository.StudentRepo;
 import com.FinalProject.service.OrderService;
-import jakarta.annotation.PostConstruct;
-import jakarta.persistence.PrePersist;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,8 +42,12 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
 
         if(!bookService.areAllBooksInStock(books))
             throw new StockNotEnoughException();
-        
+
+        System.out.println(order.getBooks().size()+" sssssss");
+
         order = orderRepo.saveAndFlush(order);
+
+        System.out.println(order.getBooks().size()+" xccxcxcx");
 
         bookService.updateStockNumbersByIdIn(books,-1);
 
@@ -62,7 +59,7 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
 
         var order = orderRepo.findById(ID);
 
-        if(order.isEmpty()) throw new NotFoundException("not founded");
+        if(order.isEmpty()) throw new OrderNotFoundException("not founded");
 
         return orderMapper.toGetDto(order.get());
 
@@ -74,7 +71,7 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
 
         var optional = orderRepo.findById(id);
 
-        if(optional.isEmpty()) throw new NotFoundException();
+        if(optional.isEmpty()) throw new OrderNotFoundException();
 
         Order order = optional.get();
 
@@ -84,14 +81,16 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
 
         var bookIds = dto.getBooks().stream().filter(Objects::nonNull).distinct().collect(Collectors.toCollection(ArrayList::new));
 
+        var entityBooksids= order.getBooks().stream().map(Book::getId).collect(Collectors.toList());
+
         if(bookIds.isEmpty())delete(id);
 
-        else if(!bookService.areAllBooksInStock(bookIds))
+        else if(!bookService.areAllBooksInStock(bookIds.stream().filter(t->!entityBooksids.contains(t)).collect(Collectors.toList())))
             throw new StockNotEnoughException();
 
         var dtoBooks= bookIds.stream().map(t-> Book.builder().id(t).build()).collect(Collectors.toSet());
 
-        bookService.updateStockNumbersByIdIn(order.getBooks().stream().map(Book::getId).collect(Collectors.toList()),1);
+        bookService.updateStockNumbersByIdIn(entityBooksids,1);
 
         bookService.updateStockNumbersByIdIn(bookIds,-1);
 
@@ -134,7 +133,7 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
 
         var optional = orderRepo.findById(ID);
 
-        if(optional.isEmpty())throw new NotFoundException();
+        if(optional.isEmpty())throw new OrderNotFoundException();
 
         var order = optional.get();
 

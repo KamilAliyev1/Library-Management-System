@@ -3,6 +3,7 @@ package com.FinalProject.repository;
 import com.FinalProject.model.Authors;
 import com.FinalProject.model.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -31,7 +32,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findByAuthor(Authors author);
 
     Optional<Book> findByIsbn(String isbn);
-
-    @Query("SELECT CASE WHEN COUNT(b) > 0 THEN false ELSE true END FROM Book b WHERE b.isbn IN :isbns AND b.stock = 0")
-    boolean updateStockNumbersByIdIn(@Param("isbns") List<Long> isbn, int i);
+    @Modifying
+    @Query("UPDATE Book b SET b.stock=b.stock+:i where b.id in :ids")
+    int updateStockNumbersByIdIn(@Param("ids") List<Long> ids, int i);
 }

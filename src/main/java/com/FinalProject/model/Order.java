@@ -26,6 +26,10 @@ public class Order {
 
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinTable(
+            name = "orders_books",
+            joinColumns = @JoinColumn(name = "order_id"),
+            inverseJoinColumns = @JoinColumn(name = "book_id"))
     Set<Book> books;
 
 

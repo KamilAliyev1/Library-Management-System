@@ -12,6 +12,7 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -22,7 +23,7 @@ public interface OrderMapper {
 
     default Order toEntity(OrderPOSTv1 dto){
         return Order.builder().student(Student.builder().ID(dto.getStudentId()).build())
-                .books(dto.getBooks().stream().map(t-> Book.builder().id(t).build()).collect(Collectors.toSet()))
+                .books(dto.getBooks().stream().filter(Objects::nonNull).map(t-> Book.builder().id(t).build()).collect(Collectors.toSet()))
                 .build();
     };
 
@@ -47,7 +48,7 @@ public interface OrderMapper {
 
     default Order change(OrderPOSTv1 dto,Order entity){
         entity.setStudent(Student.builder().ID(dto.getStudentId()).build());
-        entity.setBooks(entity.getBooks());
+        entity.setBooks(dto.getBooks().stream().map(t->Book.builder().id(t).build()).collect(Collectors.toSet()));
         return entity;
     }
 
