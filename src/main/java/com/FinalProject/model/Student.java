@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
-
+import java.util.Set;
 
 
 @AllArgsConstructor
@@ -29,16 +29,15 @@ public class Student {
     private String studentFIN;
     @Column(updatable = false)
     private boolean deleteStatus;
+    @OneToMany(mappedBy = "student",cascade = {CascadeType.REFRESH,CascadeType.PERSIST})
+    private Set<Order> orders;
 
-    @OneToOne
-    private Order order;
-
-    public Order getOrder() {
-        return order;
+    public Set<Order> getOrders() {
+        return orders;
     }
 
-    public void setOrder(Order order) {
-        this.order = order;
+    public void setOrders(Set<Order> orders) {
+        this.orders = orders;
     }
 
     public Long getID() {

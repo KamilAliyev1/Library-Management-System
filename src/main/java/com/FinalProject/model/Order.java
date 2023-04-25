@@ -33,8 +33,8 @@ public class Order {
     Set<Book> books;
 
 
-    @JoinColumn(name = "student_id", nullable = false, unique = true)
-    @OneToOne(cascade = CascadeType.REFRESH)
+    @JoinColumn(name = "student_id", nullable = false)
+    @ManyToOne(cascade = CascadeType.REFRESH)
     Student student;
 
     @Column(nullable = false)

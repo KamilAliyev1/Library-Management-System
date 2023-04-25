@@ -45,7 +45,7 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
 
         var student  = studentService.findById(dto.studentId);
 
-        if(student.getOrder()!=null)throw new OrderStudentUniqueException();
+        if(student.getOrders() !=null && !student.getOrders().isEmpty() && student.getOrders().stream().anyMatch(Order::getInProgress))throw new OrderStudentUniqueException();
 
         Order order = orderMapper.toEntity(dto);
 
@@ -78,7 +78,7 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
 
         var student  = studentService.findById(dto.studentId);
 
-        if(student.getOrder()!=null)throw new OrderStudentUniqueException();
+        if(student.getOrders() !=null && !student.getOrders().isEmpty() && student.getOrders().stream().anyMatch(Order::getInProgress))throw new OrderStudentUniqueException();
 
         var optional = orderRepo.findById(id);
 
