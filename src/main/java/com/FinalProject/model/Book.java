@@ -21,16 +21,9 @@ public class Book {
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "author_id", referencedColumnName = "id")
     private Authors author;
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "category_id")
     private Category category;
-
-
-    public void setBookCategory(Category bookCategory) {
-        bookCategory.getBook().add(this);
-        this.category = bookCategory;
-    }
-
     public Book(String isbn, String name, int stock, Authors author, Category category) {
         this.isbn = isbn;
         this.name = name;

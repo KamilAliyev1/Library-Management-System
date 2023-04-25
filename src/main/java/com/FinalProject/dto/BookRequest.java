@@ -13,6 +13,6 @@ public class BookRequest {
     private String name;
     private String isbn;
     private int stock;
-    private String fullName;
+    private String authorName;
     private String category;
 }
