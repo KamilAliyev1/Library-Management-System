@@ -1,13 +1,13 @@
 package com.FinalProject.service.impl;
 
 import com.FinalProject.dto.CategoryDto;
-import com.FinalProject.exception.CategoryAlreadyExistsException;
 import com.FinalProject.exception.CategoryNotFoundException;
 import com.FinalProject.mapper.CategoryMapper;
 import com.FinalProject.model.Category;
 import com.FinalProject.repository.CategoryRepository;
 import com.FinalProject.service.CategoryService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -48,22 +48,24 @@ public class CategoryServiceImpl implements CategoryService {
         }
     }
 
+
     @Override
     public void createCategory(CategoryDto category) {
         Category category1 = categoryMapper.categoryDtoToCategory(category);
 
         categoryRepository.save(new Category(category1.getId(), category1.getName(), category1.getBook()));
 
-        throw new CategoryAlreadyExistsException("Tutorial already exists!");
+//        throw new CategoryAlreadyExistsException("Category already exists!");
 
     }
+
 
     @Override
     public void updateCategory(CategoryDto categoryDto) {
-
-        Category category = categoryRepository.save(categoryMapper.categoryDtoToCategory(categoryDto));
+        categoryRepository.save(categoryMapper.categoryDtoToCategory(categoryDto));
 
     }
+
 
     @Override
     public void deleteCategory(Long id) {
