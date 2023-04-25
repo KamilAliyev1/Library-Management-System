@@ -68,7 +68,7 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
 
         if(order.getInProgress()==false)throw new NotChangeableException("Cannot be changeable");
 
-        if(!order.getCreatedAt().toLocalDate().equals(LocalDate.now()))throw new NotChangeableException("create new order");
+        if(!order.getCreatedAt().toLocalDate().equals(LocalDate.now()))throw new NotChangeableException("createStudent new order");
 
         // TODO: 4/15/2023 check available
         var dtoBooks= dto.getBooks().stream().filter(t->t!=null).map(t-> Books.builder().id(t).build()).collect(Collectors.toSet());
