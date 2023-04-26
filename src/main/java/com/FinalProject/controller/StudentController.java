@@ -1,7 +1,7 @@
 package com.FinalProject.controller;
 
 import com.FinalProject.dto.studentdto.StudentDto;
-import com.FinalProject.service.student.StudentService;
+import com.FinalProject.service.StudentService;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
