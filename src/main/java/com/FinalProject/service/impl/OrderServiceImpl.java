@@ -88,7 +88,7 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
 
         if(!order.getInProgress())throw new NotChangeableException("Cannot be changeable");
 
-        if(!order.getCreatedAt().toLocalDate().equals(LocalDate.now()))throw new NotChangeableException("create new order");
+        if(!order.getCreatedAt().equals(LocalDate.now()))throw new NotChangeableException("create new order");
 
         var bookIds = dto.getBooks().stream().filter(Objects::nonNull).distinct().collect(Collectors.toCollection(ArrayList::new));
 
@@ -132,7 +132,7 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
                 t->
                         t.getCreatedAt()
                                 .plusDays(15)
-                                .compareTo(LocalDateTime.now())<0
+                                .compareTo(LocalDate.now())<0
         ).map(t->{t.setInDelay(true);return t;}).collect(Collectors.toList());
         orderRepo.saveAll(temp);
     }

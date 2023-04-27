@@ -6,6 +6,8 @@ import com.FinalProject.mapper.studentMapper.StudentMapper;
 import com.FinalProject.model.Student;
 import com.FinalProject.repository.StudentRepository;
 import com.FinalProject.service.StudentService;
+import enums.Faculty;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -58,6 +60,7 @@ public class StudentServiceImpl implements StudentService {
 
         return optional.get();
     }
+
 
     //View
 

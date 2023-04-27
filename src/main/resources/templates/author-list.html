@@ -48,7 +48,7 @@
 
         <tbody>
         <tr th:each="author: ${author}" class="col-lg-6">
-            <td th:text="${author.fullName}"></td>
+            <td> <a th:text="${author.fullName}" th:href = "@{/authorBooks/${authorId}(auhordId=${author.id})}"/></td>
             <td th:text="${author.phone}"></td>
             <td th:text="${author.email}"></td>
             <td th:text="${author.address}"></td>
