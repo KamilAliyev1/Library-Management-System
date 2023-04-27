@@ -15,7 +15,7 @@ public class StudentController {
     }
 
     public Student findById(Long id) {
-        return studentService.findById(id)
+        return studentService.findById(id);
     }
 }
 
