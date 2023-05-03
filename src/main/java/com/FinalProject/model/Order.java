@@ -6,7 +6,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Set;
 
 
@@ -45,14 +45,14 @@ public class Order {
 
     @Column(nullable = false)
     @CreationTimestamp
-    LocalDateTime createdAt;
+    LocalDate createdAt;
 
-    LocalDateTime finishedAt;
+    LocalDate finishedAt;
 
 
     @PrePersist
     private void init() {
-        this.setCreatedAt(LocalDateTime.now());
+        this.setCreatedAt(LocalDate.now());
         this.setInDelay(false);
         this.setInProgress(true);
     }
@@ -98,19 +98,19 @@ public class Order {
         this.inProgress = inProgress;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public LocalDate getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(LocalDate createdAt) {
         this.createdAt = createdAt;
     }
 
-    public LocalDateTime getFinishedAt() {
+    public LocalDate getFinishedAt() {
         return finishedAt;
     }
 
-    public void setFinishedAt(LocalDateTime finishedAt) {
+    public void setFinishedAt(LocalDate finishedAt) {
         this.finishedAt = finishedAt;
     }
 

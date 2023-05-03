@@ -25,6 +25,7 @@
     <!--        </button>-->
 
 
+
     <!--    </nav>-->
     <div class="categories">
         <div class="container">
@@ -50,6 +51,7 @@
                                     <tr th:each="book, itemStat : *{books}">
                                         <td><input th:field="*{books[__${itemStat.index}__]}"/></td>
                                     </tr>
+
 
                                     </tbody>
                                 </table>

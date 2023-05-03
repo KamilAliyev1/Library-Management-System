@@ -1,11 +1,9 @@
 package com.FinalProject.controller;
 
 import com.FinalProject.dto.AuthorsDto;
-import com.FinalProject.dto.BookDto;
 import com.FinalProject.service.AuthorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -62,7 +60,7 @@ public class AuthorController {
     public String editAuthorForm(@PathVariable("authorId") Long authorId, Model model) {
         AuthorsDto author = authorService.viewAuthor(authorId);
         model.addAttribute("author", author);
-        return "author-updateStudent";
+        return "author-update";
     }
 
     @PostMapping("/author/{authorId}/edit")
@@ -71,15 +69,17 @@ public class AuthorController {
                                BindingResult result, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("author", author);
-            return "author-updateStudent";
+            return "author-update";
         }
         authorService.updateAuthor(authorId, author);
         return "redirect:/authors";
     }
 
     @GetMapping("/authorBooks/{authorId}")
-    public ResponseEntity<List<BookDto>> authorBooks(@PathVariable("authorId") Long authorId) {
-        return ResponseEntity.ok(authorService.showAuthorBooks(authorId));
+    public String authorBooks(@PathVariable("authorId") Long authorId ,Model model) {
+        List book = authorService.showAuthorBooks(authorId);
+        model.addAttribute("books" , book);
+        return "book-list";
     }
 
 
