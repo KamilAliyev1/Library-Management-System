@@ -1,12 +1,10 @@
 package com.FinalProject.controller;
 
+import com.FinalProject.dto.BookDto;
 import com.FinalProject.dto.CategoryDto;
-import com.FinalProject.repository.CategoryRepository;
 import com.FinalProject.service.CategoryService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,10 +14,13 @@ import java.util.List;
 
 @Controller
 public class CategoryController {
-    @Autowired
-    CategoryService categoryService;
-    @Autowired
-    private CategoryRepository categoryRepository;
+
+    private final CategoryService categoryService;
+
+
+    public CategoryController(CategoryService categoryService) {
+        this.categoryService = categoryService;
+    }
 
     @GetMapping("/categories")
     public String findAll(Model model) {
@@ -30,7 +31,8 @@ public class CategoryController {
 
     @GetMapping("/category/{id}")
     public String findById(@PathVariable("id") Long id, Model model) {
-        final CategoryDto category = categoryService.findCategoryById(id);
+        final List<BookDto> category = categoryService.findCategoryById(id);
+
         model.addAttribute("category", category);
         return "category-list";
     }
@@ -51,7 +53,7 @@ public class CategoryController {
 
     @GetMapping("/update/{id}")
     public String showUpdateForm(@PathVariable("id") Long id, Model model) {
-        final CategoryDto category = categoryService.findCategoryById(id);
+        final List<BookDto> category = categoryService.findCategoryById(id);
 
         model.addAttribute("category", category);
         return "category-update";
@@ -59,11 +61,11 @@ public class CategoryController {
 
 
     @PostMapping("/update-category/{id}")
-    public String updateCategory(@PathVariable("id") Long id, @ModelAttribute("category") String category) {
-        CategoryDto categoryDto = categoryService.findCategoryById(id);
-        categoryDto.setId(id);
-        categoryDto.setName(category);
-        categoryService.updateCategory(categoryDto);
+    public String updateCategory(@PathVariable("id") Long id, CategoryDto category) {
+//        cCategoryDto categoryDto = categoryService.findCategoryById(id);
+//        categoryDto.setId(id);
+//        categoryDto.setName(category.getName());
+        categoryService.updateCategory(id, category);
         return "redirect:/categories";
     }
 

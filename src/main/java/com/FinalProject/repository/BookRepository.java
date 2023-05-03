@@ -23,7 +23,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("SELECT CASE WHEN COUNT(b) > 0 THEN false ELSE true END FROM Book b WHERE b.id IN :id AND b.stock = 0")
     boolean areAllBooksInStock(@Param("id") List<Long> id);
 
-    @Query("select b from Book b where b.category.name ilike :category")
+    @Query("select b from Book b where b.category.name like :category")
     List<Book> findByCategory(String category);
 
     void deleteByIsbn(String isbn);

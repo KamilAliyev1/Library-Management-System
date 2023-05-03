@@ -7,90 +7,98 @@
           href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
           crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" href=""/>
+    <link rel="stylesheet" th:href="@{/css/main.css}" href="">
 </head>
 <body>
-<nav class="navbar navbar-expand-md bg-dark navbar-dark">
-    <!-- Brand -->
-    <a class="navbar-brand" href="#">Book Management System</a>
+<div class="main">
+    <div th:insert="navbar/header :: header"></div>
+    <!--    <nav class="navbar navbar-expand-md bg-dark navbar-dark">-->
+    <!--        &lt;!&ndash; Brand &ndash;&gt;-->
+    <!--        <a class="navbar-brand" href="#">Book Management System</a>-->
 
-    <!-- Toggler/collapsibe Button -->
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+    <!--        &lt;!&ndash; Toggler/collapsibe Button &ndash;&gt;-->
+    <!--        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">-->
+    <!--            <span class="navbar-toggler-icon"></span>-->
+    <!--        </button>-->
 
 
-</nav>
-<br>
-<br>
-<div class="container">
-    <div class="row">
-        <div class="col-lg-6 col-md-6 col-sm-6 container justify-content-center card">
-            <h1 class="text-center"> Update Author </h1>
-            <div class="card-body">
-                <form role="form" method="post" th:action="@{/author/{authorId}/edit(authorId=${author.id})}" th:object="${author}">
-                    <input type="hidden" th:field="*{id}">
-                    <div class="form-group">
-                        <label> Author Name </label>
-                        <input
-                                type="text"
-                                name="bookName"
-                                th:field="*{fullName}"
-                                class="form-control"
-                                placeholder="Enter Book  Name"
-                        />
+    <!--    </nav>-->
+    <!--    <br>-->
+    <!--    <br>-->
+    <div class="categories">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 container justify-content-center card">
+                    <h1 class="text-center"> Update Author </h1>
+                    <div class="card-body">
+                        <form role="form" method="post" th:action="@{/author/{authorId}/edit(authorId=${author.id})}"
+                              th:object="${author}">
+                            <input type="hidden" th:field="*{id}">
+                            <div class="form-group">
+                                <label> Author Name </label>
+                                <input
+                                        type="text"
+                                        name="bookName"
+                                        th:field="*{fullName}"
+                                        class="form-control"
+                                        placeholder="Enter Book  Name"
+                                />
+                            </div>
+
+                            <div class="form-group">
+                                <label> Author birthDate </label>
+                                <input
+                                        type="date"
+                                        name="birthDate"
+                                        th:field="*{birthDate}"
+                                        class="form-control"
+                                        placeholder="Enter Author birthDate"
+                                />
+                            </div>
+
+                            <div class="form-group">
+                                <label> Author email </label>
+                                <input
+                                        type="text"
+                                        name="author"
+                                        th:field="*{email}"
+                                        class="form-control"
+                                        placeholder="Enter Author Email"
+                                />
+                            </div>
+
+                            <div class="form-group">
+                                <label> Address </label>
+                                <input
+                                        type="text"
+                                        name="address"
+                                        th:field="*{address}"
+                                        class="form-control"
+                                        placeholder="Enter address"
+                                />
+                            </div>
+
+                            <div class="form-group">
+                                <label> Phone Number </label>
+                                <input
+                                        type="text"
+                                        name="Phone Number"
+                                        th:field="*{phone}"
+                                        class="form-control"
+                                        placeholder="Enter Phone Number"
+                                />
+                            </div>
+
+                            <div class="box-footer">
+                                <button type="submit" class="btn btn-primary">
+                                    Submit
+                                </button>
+                            </div>
+                        </form>
+
                     </div>
-
-                    <div class="form-group">
-                        <label> Author birthDate </label>
-                        <input
-                                type="date"
-                                name="birthDate"
-                                th:field="*{birthDate}"
-                                class="form-control"
-                                placeholder="Enter Author birthDate"
-                        />
-                    </div>
-
-                    <div class="form-group">
-                        <label> Author email </label>
-                        <input
-                                type="text"
-                                name="author"
-                                th:field="*{email}"
-                                class="form-control"
-                                placeholder="Enter Author Email"
-                        />
-                    </div>
-
-                    <div class="form-group">
-                        <label> Address </label>
-                        <input
-                                type="text"
-                                name="address"
-                                th:field="*{address}"
-                                class="form-control"
-                                placeholder="Enter address"
-                        />
-                    </div>
-
-                    <div class="form-group">
-                        <label> Phone Number </label>
-                        <input
-                                type="text"
-                                name="Phone Number"
-                                th:field="*{phone}"
-                                class="form-control"
-                                placeholder="Enter Phone Number"
-                        />
-                    </div>
-
-                    <div class="box-footer">
-                        <button type="submit" class="btn btn-primary">
-                            Submit
-                        </button>
-                    </div>
-                </form>
-
+                </div>
             </div>
         </div>
     </div>

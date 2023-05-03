@@ -1,0 +1,148 @@
+
+.side-panel {
+    display: flex;
+    flex-direction: column;
+
+    background-color: #231d1d;
+    width: 50%;
+    min-width: 337px;
+    color: white;
+    padding-top: 30px;
+    padding-bottom: 50%;
+    transition: all .5s ease;
+}
+
+/*side-panel-head*/
+.side-panel > .head-image-side-panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+}
+
+.side-panel > .head-image-side-panel > img {
+    border-radius: 50%;
+    border: 4px solid white;
+
+}
+
+
+/*side-panel-middle*/
+
+.side-panel > .middle-side-panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 30px;
+    font-size: 14px;
+    line-height: 1.8;
+    font-family: Arial, sans-serif;
+    font-weight: 400;
+
+}
+
+.side-panel > .middle-side-panel b {
+    padding-top: 10px;
+}
+
+.side-panel > .middle-side-panel a {
+    color: white;
+    padding-top: 10px;
+
+
+}
+
+.side-panel > .middle-side-panel b, a {
+    font-style: normal;
+    font-weight: 650;
+    font-size: 18px;
+    line-height: 22px;
+}
+
+.side-panel > .middle-side-panel hr {
+    background-color: white;
+}
+
+.side-panel > .middle-side-panel div:nth-child(2) {
+    border-top: 1px solid #fef9fa;
+    border-bottom: 1px solid #fef9fa;
+    display: flex;
+    flex-direction: column;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.side-panel > .middle-side-panel div:nth-child(3) {
+    padding-top: 20px;
+}
+
+
+/*side-panel-footer*/
+.side-panel > .footer-side-panel {
+    display: flex;
+    text-align: center;
+    justify-content: center;
+
+}
+
+.side-panel > .footer-side-panel > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    width: 85%;
+}
+
+.side-panel > .footer-side-panel > div > a {
+    text-decoration: none;
+    color: #231d1d;
+    font-size: 18px;
+    border-radius: 5px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+/*#check {*/
+/*    display: none;*/
+/*}*/
+
+/*label #btn, label #cancel {*/
+/*    position: absolute;*/
+/*    cursor: pointer;*/
+/*    background-color: #042331;*/
+/*    border-radius: 3px;*/
+/*}*/
+
+/*label #btn {*/
+/*    left: 40px;*/
+/*    top: 25px;*/
+/*    font-size: 35px;*/
+/*    color: white;*/
+/*    padding: 6px 12px;*/
+/*    transition: all .5s;*/
+/*}*/
+
+/*label #cancel {*/
+/*    z-index: 1111;*/
+/*    left: -195px;*/
+/*    top: 17px;*/
+/*    font-size: 30px;*/
+/*    color: #0a5275;*/
+/*    padding: 4px 9px;*/
+/*    transition: all .5s ease;*/
+/*}*/
+
+/*#check:checked ~ .side-panel {*/
+/*    left: 0;*/
+/*}*/
+
+
+/*#check:checked ~ label #btn {*/
+/*    left: 250px;*/
+/*    opacity: 0;*/
+/*    pointer-events:none ;*/
+/*}*/
+/*#check:checked ~ label #cancel {*/
+/*    left: 250px;*/
+/*}*/

@@ -22,7 +22,7 @@ public class AuthorController {
     public String createAuthorForm(Model model) {
         AuthorsDto author = new AuthorsDto();
         model.addAttribute("author", author);
-        return "author-createStudent";
+        return "author-create";
     }
 
     @PostMapping("/author/new")
@@ -31,7 +31,7 @@ public class AuthorController {
                              @Valid Model model) {
         if (result.hasErrors()) {
             model.addAttribute("author", author);
-            return "author-createStudent";
+            return "author-create";
         }
         authorService.createAuthor(author);
         return "redirect:/authors";
