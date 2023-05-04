@@ -12,8 +12,16 @@ import com.FinalProject.repository.CategoryRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,11 +32,11 @@ public class BookServiceImpl {
 
     private final BookRepository bookRepository;
     private final CategoryRepository categoryRepository;
-
+    private final Path root = Paths.get("/Users/huseyn007/Desktop/Library-Management-System/src/main/resources/static/images");
 
     private static List<BookDto> entityListToResponseList(List<Book> books) {
         return books.stream().map(book -> new BookDto(
-                book.getId(), book.getName(), book.getIsbn(), book.getStock(), book.getAuthor().getFullName(), book.getCategory().getName())).toList();
+                book.getId(), book.getName(), book.getIsbn(), book.getStock(), book.getAuthor().getFullName(), book.getCategory().getName(), book.getImage())).toList();
     }
 
     private static BookDto entityToResponse(Book book) {
@@ -55,6 +63,30 @@ public class BookServiceImpl {
 
     }
 
+    public Resource load(String filename) {
+        try {
+            Path file = root.resolve(filename);
+            Resource resource = new UrlResource(file.toUri());
+            if (resource.exists() || resource.isReadable()) {
+                return resource;
+            } else {
+                throw new RuntimeException("Could not read the file!");
+            }
+        } catch (MalformedURLException e) {
+            throw new RuntimeException("Error: " + e.getMessage());
+        }
+    }
+
+
+    public void save(MultipartFile multipartFile) {
+        try {
+            Files.copy(multipartFile.getInputStream(), this.root.resolve((multipartFile.getOriginalFilename())));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
     @Transactional
     public void create(BookRequest bookRequests) {
 
@@ -72,10 +104,11 @@ public class BookServiceImpl {
         else
             categoryRepository.save(category);
 
-
+        save(bookRequests.getFile());
         bookRepository.save(book);
 
     }
+
 
     public Book requestToEntity(BookRequest bookRequest) {
         return Book.builder()
@@ -85,6 +118,7 @@ public class BookServiceImpl {
                 .author(Authors.builder().
                         fullName(bookRequest.getAuthorName())
                         .build())
+                .image(bookRequest.getFile().getOriginalFilename())
                 .build();
     }
 
@@ -145,6 +179,7 @@ public class BookServiceImpl {
     public List<BookDto> findAll() {
         return entityListToResponseList(bookRepository.findAll());
     }
+
 
     public boolean areAllBooksInStock(List<Long> id) {
         return bookRepository.areAllBooksInStock(id);
