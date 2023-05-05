@@ -38,14 +38,14 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<BookDto> findCategoryById(Long id) {
+    public CategoryDto findCategoryById(Long id) {
         Category optionalCategory = categoryRepository.findById(id).get();
         CategoryDto categoryDto = categoryMapper.categoryToCategoryDto(optionalCategory);
-        List<BookDto> bookRequest = bookService.findByCategory(categoryDto.getName());
+//        List<BookDto> bookRequest = bookService.findByCategory(categoryDto.getName());
         if (optionalCategory == null) {
             throw new CategoryNotFoundException("No  category present with id=" + id);
         } else {
-            return bookRequest;
+            return categoryDto;
         }
     }
 

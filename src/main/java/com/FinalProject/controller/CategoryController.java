@@ -31,7 +31,7 @@ public class CategoryController {
 
     @GetMapping("/category/{id}")
     public String findById(@PathVariable("id") Long id, Model model) {
-        final List<BookDto> category = categoryService.findCategoryById(id);
+        final CategoryDto category = categoryService.findCategoryById(id);
 
         model.addAttribute("category", category);
         return "category-list";
@@ -53,7 +53,7 @@ public class CategoryController {
 
     @GetMapping("/update/{id}")
     public String showUpdateForm(@PathVariable("id") Long id, Model model) {
-        final List<BookDto> category = categoryService.findCategoryById(id);
+        final CategoryDto category = categoryService.findCategoryById(id);
 
         model.addAttribute("category", category);
         return "category-update";
@@ -62,7 +62,7 @@ public class CategoryController {
 
     @PostMapping("/update-category/{id}")
     public String updateCategory(@PathVariable("id") Long id, CategoryDto category) {
-//        cCategoryDto categoryDto = categoryService.findCategoryById(id);
+        CategoryDto categoryDto = categoryService.findCategoryById(id);
 //        categoryDto.setId(id);
 //        categoryDto.setName(category.getName());
         categoryService.updateCategory(id, category);

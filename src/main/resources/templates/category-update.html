@@ -16,70 +16,35 @@
 <body>
 <div class="main">
     <div th:insert="navbar/header :: header"></div>
-    <!--    <nav class="navbar navbar-expand-md bg-dark navbar-dark">-->
-    <!--        &lt;!&ndash; Brand &ndash;&gt;-->
-    <!--        <a class="navbar-brand" href="#"> Category</a>-->
-
-    <!--        &lt;!&ndash; Toggler/collapsibe Button &ndash;&gt;-->
-    <!--        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">-->
-    <!--            <span class="navbar-toggler-icon"></span>-->
-    <!--        </button>-->
-
-    <!--    </nav>-->
     <div class="categories">
-        <div class="container my-5">
-            <h3>Update Category</h3>
-            <div class="card">
-                <div class="card-body">
-                    <div class="col-md-10">
-                        <form action="#" th:action="@{/update-category/{id}(id=${category.id})}" th:object="${category}"
-                              method="post">
-                            <div class="row">
-
-                                <div class="form-group col-md-8">
-                                    <label for="name" class="col-form-label">Category Name</label>
-                                    <input type="text" th:field="*{name}" class="form-control" id="name"
-                                           placeholder="Category Name"/>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <input type="submit" class="btn btn-warning" value=" Submit ">
-                                </div>
-
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 container justify-content-center card">
+                    <h1 class="text-center"> Update Category </h1>
+                    <div class="card-body">
+                        <form th:action="@{/update-category/{id}(id=${category.id})}" th:object="${category}"
+                              method="POST"
+                              enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label> Category Name </label>
+                                <input
+                                        type="text"
+                                        name="name"
+                                        th:field="*{name}"
+                                        class="form-control"
+                                        placeholder="Enter Category Name"
+                                />
+                            </div>
+                            <div class="box-footer">
+                                <button type="submit" class="btn btn-warning">
+                                    Submit
+                                </button>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
-
-
-        <!--<div class="container">-->
-        <!--    <div class="row">-->
-        <!--        <div class="col-lg-6 col-md-6 col-sm-6 container justify-content-center card">-->
-        <!--            <h1 class="text-center"> Create New Category </h1>-->
-        <!--            <div class="card-body">-->
-        <!--                <form th:action="@{/update-category/{id}(id=${category.id})}" th:object="${category}" method="POST"-->
-        <!--                      enctype="multipart/form-data">-->
-        <!--                    <div class="form-group">-->
-        <!--                        <label> Category Name </label>-->
-        <!--                        <input-->
-        <!--                                type="text"-->
-        <!--                                name="name"-->
-        <!--                                th:field="*{name}"-->
-        <!--                                class="form-control"-->
-        <!--                                placeholder="Enter Category Name"-->
-        <!--                        />-->
-        <!--                    </div>-->
-        <!--                    <div class="box-footer">-->
-        <!--                        <button type="submit" class="btn btn-warning">-->
-        <!--                            Submit-->
-        <!--                        </button>-->
-        <!--                    </div>-->
-        <!--                </form>-->
-        <!--            </div>-->
-        <!--        </div>-->
-        <!--    </div>-->
     </div>
 </div>
 </body>

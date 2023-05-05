@@ -10,7 +10,7 @@ import java.util.List;
 public interface CategoryService {
     public List<CategoryDto> findAllCategories();
 
-    public List<BookDto> findCategoryById(Long id);
+    public CategoryDto findCategoryById(Long id);
 
     public void createCategory(CategoryDto category);
 
