@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -88,7 +87,7 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
 
         if(!order.getInProgress())throw new NotChangeableException("Cannot be changeable");
 
-        if(!order.getCreatedAt().toLocalDate().equals(LocalDate.now()))throw new NotChangeableException("create new order");
+        if(!order.getCreatedAt().equals(LocalDate.now()))throw new NotChangeableException("create new order");
 
         var bookIds = dto.getBooks().stream().filter(Objects::nonNull).distinct().collect(Collectors.toCollection(ArrayList::new));
 
@@ -132,7 +131,7 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
                 t->
                         t.getCreatedAt()
                                 .plusDays(15)
-                                .compareTo(LocalDateTime.now())<0
+                                .compareTo(LocalDate.now())<0
         ).map(t->{t.setInDelay(true);return t;}).collect(Collectors.toList());
         orderRepo.saveAll(temp);
     }
@@ -148,7 +147,7 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
 
         var order = optional.get();
 
-        order.setFinishedAt(LocalDateTime.now());
+        order.setFinishedAt(LocalDate.now());
 
         order.setInProgress(false);
 
