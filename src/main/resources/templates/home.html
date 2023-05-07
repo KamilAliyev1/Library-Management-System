@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewreport" content="width=device-width, initial-scale=1.0">
+    <title>
+        Home Page
+    </title>
+    <link rel="stylesheet" type="text/css"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/>
+    <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}" href=""/>
+</head>
+<body>
+<div class="hero">
+    <nav>
+        <img src="/img/logo.png" class="logo">
+        <ul>
+            <li><a th:href="@{/}">Home</a></li>
+            <li><a th:href="@{/authors}">Author</a></li>
+            <li><a th:href="@{/book}">Book</a></li>
+            <li><a th:href="@{/categories}">Category</a></li>
+        </ul>
+    </nav>
+
+    <div class="detel">
+        <h1>Library <br> <span> Management System </span></h1>
+        <p>Lorem ipsum dollars
+            <br>Books
+        </p>
+        <a th:href="@{/about}">More About</a>
+    </div>
+    <div class="images">
+        <img src="/img/homeimage.jpeg" class="shape">
+        <img src="/img/homeimage2.webp" class="girls">
+    </div>
+</div>
+</body>
+</html>

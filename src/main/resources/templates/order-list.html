@@ -1,76 +1,71 @@
 <!DOCTYPE html>
-<head xmlns:th="http://www.w3.org/1999/xhtml">
+<head xmlns:th="http://www.thymeleaf.org">
     <meta charset="ISO-8859-1">
     <title>Book Management System</title>
     <link rel="stylesheet"
           href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
           crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" href=""/>
+    <link rel="stylesheet" th:href="@{/css/containers.css}" href="">
 </head>
 <body>
-<nav class="navbar navbar-expand-md bg-dark navbar-dark">
-    <a class="navbar-brand" href="#">Book Management System</a>
+<div class="main">
+    <div th:insert="navbar/header :: header"></div>
+    <div class="orders">
+        <div class="container" style="width: 65%">
+            <div class="row">
+                <h1> List Order </h1>
+            </div>
 
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+            <div class="row gx-5">
+                <div>
+                    <form th:action="@{/orders/search/}" class="nav-link p-3">
+                        <input name="id" class="form-control mr-sm-2 mb-5" type="search" placeholder="Search Author"
+                               aria-label="Search">
+                    </form>
+                </div>
+            </div>
+            <table class="table table-striped table-bordered">
+                <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>StudentID</th>
+                    <th>createdAt</th>
+                    <th>inProgress</th>
+                    <th>inDelay</th>
+                    <th>finishedAt</th>
 
-</nav>
-<div class="container">
-    <div class="row">
-        <h1> List Order </h1>
-    </div>
+                </tr>
+                </thead>
 
-    <div class="row gx-5">
-        <div>
-            <form th:action="@{/orders/search/}" class="nav-link p-3">
-                <input name="id" class="form-control mr-sm-2 mb-5" type="search" placeholder="Search Author"
-                       aria-label="Search">
-            </form>
+                <tbody>
+                <tr th:each="order: ${orders}" class="col-lg-6">
+                    <td th:text="${order.id}"></td>
+                    <td th:text="${order.studentId}"></td>
+                    <td th:text="${order.createdAt}"></td>
+                    <td th:text="${order.inProgress}"></td>
+                    <td th:text="${order.inDelay}"></td>
+                    <td th:text="${order.finishedAt}"></td>
+
+                    <td>
+                        <a th:href="@{/orders/{id}/update(id=${order.id})}"
+                           class="btn btn-primary">Update</a>
+
+                        <a th:href="@{/orders/{id}/delete(id=${order.id})}"
+                           class="btn btn-danger">Delete</a>
+
+                        <a th:href="@{/orders/{id}/disableProgress(id=${order.id})}"
+                           class="btn btn-danger">disableProgress</a>
+
+                    </td>
+                </tr>
+
+                </tbody>
+
+            </table>
         </div>
     </div>
-    <div class="row">
-        <div class="col-lg-3">
-            <a th:href="@{/orders/add}" class="btn btn-primary btn-sm mb-3"> Add Order</a>
-        </div>
-    </div>
-    <table class="table table-striped table-bordered">
-        <thead class="table-dark">
-        <tr>
-            <th>ID</th>
-            <th>StudentID</th>
-            <th>createdAt</th>
-            <th>inProgress</th>
-            <th>inDelay</th>
-            <th>finishedAt</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        <tr th:each="order: ${orders}" class="col-lg-6">
-            <td th:text="${order.id}"></td>
-            <td th:text="${order.studentId}"></td>
-            <td th:text="${order.createdAt}"></td>
-            <td th:text="${order.inProgress}"></td>
-            <td th:text="${order.inDelay}"></td>
-            <td th:text="${order.finishedAt}"></td>
-
-            <td>
-                <a th:href="@{/orders/{id}/update(id=${order.id})}"
-                   class="btn btn-primary">Update</a>
-
-                <a th:href="@{/orders/{id}/delete(id=${order.id})}"
-                   class="btn btn-danger">Delete</a>
-
-                <a th:href="@{/orders/{id}/disableProgress(id=${order.id})}"
-                   class="btn btn-danger">disableProgress</a>
-
-            </td>
-        </tr>
-
-        </tbody>
-
-    </table>
 </div>
 </body>
 </html>
