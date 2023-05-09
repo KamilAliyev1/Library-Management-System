@@ -62,10 +62,7 @@
             <td th:text="${book.getAuthorName()}"></td>
             <td th:text="${book.getCategory()}"></td>
             <td>
-                <img th:src="@{/book/images/__${book.getImage()}__}" />
-            </td>
-
-
+                <img th:src="@{/book/images/__${book.getImage()}__}  " width="150" height="150"/>
             <td>
                 <a th:href="@{/book/{isbn}/update(isbn=${book.getIsbn()})}"
                    class="btn btn-primary">Update</a>

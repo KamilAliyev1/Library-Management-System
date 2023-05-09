@@ -4,6 +4,7 @@ import com.FinalProject.dto.BookDto;
 import com.FinalProject.dto.BookRequest;
 import com.FinalProject.exception.BookAlreadyFoundException;
 import com.FinalProject.exception.BookNotFoundException;
+import com.FinalProject.exception.FileAlreadyExistsException;
 import com.FinalProject.model.Authors;
 import com.FinalProject.model.Book;
 import com.FinalProject.model.Category;
@@ -47,6 +48,7 @@ public class BookServiceImpl {
                 .category(book.getCategory().getName())
                 .isbn(book.getIsbn())
                 .name(book.getName())
+                .image(book.getImage())
                 .build();
     }
 
@@ -79,11 +81,29 @@ public class BookServiceImpl {
 
 
     public void save(MultipartFile multipartFile) {
-        try {
-            Files.copy(multipartFile.getInputStream(), this.root.resolve((multipartFile.getOriginalFilename())));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if (isPng(multipartFile))
+            try {
+                Files.copy(multipartFile.getInputStream(), this.root.resolve((multipartFile.getOriginalFilename())));
+            } catch (IOException e) {
+                throw new FileAlreadyExistsException("file is already found :" + multipartFile.getOriginalFilename());
+            }
+        else {
+            throw new IllegalArgumentException("Only PNG files are allowed");
         }
+
+    }
+
+    public void deleteFile(String fileName) {
+        Path path = Paths.get(root.toString(), fileName);
+        try {
+            Files.delete(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean isPng(MultipartFile file) {
+        return file.getContentType().equals("image/png");
     }
 
 
@@ -122,7 +142,6 @@ public class BookServiceImpl {
                 .build();
     }
 
-
     public BookDto update(String isbn, BookRequest bookRequest) {
         Category bookCategory = Category.builder()
                 .name(bookRequest.getCategory())
@@ -142,17 +161,23 @@ public class BookServiceImpl {
         book.setStock(bookRequest.getStock());
         book.setIsbn(bookRequest.getIsbn());
         book.setName(bookRequest.getName());
+        book.setImage(bookRequest.getFile().getOriginalFilename());
+        save(bookRequest.getFile());
         return entityToResponse(bookRepository.save(book));
     }
 
     @Transactional
     public void delete(String isbn) {
         bookRepository.findByIsbn(isbn).ifPresentOrElse(
-                book -> bookRepository.deleteByIsbn(isbn),
+                book -> {
+                    bookRepository.deleteByIsbn(isbn);
+                    deleteFile(book.getImage());
+                },
                 () -> {
                     throw new BookNotFoundException("Book not found with isbn : " + isbn);
                 }
         );
+
     }
 
     public List<BookDto> findByCategory(String category) {

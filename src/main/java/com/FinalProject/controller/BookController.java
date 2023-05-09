@@ -56,12 +56,12 @@ public class BookController {
 
 
     @PostMapping("/{isbn}/update")
-    public String update(@PathVariable String isbn, @ModelAttribute("bookRequest") BookRequest bookRequest, Model model) {
+    public String update(@PathVariable String isbn, @ModelAttribute("request") BookRequest bookRequest, Model model) {
         if (bookRequest == null) {
             return "book-update";
         }
         bookService.update(isbn, bookRequest);
-        model.addAttribute("bookRequest", bookService.findAll());
+        model.addAttribute("bookRequest1", bookService.findAll());
         return "redirect:/book";
     }
 

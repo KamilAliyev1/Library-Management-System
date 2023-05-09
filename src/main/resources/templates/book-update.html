@@ -28,7 +28,7 @@
             <h1 class="text-center"> Update Book </h1>
             <div class="card-body">
                 <form role="form" method="post" th:action="@{/book/{isbn}/update(isbn=${bookRequest.getIsbn()})}"
-                      th:object="${bookRequest}">
+                      th:object="${request}">
                     <div class="form-group">
                         <label> Book ISBN </label>
                         <input
@@ -79,6 +79,16 @@
                                 th:field="*{category}"
                                 class="form-control"
                                 placeholder="Enter Book Category"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label> Book Picture </label>
+                        <input
+                                type="file"
+                                name="Book Picture"
+                                th:field="*{file}"
+                                class="form-control"
+                                placeholder="Enter Book Picture"
                         />
                     </div>
                     <div>
