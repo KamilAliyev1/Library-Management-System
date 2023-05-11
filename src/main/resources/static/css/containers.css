@@ -3,10 +3,16 @@
 
 }
 
-.categories {
-    margin-top: 10%;
+.categories,.books,.authors {
+    margin-top: 8%;
     margin-left: 0;
-    width: 65%;
+    width: 100%;
+    justify-items: center;
+}
+.orders{
+    margin-top: 5%;
+    margin-left: 0;
+    width: 100%;
     justify-items: center;
 }
 
