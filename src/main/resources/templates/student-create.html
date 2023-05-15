@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Book Student Management System</title>
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/sidebar.css}" href=""/>
+    <link rel="stylesheet" th:href="@{/css/containers.css}" href="">
+</head>
+<body>
+<div class="main">
+    <div th:insert="navbar/sidebar :: sidebar"></div>
+    <div class="students">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 container justify-content-center card">
+                    <h1 class="text-center"> Create New Student </h1>
+                    <div class="card-body">
+                        <form th:action="@{/student}" th:object="${studentRequest}" method="POST" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label> Student studentFIN </label>
+                                <input
+                                        type="text"
+                                        name="studentFIN"
+                                        th:field="*{studentFIN}"
+                                        class="form-control"
+                                        placeholder="Enter Student studentFIN"
+                                />
+                            </div>
+
+                            <div class="form-group">
+                                <label> Student name </label>
+                                <input
+                                        type="text"
+                                        name="Student Name"
+                                        th:field="*{name}"
+                                        class="form-control"
+                                        placeholder="Enter Student Name"
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label> Student surname </label>
+                                <input
+                                        type="text"
+                                        name="Student surName"
+                                        th:field="*{surname}"
+                                        class="form-control"
+                                        placeholder="Enter Student surName"
+                                />
+                            </div>
+
+
+
+<!--                            <div class="form-group">-->
+<!--                                <label> Student studentFIN </label>-->
+<!--                                <input-->
+<!--                                        type="text"-->
+<!--                                        name="studentFIN"-->
+<!--                                        th:field="*{studentFIN}"-->
+<!--                                        class="form-control"-->
+<!--                                        placeholder="Enter StudentFIN"-->
+<!--                                />-->
+<!--                            </div>-->
+
+                            <div class="form-group">
+                                <label> Student faculty </label>
+                                <input
+                                        type="text"
+                                        name="faculty"
+                                        th:field="*{faculty}"
+                                        class="form-control"
+                                        placeholder="Enter Faculty faculty"
+                                />
+                            </div>
+
+                            <div class="box-footer">
+                                <button type="submit" class="btn btn-primary">
+                                    Submit
+                                </button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
