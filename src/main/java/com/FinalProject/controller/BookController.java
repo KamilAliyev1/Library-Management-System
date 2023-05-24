@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,11 +24,18 @@ public class BookController {
 
     private final BookServiceImpl bookService;
 
+    @PostMapping("/{isbn}/update")
+    public String update(@PathVariable("isbn") String isbn,
+                         @ModelAttribute("bookRequest") BookRequest bookRequest,
+                         BindingResult result, Model model) {
+        bookService.update(isbn, bookRequest);
+        return "book-list";
+    }
 
-    @GetMapping("/add")
-    public String bookForm(Model model) {
+    @GetMapping("/{isbn}/update")
+    public String updatePage(@PathVariable("isbn") String isbn, Model model) {
         model.addAttribute("bookRequest", new BookRequest());
-        return "book-create";
+        return "book-update";
     }
 
     @PostMapping
@@ -39,6 +47,14 @@ public class BookController {
         model.addAttribute("book", bookService.findAll());
         return "redirect:/book";
     }
+
+
+    @GetMapping("/add")
+    public String bookForm(Model model) {
+        model.addAttribute("bookRequest", new BookRequest());
+        return "book-create";
+    }
+
 
     @GetMapping
     public String findAll(Model model) {
@@ -54,22 +70,6 @@ public class BookController {
         return "redirect:/book";
     }
 
-
-    @PostMapping("/{isbn}/update")
-    public String update(@PathVariable String isbn, @ModelAttribute("request") BookRequest bookRequest, Model model) {
-        if (bookRequest == null) {
-            return "book-update";
-        }
-        bookService.update(isbn, bookRequest);
-        model.addAttribute("bookRequest1", bookService.findAll());
-        return "redirect:/book";
-    }
-
-    @GetMapping("/{isbn}/update")
-    public String updatePage(@PathVariable String isbn, Model model) {
-        model.addAttribute("bookRequest", bookService.findByIsbn(isbn));
-        return "book-update";
-    }
 
     @GetMapping("/images/{imageName}")
     public ResponseEntity<Resource> getImage(Model model, @PathVariable String imageName) {

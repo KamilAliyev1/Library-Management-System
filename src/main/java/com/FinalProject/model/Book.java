@@ -12,6 +12,7 @@ import lombok.*;
 @Builder
 @EqualsAndHashCode(of = "id")
 public class Book {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

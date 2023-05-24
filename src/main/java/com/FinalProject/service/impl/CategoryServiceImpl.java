@@ -7,7 +7,6 @@ import com.FinalProject.model.Category;
 import com.FinalProject.repository.CategoryRepository;
 import com.FinalProject.service.CategoryService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -63,7 +62,6 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void updateCategory(CategoryDto categoryDto) {
         categoryRepository.save(categoryMapper.categoryDtoToCategory(categoryDto));
-
     }
 
 
