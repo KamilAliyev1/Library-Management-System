@@ -7,58 +7,74 @@
           href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
           crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/sidebar.css}" href=""/>
+    <link rel="stylesheet" th:href="@{/css/containers.css}" href="">
 </head>
 <body>
-<nav class="navbar navbar-expand-md bg-dark navbar-dark">
-    <!-- Brand -->
-    <a class="navbar-brand" href="#">Books Management System</a>
+<div class="main">
+    <div th:insert="navbar/sidebar :: sidebar"></div>
+<div class="books">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 container justify-content-center card">
+                <h1 class="text-center"> Create New Book </h1>
+                <div class="card-body">
+                    <form th:action="@{/book}" th:object="${bookRequest}" method="POST" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label> Book Isbn </label>
+                            <input
+                                    type="text"
+                                    name="isbn"
+                                    th:field="*{isbn}"
+                                    class="form-control"
+                                    placeholder="Enter Book Isbn"
+                            />
+                        </div>
 
-    <!-- Toggler/collapsibe Button -->
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+                        <div class="form-group">
+                            <label> Book name </label>
+                            <input
+                                    type="text"
+                                    name="Book Name"
+                                    th:field="*{name}"
+                                    class="form-control"
+                                    placeholder="Enter Book Name"
+                            />
+                        </div>
 
-</nav>
-<br>
-<br>
-<div class="container">
-    <div class="row">
-        <div class="col-lg-6 col-md-6 col-sm-6 container justify-content-center card">
-            <h1 class="text-center"> Create New Book </h1>
-            <div class="card-body">
-                <form th:action="@{/book}" th:object="${bookRequest}" method="POST" enctype="multipart/form-data">
-                    <div class="form-group">
-                        <label> Book Isbn </label>
-                        <input
-                                type="text"
-                                name="isbn"
-                                th:field="*{isbn}"
-                                class="form-control"
-                                placeholder="Enter Book Isbn"
-                        />
-                    </div>
+                        <div class="form-group">
+                            <label> Book stock </label>
+                            <input
+                                    type="number"
+                                    name="stock"
+                                    th:field="*{stock}"
+                                    class="form-control"
+                                    placeholder="Enter Book Stock"
+                            />
+                        </div>
 
-                    <div class="form-group">
-                        <label> Book name </label>
-                        <input
-                                type="text"
-                                name="Book Name"
-                                th:field="*{name}"
-                                class="form-control"
-                                placeholder="Enter Book Name"
-                        />
-                    </div>
+                        <div class="form-group">
+                            <label> Book Category </label>
+                            <input
+                                    type="text"
+                                    name="category"
+                                    th:field="*{category}"
+                                    class="form-control"
+                                    placeholder="Enter Book Category"
+                            />
+                        </div>
 
-                    <div class="form-group">
-                        <label> Book stock </label>
-                        <input
-                                type="number"
-                                name="stock"
-                                th:field="*{stock}"
-                                class="form-control"
-                                placeholder="Enter Book Stock"
-                        />
-                    </div>
+                        <div class="form-group">
+                            <label> Book Author </label>
+                            <input
+                                    type="text"
+                                    name="Author Name"
+                                    th:field="*{authorName}"
+                                    class="form-control"
+                                    placeholder="Enter Author Name"
+                            />
+                        </div>
+
 
                     <div class="form-group">
                         <label> Book Category </label>
@@ -101,9 +117,12 @@
                     </div>
                 </form>
 
+
+                </div>
             </div>
         </div>
     </div>
+</div>
 </div>
 </body>
 </html>

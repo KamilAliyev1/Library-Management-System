@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title> Category</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/sidebar.css}" href=""/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/containers.css}" href=""/>
+
+</head>
+<body>
+<div class="main">
+    <div th:insert="navbar/sidebar :: sidebar"></div>
+    <div class="categories">
+        <div th:switch="${category}" class="container my-5">
+            <p class="my-5">
+                <a href="#" class="btn btn-primary">
+                    <i class="bi bi-journals"></i>
+                </a>
+            </p>
+            <table class="table table-striped table-responsive-md">
+
+                <thead>
+                <tr>
+                    <th>id</th>
+                    <th>name</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td th:text="${category.id}"></td>
+                    <td th:text="${category.name}"></td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+<!--<div th:insert="navbar/footer :: footer"></div>-->
+</body>
+
+</html>

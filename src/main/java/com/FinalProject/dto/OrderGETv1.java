@@ -1,7 +1,7 @@
 package com.FinalProject.dto;
 
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -14,9 +14,9 @@ public record OrderGETv1(
 
         Boolean inProgress,
 
-        LocalDateTime createdAt,
+        LocalDate createdAt,
 
-        LocalDateTime finishedAt,
+        LocalDate finishedAt,
         Boolean inDelay
 
 ) {

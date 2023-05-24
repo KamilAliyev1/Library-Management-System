@@ -39,8 +39,9 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }
 
-    @ExceptionHandler({NotChangeableException.class, OrderNotFoundException.class, StockNotEnoughException.class})
-    public ResponseEntity<?> userExceptions(Exception userException) {
+    @ExceptionHandler({NotChangeableException.class, OrderNotFoundException.class,StockNotEnoughException.class, OrderStudentUniqueException.class})
+    public ResponseEntity<?> userExceptions(Exception userException){
+
         return ResponseEntity.status(HttpStatus.CONFLICT).body(userException.getMessage());
     }
 
