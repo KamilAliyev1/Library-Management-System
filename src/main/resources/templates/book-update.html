@@ -78,10 +78,73 @@
                                 <button>submit</button>
                             </div>
 
+</nav>
+<br>
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-6 container justify-content-center card">
+            <h1 class="text-center"> Update Book </h1>
+            <div class="card-body">
+                <form th:action="@{/book/{isbn}/update(isbn=${bookRequest.getIsbn()})}"
+                      th:object="${bookRequest}"
+                      method="POST" enctype="multipart/form-data"
+                >
+                    <div class="form-group">
+                        <label> Book Name </label>
+                        <input
+                                type="text"
+                                name="name"
+                                th:field="*{name}"
+                                class="form-control"
+                                placeholder="Enter Book Name"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label> Book Stock </label>
+                        <input
+                                type="number"
+                                name="stock"
+                                th:field="*{stock}"
+                                class="form-control"
+                                placeholder="Enter Book Stock"
+                        />
+                    </div>
 
-                        </form>
+                    <div class="form-group">
+                        <label> Author </label>
+                        <input
+                                type="text"
+                                name="authorName"
+                                th:field="*{authorName}"
+                                class="form-control"
+                                placeholder="Enter Book Author"
+                        />
+                    </div>
+
 
                     </div>
+
+                    <div class="form-group">
+                        <label> Picture </label>
+                        <input
+                                type="file"
+                                name="file"
+                                th:field="*{file}"
+                                class="form-control"
+                                placeholder="Enter Book Picture"
+                        />
+                    </div>
+
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-primary">
+                            Submit
+                        </button>
+                    </div>
+
+
+                </form>
+
 
                 </div>
             </div>

@@ -36,8 +36,41 @@
                     <th>Author</th>
                     <th>Category</th>
 
-                </tr>
-                </thead>
+</nav>
+<div class="container">
+    <div class="row">
+        <h1> List Book </h1>
+    </div>
+
+    <div class="row gx-5">
+        <div>
+            <form th:action="@{/book/search/}" class="nav-link p-3">
+                <input name="isbn" class="form-control mr-sm-2 mb-5" type="search" placeholder="Search Book with ISBN"
+                       aria-label="Search">
+            </form>
+            <form th:action="@{/book/search/c}" class="nav-link p-3">
+                <input name="category" class="form-control mr-sm-2 mb-5" type="search"
+                       placeholder="Search Book with Category"
+                       aria-label="Search">
+            </form>
+
+            <!--            <form th:action="@{/book/search/a}" class="nav-link p-3">-->
+            <!--                <input name="author" class="form-control mr-sm-2 mb-5" type="search" placeholder="Search Book"-->
+            <!--                       aria-label="Search">-->
+            <!--            </form>-->
+        </div>
+    </div>
+    <table class="table table-striped table-bordered">
+        <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Isbn</th>
+            <th>Name</th>
+            <th>Stock</th>
+            <th>Author</th>
+            <th>Category</th>
+            <th>Image</th>
+
 
                 <tbody>
                 <tr th:each="book: ${books}" class="col-lg-6">
@@ -48,24 +81,36 @@
                     <td th:text="${book.getAuthorName()}"></td>
                     <td th:text="${book.getCategory()}"></td>
 
-                    <td>
-                        <a th:href="@{/book/{isbn}/update(isbn=${book.getIsbn()})}"
-                           class="btn btn-primary">Update</a>
+        <tbody>
+        <tr th:each="book: ${bookList}" class="col-lg-6">
+            <td th:text="${book.getId()}"></td>
+            <td th:text="${book.getIsbn()}"></td>
+            <td th:text="${book.getName()}"></td>
+            <td th:text="${book.getStock()}"></td>
+            <td th:text="${book.getAuthorName()}"></td>
+            <td th:text="${book.getCategory()}"></td>
+            <td>
+                <img th:src="@{/book/images/__${book.getImage()}__}  " width="150" height="150"/>
+            <td>
+                <a th:href="@{/book/{isbn}/update(isbn=${book.getIsbn()})}"
+                   class="btn btn-primary">Update</a>
 
-                        <a th:href="@{/book/remove/{isbn}(isbn=${book.getIsbn()})}"
-                           class="btn btn-danger">Delete</a>
 
                         <!--                <a th:href="@{/orders/{id}/disableProgress(id=${order.id})}"-->
                         <!--                   class="btn btn-danger">disableProgress</a>-->
 
-                    </td>
-                </tr>
+
+
+                <!--                <a th:href="@{/orders/{id}/disableProgress(id=${order.id})}"-->
+                <!--                   class="btn btn-danger">disableProgress</a>-->
+
 
                 </tbody>
 
-            </table>
-        </div>
-    </div>
+
+        </tbody>
+
+    </table>
+
 </div>
 </body>
-</html>

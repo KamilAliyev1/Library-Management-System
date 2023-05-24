@@ -16,4 +16,14 @@ public class BookDto {
     private int stock;
     private String authorName;
     private String category;
+    private String image;
+
+    public BookDto(Long id, String name, String isbn, int stock, String authorName, String category) {
+        this.id = id;
+        this.name = name;
+        this.isbn = isbn;
+        this.stock = stock;
+        this.authorName = authorName;
+        this.category = category;
+    }
 }

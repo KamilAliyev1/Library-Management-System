@@ -54,7 +54,6 @@ public class CategoryController {
     @GetMapping("/update/{id}")
     public String showUpdateForm(@PathVariable("id") Long id, Model model) {
         final CategoryDto category = categoryService.findCategoryById(id);
-
         model.addAttribute("category", category);
         return "category-update";
     }

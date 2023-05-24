@@ -75,12 +75,48 @@
                             />
                         </div>
 
-                        <div class="box-footer">
-                            <button type="submit" class="btn btn-primary">
-                                Submit
-                            </button>
-                        </div>
-                    </form>
+
+                    <div class="form-group">
+                        <label> Book Category </label>
+                        <input
+                                type="text"
+                                name="category"
+                                th:field="*{category}"
+                                class="form-control"
+                                placeholder="Enter Book Category"
+                        />
+                    </div>
+
+                    <div class="form-group">
+                        <label> Book Author </label>
+                        <input
+                                type="text"
+                                name="Author Name"
+                                th:field="*{authorName}"
+                                class="form-control"
+                                placeholder="Enter Author Name"
+                        />
+                    </div>
+
+                    <div class="form-group">
+                        <label> Book Picture </label>
+                        <input
+                                type="file"
+                                name="Book Picture"
+                                th:field="*{file}"
+                                class="form-control"
+                                placeholder="Enter Book Picture"
+                        />
+                    </div>
+
+
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-primary">
+                            Submit
+                        </button>
+                    </div>
+                </form>
+
 
                 </div>
             </div>
