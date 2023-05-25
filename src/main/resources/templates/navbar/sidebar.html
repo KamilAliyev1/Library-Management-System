@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Header</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/>
+    <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/sidebar.css}" href=""/>
+
+</head>
+<body>
+<nav th:fragment="sidebar">
+    <div class="side-panel">
+        <div class="head-image-side-panel">
+            <img th:src="@{img/useravatar.jpg}" alt="Avatar" width="188px" height="188px"/>
+            <h4 class="head">
+                <b>Book Management System</b>
+            </h4>
+            <p>Username</p>
+        </div>
+        <div class="middle-side-panel">
+            <div>
+                <b><a href="/authors">Authors</a></b>
+            </div>
+            <div>
+                <b><a href="/">Home</a></b>
+
+
+            </div>
+            <div>
+                <b><a href="/book">Books</a></b>
+                <hr>
+            </div>
+
+            <div>
+                <b><a href="/students">Students</a></b>
+                <hr>
+            </div>
+            <div>
+                <b><a href="/categories">Categories</a></b>
+                <hr>
+            </div>
+            <div>
+                <b><a href="/orders">Orders</a></b>
+            </div>
+        </div>
+
+        <div class="footer-side-panel">
+            <div>
+                <a href="#"> Log out</a>
+            </div>
+        </div>
+    </div>
+</nav>
+</body>
+</html>

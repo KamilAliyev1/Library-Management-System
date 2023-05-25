@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 public class Aspect {
 
 
+
     @Before("execution(* com.FinalProject.service.*.*(..))")
     void beforeService(JoinPoint joinPoint) {
         log.info(joinPoint + "args: {}", joinPoint.getArgs());

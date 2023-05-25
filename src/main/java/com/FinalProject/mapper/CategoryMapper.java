@@ -2,6 +2,7 @@ package com.FinalProject.mapper;
 
 import com.FinalProject.dto.CategoryDto;
 import com.FinalProject.model.Category;
+import com.FinalProject.request.CategoryRequest;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -10,7 +11,6 @@ public class CategoryMapper {
         return CategoryDto.builder()
                 .id(category.getId())
                 .name(category.getName())
-                .books(category.getBook())
                 .build();
     }
 
@@ -20,5 +20,13 @@ public class CategoryMapper {
                 .book(categoryDto.getBooks())
                 .build();
     }
+
+    public Category categoryRequestToCategory(CategoryRequest categoryRequest) {
+        return Category.builder()
+                .name(categoryRequest.getName())
+                .build();
+    }
+
+
 }
 

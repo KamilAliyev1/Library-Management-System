@@ -4,6 +4,7 @@ import com.FinalProject.dto.BookDto;
 import com.FinalProject.dto.BookRequest;
 import com.FinalProject.exception.BookAlreadyFoundException;
 import com.FinalProject.exception.BookNotFoundException;
+import com.FinalProject.exception.FileAlreadyExistsException;
 import com.FinalProject.model.Authors;
 import com.FinalProject.model.Book;
 import com.FinalProject.model.Category;
@@ -12,9 +13,18 @@ import com.FinalProject.repository.CategoryRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -24,11 +34,11 @@ public class BookServiceImpl {
 
     private final BookRepository bookRepository;
     private final CategoryRepository categoryRepository;
-
+    private final Path root = Paths.get("/Users/huseyn007/Desktop/Library-Management-System/src/main/resources/static/images");
 
     private static List<BookDto> entityListToResponseList(List<Book> books) {
         return books.stream().map(book -> new BookDto(
-                book.getId(), book.getName(), book.getIsbn(), book.getStock(), book.getAuthor().getFullName(), book.getCategory().getName())).toList();
+                book.getId(), book.getName(), book.getIsbn(), book.getStock(), book.getAuthor().getFullName(), book.getCategory().getName(), book.getImage())).toList();
     }
 
     private static BookDto entityToResponse(Book book) {
@@ -39,6 +49,7 @@ public class BookServiceImpl {
                 .category(book.getCategory().getName())
                 .isbn(book.getIsbn())
                 .name(book.getName())
+                .image(book.getImage())
                 .build();
     }
 
@@ -54,6 +65,48 @@ public class BookServiceImpl {
                 )).toList();
 
     }
+
+    public Resource load(String filename) {
+        try {
+            Path file = root.resolve(filename);
+            Resource resource = new UrlResource(file.toUri());
+            if (resource.exists() || resource.isReadable()) {
+                return resource;
+            } else {
+                throw new RuntimeException("Could not read the file!");
+            }
+        } catch (MalformedURLException e) {
+            throw new RuntimeException("Error: " + e.getMessage());
+        }
+    }
+
+
+    public void save(MultipartFile multipartFile) {
+        if (isPng(multipartFile))
+            try {
+                Files.copy(multipartFile.getInputStream(), this.root.resolve((Objects.requireNonNull(multipartFile.getOriginalFilename()))));
+            } catch (IOException e) {
+                throw new FileAlreadyExistsException("file is already found :" + multipartFile.getOriginalFilename());
+            }
+        else {
+            throw new IllegalArgumentException("Only PNG files are allowed");
+        }
+
+    }
+
+    public void deleteFile(String fileName) {
+        Path path = Paths.get(root.toString(), fileName);
+        try {
+            Files.delete(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean isPng(MultipartFile file) {
+        return Objects.equals(file.getContentType(), "image/png");
+    }
+
 
     @Transactional
     public void create(BookRequest bookRequests) {
@@ -71,11 +124,11 @@ public class BookServiceImpl {
             book.setCategory(categoryOptional.get());
         else
             categoryRepository.save(category);
-
-
+        save(bookRequests.getFile());
         bookRepository.save(book);
 
     }
+
 
     public Book requestToEntity(BookRequest bookRequest) {
         return Book.builder()
@@ -85,11 +138,12 @@ public class BookServiceImpl {
                 .author(Authors.builder().
                         fullName(bookRequest.getAuthorName())
                         .build())
+                .image(bookRequest.getFile().getOriginalFilename())
                 .build();
     }
 
-
-    public BookDto update(String isbn, BookRequest bookRequest) {
+    @Transactional
+    public void update(String isbn, BookRequest bookRequest) {
         Category bookCategory = Category.builder()
                 .name(bookRequest.getCategory())
                 .build();
@@ -98,9 +152,9 @@ public class BookServiceImpl {
                 .build();
         Book book = bookRepository.findByIsbn(isbn).orElseThrow(() -> new BookNotFoundException("Book not found with isbn : " + isbn));
         Optional<Category> category = categoryRepository.findByName(bookCategory.getName());
-        if (category.isPresent()) {
+        if (category.isPresent())
             book.setCategory(category.get());
-        } else {
+        else {
             categoryRepository.save(bookCategory);
             book.setCategory(bookCategory);
         }
@@ -108,17 +162,23 @@ public class BookServiceImpl {
         book.setStock(bookRequest.getStock());
         book.setIsbn(bookRequest.getIsbn());
         book.setName(bookRequest.getName());
-        return entityToResponse(bookRepository.save(book));
+        book.setImage(bookRequest.getFile().getOriginalFilename());
+        save(bookRequest.getFile());
+        bookRepository.save(book);
     }
 
     @Transactional
     public void delete(String isbn) {
         bookRepository.findByIsbn(isbn).ifPresentOrElse(
-                book -> bookRepository.deleteByIsbn(isbn),
+                book -> {
+                    bookRepository.deleteByIsbn(isbn);
+                    deleteFile(book.getImage());
+                },
                 () -> {
                     throw new BookNotFoundException("Book not found with isbn : " + isbn);
                 }
         );
+
     }
 
     public List<BookDto> findByCategory(String category) {
@@ -145,6 +205,7 @@ public class BookServiceImpl {
     public List<BookDto> findAll() {
         return entityListToResponseList(bookRepository.findAll());
     }
+
 
     public boolean areAllBooksInStock(List<Long> id) {
         return bookRepository.areAllBooksInStock(id);

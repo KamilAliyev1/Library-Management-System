@@ -35,6 +35,9 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'org.springframework.boot:spring-boot-devtools:3.0.6'
+	implementation 'org.modelmapper:modelmapper:3.1.1'
+
+
 
 }
 
