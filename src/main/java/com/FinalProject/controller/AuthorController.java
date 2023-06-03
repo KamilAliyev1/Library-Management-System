@@ -1,9 +1,9 @@
 package com.FinalProject.controller;
 
 import com.FinalProject.dto.AuthorsDto;
+import com.FinalProject.dto.BookDto;
 import com.FinalProject.service.AuthorService;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,11 +12,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequiredArgsConstructor
 public class AuthorController {
 
     private final AuthorService authorService;
 
+    public AuthorController(AuthorService authorService) {
+        this.authorService = authorService;
+    }
 
     @GetMapping("/author/new")
     public String createAuthorForm(Model model) {
@@ -78,9 +80,9 @@ public class AuthorController {
     }
 
     @GetMapping("/authorBooks/{authorId}")
-    public String authorBooks(@PathVariable("authorId") Long authorId ,Model model) {
-        List book = authorService.showAuthorBooks(authorId);
-        model.addAttribute("books" , book);
+    public String authorBooks(@PathVariable("authorId") Long authorId, Model model) {
+        List<BookDto> book = authorService.showAuthorBooks(authorId);
+        model.addAttribute("books", book);
         return "book-list";
     }
 
