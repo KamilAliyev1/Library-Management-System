@@ -36,23 +36,23 @@ public class GlobalExceptionHandler {
         detail.add(categoryAlreadyExistsException.getMessage());
 
         ErrorResponse errorResponse = new ErrorResponse("Category Already Exists !", detail);
-        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({NotChangeableException.class, OrderNotFoundException.class,StockNotEnoughException.class, OrderStudentUniqueException.class})
     public ResponseEntity<?> userExceptions(Exception userException){
 
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(userException.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(userException.getMessage());
     }
 
     @ExceptionHandler(BindException.class)
     public ResponseEntity<?> validationException(BindException e) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getFieldError().getDefaultMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getFieldError().getDefaultMessage());
     }
 
     @ExceptionHandler(FileAlreadyExistsException.class)
     public ResponseEntity<?> fileAlreadyExistException(FileAlreadyExistsException fileAlreadyExistsException) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(fileAlreadyExistsException.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(fileAlreadyExistsException.getMessage());
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
