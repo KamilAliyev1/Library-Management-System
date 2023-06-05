@@ -10,6 +10,7 @@ import com.FinalProject.exception.StockNotEnoughException;
 import com.FinalProject.mapper.OrderMapper;
 import com.FinalProject.model.Book;
 import com.FinalProject.model.Order;
+import com.FinalProject.model.Student;
 import com.FinalProject.repository.OrderRepo;
 import com.FinalProject.service.OrderService;
 import com.FinalProject.service.StudentService;
@@ -37,6 +38,21 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
 
     private final StudentService studentService;
 
+    void validateStudents(Student student){
+        if(student.getOrders() !=null && !student.getOrders().isEmpty() && student.getOrders().stream().anyMatch(Order::getInProgress))throw new OrderStudentUniqueException();
+    }
+
+    void validateBooks(List<Long> books){
+        if(!bookService.areAllBooksInStock(books))
+            throw new StockNotEnoughException();
+    }
+
+    void validateOrderForUpdate(Order order){
+
+        if(!order.getInProgress())throw new NotChangeableException("Cannot be changeable");
+
+        if(!order.getCreatedAt().equals(LocalDate.now()))throw new NotChangeableException("create new order");
+    }
 
     @Transactional
     @Override
@@ -44,14 +60,13 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
 
         var student  = studentService.findById(dto.studentId);
 
-        if(student.getOrders() !=null && !student.getOrders().isEmpty() && student.getOrders().stream().anyMatch(Order::getInProgress))throw new OrderStudentUniqueException();
+        validateStudents(student);
 
         Order order = orderMapper.toEntity(dto);
 
         List<Long> books = new HashSet<>(dto.getBooks()).stream().toList();
 
-        if(!bookService.areAllBooksInStock(books))
-            throw new StockNotEnoughException();
+        validateBooks(books);
 
         order = orderRepo.saveAndFlush(order);
 
@@ -63,11 +78,13 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
     @Override
     public OrderGETv1 get(Long ID) {
 
-        var order = orderRepo.findById(ID);
+        var order = orderRepo.findById(ID).orElseThrow(
+                ()->new OrderNotFoundException(
+                    String.format("Order couldn't found with id: %d",ID)
+                )
+        );
 
-        if(order.isEmpty()) throw new OrderNotFoundException("not founded");
-
-        return orderMapper.toGetDto(order.get());
+        return orderMapper.toGetDto(order);
 
     }
 
@@ -77,36 +94,35 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
 
         var student  = studentService.findById(dto.studentId);
 
-        if(student.getOrders() !=null && !student.getOrders().isEmpty() && student.getOrders().stream().anyMatch(Order::getInProgress))throw new OrderStudentUniqueException();
 
-        var optional = orderRepo.findById(id);
+        Order order = orderRepo.findById(id).orElseThrow(
+                ()->new OrderNotFoundException(
+                        String.format("Order couldn't found with id: %d",id)
+                )
+        );
 
-        if(optional.isEmpty()) throw new OrderNotFoundException();
+        if(student!=order.getStudent())
+            validateStudents(student);
 
-        Order order = optional.get();
+        validateOrderForUpdate(order);
 
-        if(!order.getInProgress())throw new NotChangeableException("Cannot be changeable");
+        var dtoBooksIds = dto.getBooks().stream().filter(Objects::nonNull).distinct().collect(Collectors.toCollection(ArrayList::new));
 
-        if(!order.getCreatedAt().equals(LocalDate.now()))throw new NotChangeableException("create new order");
+        var entityBooksIds= order.getBooks().stream().map(Book::getId).collect(Collectors.toList());
 
-        var bookIds = dto.getBooks().stream().filter(Objects::nonNull).distinct().collect(Collectors.toCollection(ArrayList::new));
+        if(dtoBooksIds.isEmpty()){disableProgress(id);delete(id);return orderMapper.toGetDto(new Order());}
 
-        var entityBooksids= order.getBooks().stream().map(Book::getId).collect(Collectors.toList());
+        validateBooks(dtoBooksIds.stream().filter(t->!entityBooksIds.contains(t)).collect(Collectors.toList()));
 
-        if(bookIds.isEmpty())delete(id);
+        var dtoBooks = dtoBooksIds.stream().map(t-> Book.builder().id(t).build()).collect(Collectors.toSet());
 
-        else if(!bookService.areAllBooksInStock(bookIds.stream().filter(t->!entityBooksids.contains(t)).collect(Collectors.toList())))
-            throw new StockNotEnoughException();
+        bookService.updateStockNumbersByIdIn(entityBooksIds,1);
 
-        var dtoBooks= bookIds.stream().map(t-> Book.builder().id(t).build()).collect(Collectors.toSet());
-
-        bookService.updateStockNumbersByIdIn(entityBooksids,1);
-
-        bookService.updateStockNumbersByIdIn(bookIds,-1);
+        bookService.updateStockNumbersByIdIn(dtoBooksIds,-1);
 
         var newOrder = orderMapper.change(dto,order);
 
-        newOrder.setBooks(dtoBooks);
+        newOrder.setBooks(dtoBooks); // I set this in here .Because DTO's Books can be contain null variable
 
         newOrder = orderRepo.saveAndFlush(newOrder);
 
@@ -127,12 +143,11 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
     void checkPeriod(){
 
         var temp = orderRepo.findAll();
-        temp = temp.stream().filter(t->t.getInProgress()).filter(
+        temp = temp.stream().filter(Order::getInProgress).filter(
                 t->
                         t.getCreatedAt()
-                                .plusDays(15)
-                                .compareTo(LocalDate.now())<0
-        ).map(t->{t.setInDelay(true);return t;}).collect(Collectors.toList());
+                                .plusDays(15).isBefore(LocalDate.now())
+        ).peek(t-> t.setInDelay(true)).collect(Collectors.toList());
         orderRepo.saveAll(temp);
     }
 
