@@ -45,7 +45,8 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public void updateAuthor(Long id, AuthorsDto request) {
-        Authors author = authorRepository.findById(id).orElseThrow();
+        Authors author = authorRepository.findById(id)
+                .orElseThrow(() -> new AuthorsNotFoundException("Author couldn't found with %s id:" + id));
         author.setFullName(request.getFullName());
         author.setEmail(request.getEmail());
         author.setPhone(request.getPhone());

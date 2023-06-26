@@ -208,7 +208,8 @@ public class BookServiceImpl {
 
 
     public boolean areAllBooksInStock(List<Long> id) {
-        return bookRepository.areAllBooksInStock(id);
+        //bookRepository.areAllBooksInTable(id);
+        return bookRepository.areAllBooksInTable(id,Integer.valueOf(id.size()).longValue())&&bookRepository.areAllBooksInStock(id);
     }
 
     public void updateStockNumbersByIdIn(List<Long> books, int i) {
