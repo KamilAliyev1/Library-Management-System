@@ -1,7 +1,6 @@
 package com.FinalProject.dto.studentdto;
-import enums.Faculty;
+import com.FinalProject.enums.Faculty;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.mapstruct.Mapper;
 

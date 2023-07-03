@@ -28,6 +28,9 @@ public class BookController {
     public String update(@PathVariable("isbn") String isbn,
                          @ModelAttribute("bookRequest") BookRequest bookRequest,
                          BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            return "book-update";
+        }
         bookService.update(isbn, bookRequest);
         return "book-list";
     }
@@ -63,7 +66,7 @@ public class BookController {
         return "book-list";
     }
 
-    @GetMapping("/remove/{isbn}")
+    @GetMapping("/{isbn}/remove")
     public String delete(@PathVariable String isbn, Model model) {
         bookService.delete(isbn);
         model.addAttribute("category", bookService.findAll());

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign In</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Sign In</h1>
+
+    <form action="#" th:action="@{/login}" th:object="${login}" method="post">
+        <div class="form-group">
+            <label>Email:</label>
+            <input type="text" name="email" th:field="*{email}" class="form-control" placeholder="Enter Email">
+        </div>
+
+        <div class="form-group">
+            <label>Password:</label>
+            <input type="password" name="password" th:field="*{password}" class="form-control"
+                   placeholder="Enter Password">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Sign In</button>
+<!--        <script th:inline="javascript">-->
+<!--            var jwtToken = [[#{token}]];-->
+
+
+<!--            // Make an AJAX request with the JWT token in the Authorization header-->
+<!--            var xhr = new XMLHttpRequest();-->
+<!--            xhr.open('GET', 'http://localhost:8080/about');-->
+<!--            xhr.setRequestHeader('Authorization', 'Bearer ' + jwtToken);-->
+<!--            xhr.onreadystatechange = function () {-->
+<!--                if (xhr.readyState === 4 && xhr.status === 200) {-->
+<!--                    // Handle the response-->
+<!--                    var response = JSON.parse(xhr.responseText);-->
+<!--                    console.log(response);-->
+<!--                }-->
+<!--            };-->
+<!--            xhr.send();-->
+<!--        </script>-->
+
+    </form>
+
+    <p>Don't have an account? <a th:href="@{/register}">Register</a></p>
+</div>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+</body>
+</html>
