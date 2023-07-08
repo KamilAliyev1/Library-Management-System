@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -26,18 +27,26 @@ public class BookController {
 
     @PostMapping("/{isbn}/update")
     public String update(@PathVariable("isbn") String isbn,
-                         @ModelAttribute("bookRequest") BookRequest bookRequest,
+                         @ModelAttribute("bookRequest") BookRequest bookRequest ,@RequestParam("file") MultipartFile file,
                          BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            return "book-update";
-        }
+        System.out.println("Aaaaaaaaaa");
+        System.out.println(file.getOriginalFilename());
+
+
+//        if (result.hasErrors()) {
+//
+//            return "book-update";
+//
+//        }
+        System.out.println(bookRequest.getFile().getOriginalFilename());
         bookService.update(isbn, bookRequest);
+
         return "book-list";
     }
 
     @GetMapping("/{isbn}/update")
     public String updatePage(@PathVariable("isbn") String isbn, Model model) {
-        model.addAttribute("bookRequest", new BookRequest());
+        model.addAttribute("bookRequest", BookRequest.builder().isbn(isbn).build());
         return "book-update";
     }
 

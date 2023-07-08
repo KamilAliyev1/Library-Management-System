@@ -12,6 +12,7 @@ import java.util.List;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+
     @ExceptionHandler(AuthorsNotFoundException.class)
     public ResponseEntity<?> authorNotFound(AuthorsNotFoundException authorsNotFoundException) {
         List<String> detail = new ArrayList<>();
@@ -39,8 +40,8 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler({NotChangeableException.class, OrderNotFoundException.class,StockNotEnoughException.class, OrderStudentUniqueException.class})
-    public ResponseEntity<?> userExceptions(Exception userException){
+    @ExceptionHandler({NotChangeableException.class, OrderNotFoundException.class, StockNotEnoughException.class, OrderStudentUniqueException.class})
+    public ResponseEntity<?> userExceptions(Exception userException) {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(userException.getMessage());
     }
@@ -54,6 +55,16 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> fileAlreadyExistException(FileAlreadyExistsException fileAlreadyExistsException) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(fileAlreadyExistsException.getMessage());
     }
+
+//    @ExceptionHandler(TokenExpiredException.class)
+//    public ResponseEntity<String> tokenExpiredException(HttpServletResponse response) {
+//        Cookie cookie = new Cookie("jwt", null);
+//        cookie.setMaxAge(0);
+//        cookie.setPath("/");
+//        response.addCookie(cookie);
+//        return ResponseEntity.ok().body("/login");
+//    }
+
 
 //    @ExceptionHandler(IllegalArgumentException.class)
 //    public String illegalArgumentException() {
