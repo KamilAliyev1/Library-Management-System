@@ -11,9 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -27,26 +25,13 @@ public class BookController {
 
     @PostMapping("/{isbn}/update")
     public String update(@PathVariable("isbn") String isbn,
-                         @ModelAttribute("bookRequest") BookRequest bookRequest ,@RequestParam("file") MultipartFile file,
-                         BindingResult result, Model model) {
-        System.out.println("Aaaaaaaaaa");
-        System.out.println(file.getOriginalFilename());
-
-
-//        if (result.hasErrors()) {
-//
-//            return "book-update";
-//
-//        }
-        System.out.println(bookRequest.getFile().getOriginalFilename());
+                         @ModelAttribute("bookRequest") BookRequest bookRequest) {
         bookService.update(isbn, bookRequest);
-
-        return "book-list";
+        return "redirect:/book";
     }
 
     @GetMapping("/{isbn}/update")
-    public String updatePage(@PathVariable("isbn") String isbn, Model model) {
-        model.addAttribute("bookRequest", BookRequest.builder().isbn(isbn).build());
+    public String updatePage(@PathVariable("isbn") String isbn, @ModelAttribute("bookRequest") BookRequest bookRequest) {
         return "book-update";
     }
 
@@ -84,7 +69,7 @@ public class BookController {
 
 
     @GetMapping("/images/{imageName}")
-    public ResponseEntity<Resource> getImage(Model model, @PathVariable String imageName) {
+    public ResponseEntity<Resource> getImage(@PathVariable String imageName) {
         var resource = bookService.load(imageName);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=\"" + imageName + "\"")
