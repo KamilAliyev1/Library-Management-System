@@ -24,6 +24,12 @@ public class AuthenticationController {
     private final AuthenticationService service;
 
 
+    @GetMapping("/lms")
+    public String lms() {
+        return "redirect:/login";
+    }
+
+
     @GetMapping("/login")
     public String loginForm(Model model) {
         model.addAttribute("login", new AuthenticationRequest());

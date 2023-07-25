@@ -29,17 +29,15 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
                 .requestMatchers("https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css").permitAll()
                 .requestMatchers("https://fonts.googleapis.com/css?family=Raleway&display=swap").permitAll()
                 .requestMatchers("/img", "/images").permitAll()
+                .requestMatchers("/lms").permitAll()
                 .requestMatchers("/login").permitAll()
-                .requestMatchers("/about").hasAuthority("ROLE_ADMIN")
-                .requestMatchers("/register")
-                .permitAll()
+                .requestMatchers("/register").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()

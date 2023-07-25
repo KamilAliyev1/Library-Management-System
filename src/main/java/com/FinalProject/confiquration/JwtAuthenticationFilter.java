@@ -39,9 +39,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String jwt = service.extractToken(request);
         String userEmail = null;
         if (jwt == null) {
-            filterChain.doFilter(request, response);
+            filterChain.doFilter(request,response);
             return;
         }
+
         try {
             userEmail = service.extractUsername(jwt);
         } catch (TokenExpiredException e) {
