@@ -1,7 +1,7 @@
 package com.FinalProject.model;
 
 
-import enums.Faculty;
+import com.FinalProject.enums.Faculty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

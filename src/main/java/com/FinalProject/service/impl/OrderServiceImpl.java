@@ -13,7 +13,6 @@ import com.FinalProject.model.Order;
 import com.FinalProject.model.Student;
 import com.FinalProject.repository.OrderRepo;
 import com.FinalProject.service.OrderService;
-import com.FinalProject.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -36,7 +35,7 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
 
     private final BookServiceImpl bookService;
 
-    private final StudentService studentService;
+//    private final StudentService studentService;
 
     void validateStudents(Student student){
         if(student.getOrders() !=null && !student.getOrders().isEmpty() && student.getOrders().stream().anyMatch(Order::getInProgress))throw new OrderStudentUniqueException();
@@ -58,9 +57,9 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
     @Override
     public OrderGETv1 add(OrderPOSTv1 dto) {
 
-        var student  = studentService.findById(dto.studentId);
+//        var student  = studentService.findById(dto.studentId);
 
-        validateStudents(student);
+//        validateStudents(student);
 
         Order order = orderMapper.toEntity(dto);
 
@@ -92,7 +91,7 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
     @Override
     public OrderGETv1 update(Long id,OrderPOSTv1 dto) {
 
-        var student  = studentService.findById(dto.studentId);
+//        var student  = studentService.findById(dto.studentId);
 
 
         Order order = orderRepo.findById(id).orElseThrow(
@@ -101,8 +100,8 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
                 )
         );
 
-        if(student!=order.getStudent())
-            validateStudents(student);
+//        if(student!=order.getStudent())
+//            validateStudents(student);
 
         validateOrderForUpdate(order);
 

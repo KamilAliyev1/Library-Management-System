@@ -11,10 +11,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/book")
@@ -26,15 +26,13 @@ public class BookController {
 
     @PostMapping("/{isbn}/update")
     public String update(@PathVariable("isbn") String isbn,
-                         @ModelAttribute("bookRequest") BookRequest bookRequest,
-                         BindingResult result, Model model) {
+                         @ModelAttribute("bookRequest") BookRequest bookRequest) {
         bookService.update(isbn, bookRequest);
-        return "book-list";
+        return "redirect:/book";
     }
 
     @GetMapping("/{isbn}/update")
-    public String updatePage(@PathVariable("isbn") String isbn, Model model) {
-        model.addAttribute("bookRequest", new BookRequest());
+    public String updatePage(@PathVariable("isbn") String isbn, @ModelAttribute("bookRequest") BookRequest bookRequest) {
         return "book-update";
     }
 
@@ -63,7 +61,7 @@ public class BookController {
         return "book-list";
     }
 
-    @GetMapping("/remove/{isbn}")
+    @GetMapping("/{isbn}/remove")
     public String delete(@PathVariable String isbn, Model model) {
         bookService.delete(isbn);
         model.addAttribute("category", bookService.findAll());
@@ -72,7 +70,7 @@ public class BookController {
 
 
     @GetMapping("/images/{imageName}")
-    public ResponseEntity<Resource> getImage(Model model, @PathVariable String imageName) {
+    public ResponseEntity<Resource> getImage(@PathVariable String imageName) {
         var resource = bookService.load(imageName);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=\"" + imageName + "\"")
@@ -80,21 +78,36 @@ public class BookController {
 
     }
 
-    @GetMapping("/search/")
+    @GetMapping("/search")
     public String findByIsbn(@RequestParam String isbn, Model model) {
-        model.addAttribute("books", bookService.findByIsbn(isbn));
+        List<BookDto> bookList = bookService.findAll();
+        List<BookDto> findBooks =
+                bookList.stream().
+                        filter(bookDto -> bookDto.getIsbn().equals(isbn))
+                        .collect(Collectors.toList());
+        model.addAttribute("bookList", findBooks);
         return "book-list";
     }
 
-    @GetMapping("/search/c")
+    @GetMapping("/search/category")
     public String findByCategory(@RequestParam String category, Model model) {
-        model.addAttribute("books", bookService.findByCategory(category));
+        List<BookDto> bookList = bookService.findAll();
+        List<BookDto> findBooks =
+                bookList.stream().
+                        filter(bookDto -> bookDto.getCategory().contains(category))
+                        .collect(Collectors.toList());
+        model.addAttribute("bookList", findBooks);
         return "book-list";
     }
 
-    @GetMapping("/search/a")
+    @GetMapping("/search/author")
     public String findByAuthor(@RequestParam String author, Model model) {
-        model.addAttribute("books", bookService.findByAuthor(author));
+        List<BookDto> bookList = bookService.findAll();
+        List<BookDto> findBooks =
+                bookList.stream().
+                        filter(bookDto -> bookDto.getAuthorName().contains(author))
+                        .collect(Collectors.toList());
+        model.addAttribute("bookList", findBooks);
         return "book-list";
     }
 

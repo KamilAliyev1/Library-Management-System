@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="ISO-8859-1">
+    <meta charset="UTF-8">
     <title>Book Management System</title>
-    <link rel="stylesheet"
-          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
           crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" th:href="@{/css/sidebar.css}" href=""/>
@@ -13,116 +12,53 @@
 <body>
 <div class="main">
     <div th:insert="navbar/sidebar :: sidebar"></div>
-<div class="books">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-6 col-md-6 col-sm-6 container justify-content-center card">
-                <h1 class="text-center"> Create New Book </h1>
-                <div class="card-body">
-                    <form th:action="@{/book}" th:object="${bookRequest}" method="POST" enctype="multipart/form-data">
-                        <div class="form-group">
-                            <label> Book Isbn </label>
-                            <input
-                                    type="text"
-                                    name="isbn"
-                                    th:field="*{isbn}"
-                                    class="form-control"
-                                    placeholder="Enter Book Isbn"
-                            />
-                        </div>
-
-                        <div class="form-group">
-                            <label> Book name </label>
-                            <input
-                                    type="text"
-                                    name="Book Name"
-                                    th:field="*{name}"
-                                    class="form-control"
-                                    placeholder="Enter Book Name"
-                            />
-                        </div>
-
-                        <div class="form-group">
-                            <label> Book stock </label>
-                            <input
-                                    type="number"
-                                    name="stock"
-                                    th:field="*{stock}"
-                                    class="form-control"
-                                    placeholder="Enter Book Stock"
-                            />
-                        </div>
-
-                        <div class="form-group">
-                            <label> Book Category </label>
-                            <input
-                                    type="text"
-                                    name="category"
-                                    th:field="*{category}"
-                                    class="form-control"
-                                    placeholder="Enter Book Category"
-                            />
-                        </div>
-
-                        <div class="form-group">
-                            <label> Book Author </label>
-                            <input
-                                    type="text"
-                                    name="Author Name"
-                                    th:field="*{authorName}"
-                                    class="form-control"
-                                    placeholder="Enter Author Name"
-                            />
-                        </div>
-
-
-                    <div class="form-group">
-                        <label> Book Category </label>
-                        <input
-                                type="text"
-                                name="category"
-                                th:field="*{category}"
-                                class="form-control"
-                                placeholder="Enter Book Category"
-                        />
+    <div class="books">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 container justify-content-center card">
+                    <h1 class="text-center">Create New Book</h1>
+                    <div class="card-body">
+                        <form th:action="@{/book}" th:object="${bookRequest}" method="POST"
+                              enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label>Book ISBN</label>
+                                <input type="text" name="isbn" th:field="*{isbn}" class="form-control"
+                                       placeholder="Enter Book ISBN"/>
+                            </div>
+                            <div class="form-group">
+                                <label>Book Name</label>
+                                <input type="text" name="name" th:field="*{name}" class="form-control"
+                                       placeholder="Enter Book Name"/>
+                            </div>
+                            <div class="form-group">
+                                <label>Book Stock</label>
+                                <input type="number" name="stock" th:field="*{stock}" class="form-control"
+                                       placeholder="Enter Book Stock"/>
+                            </div>
+                            <div class="form-group">
+                                <label>Book Category</label>
+                                <input type="text" name="category" th:field="*{category}" class="form-control"
+                                       placeholder="Enter Book Category"/>
+                            </div>
+                            <div class="form-group">
+                                <label>Book Author</label>
+                                <input type="text" name="authorName" th:field="*{authorName}" class="form-control"
+                                       placeholder="Enter Author Name"/>
+                            </div>
+                            <div class="form-group">
+                                <label>Book Picture</label>
+                                <input type="file" name="file" th:field="*{file}" class="form-control"
+                                       placeholder="Enter Book Picture"/>
+                            </div>
+                            <div class="box-footer">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </form>
                     </div>
-
-                    <div class="form-group">
-                        <label> Book Author </label>
-                        <input
-                                type="text"
-                                name="Author Name"
-                                th:field="*{authorName}"
-                                class="form-control"
-                                placeholder="Enter Author Name"
-                        />
-                    </div>
-
-                    <div class="form-group">
-                        <label> Book Picture </label>
-                        <input
-                                type="file"
-                                name="Book Picture"
-                                th:field="*{file}"
-                                class="form-control"
-                                placeholder="Enter Book Picture"
-                        />
-                    </div>
-
-
-                    <div class="box-footer">
-                        <button type="submit" class="btn btn-primary">
-                            Submit
-                        </button>
-                    </div>
-                </form>
-
-
                 </div>
             </div>
         </div>
     </div>
-</div>
 </div>
 </body>
 </html>
