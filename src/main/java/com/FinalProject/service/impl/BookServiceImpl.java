@@ -24,7 +24,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -84,7 +83,7 @@ public class BookServiceImpl {
     public void save(MultipartFile multipartFile) {
         if (isPng(multipartFile))
             try {
-                Files.copy(multipartFile.getInputStream(), this.root.resolve((Objects.requireNonNull(multipartFile.getOriginalFilename()))));
+                Files.copy(multipartFile.getInputStream(), this.root.resolve((multipartFile.getOriginalFilename())));
             } catch (IOException e) {
                 throw new FileAlreadyExistsException("file is already found :" + multipartFile.getOriginalFilename());
             }
@@ -104,7 +103,7 @@ public class BookServiceImpl {
     }
 
     public boolean isPng(MultipartFile file) {
-        return Objects.equals(file.getContentType(), "image/png");
+        return file.getContentType().equals("image/png");
     }
 
 
@@ -124,6 +123,7 @@ public class BookServiceImpl {
             book.setCategory(categoryOptional.get());
         else
             categoryRepository.save(category);
+
         save(bookRequests.getFile());
         bookRepository.save(book);
 
@@ -142,8 +142,7 @@ public class BookServiceImpl {
                 .build();
     }
 
-    @Transactional
-    public void update(String isbn, BookRequest bookRequest) {
+    public BookDto update(String isbn, BookRequest bookRequest) {
         Category bookCategory = Category.builder()
                 .name(bookRequest.getCategory())
                 .build();
@@ -152,9 +151,9 @@ public class BookServiceImpl {
                 .build();
         Book book = bookRepository.findByIsbn(isbn).orElseThrow(() -> new BookNotFoundException("Book not found with isbn : " + isbn));
         Optional<Category> category = categoryRepository.findByName(bookCategory.getName());
-        if (category.isPresent())
+        if (category.isPresent()) {
             book.setCategory(category.get());
-        else {
+        } else {
             categoryRepository.save(bookCategory);
             book.setCategory(bookCategory);
         }
@@ -164,7 +163,7 @@ public class BookServiceImpl {
         book.setName(bookRequest.getName());
         book.setImage(bookRequest.getFile().getOriginalFilename());
         save(bookRequest.getFile());
-        bookRepository.save(book);
+        return entityToResponse(bookRepository.save(book));
     }
 
     @Transactional
@@ -208,8 +207,7 @@ public class BookServiceImpl {
 
 
     public boolean areAllBooksInStock(List<Long> id) {
-        //bookRepository.areAllBooksInTable(id);
-        return bookRepository.areAllBooksInTable(id,Integer.valueOf(id.size()).longValue())&&bookRepository.areAllBooksInStock(id);
+        return bookRepository.areAllBooksInStock(id);
     }
 
     public void updateStockNumbersByIdIn(List<Long> books, int i) {
