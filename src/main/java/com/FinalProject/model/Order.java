@@ -17,7 +17,7 @@ import java.util.Set;
 @ToString(of = "ID")
 @EqualsAndHashCode(of = "ID")
 @Entity(name = "order")
-@Table(name = "orders", uniqueConstraints = {@UniqueConstraint(columnNames = {"student_id"})})
+@Table(name = "orders")//uniqueConstraints = {@UniqueConstraint(columnNames = {"student_id"})}
 public class Order {
 
     @Id

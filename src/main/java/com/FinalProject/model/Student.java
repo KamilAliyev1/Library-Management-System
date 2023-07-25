@@ -29,7 +29,7 @@ public class Student {
     private String studentFIN;
     @Column(updatable = false)
     private boolean deleteStatus;
-    @OneToMany(mappedBy = "student",cascade = {CascadeType.REFRESH,CascadeType.PERSIST})
+    @OneToMany(mappedBy = "student",cascade = CascadeType.ALL)
     private Set<Order> orders;
 
     public Set<Order> getOrders() {

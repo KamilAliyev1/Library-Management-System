@@ -33,7 +33,7 @@ public class BookServiceImpl {
 
     private final BookRepository bookRepository;
     private final CategoryRepository categoryRepository;
-    private final Path root = Paths.get("/Users/huseyn007/Desktop/Library-Management-System/src/main/resources/static/images");
+    private final Path root = Paths.get("src/main/resources/static/images");
 
     private static List<BookDto> entityListToResponseList(List<Book> books) {
         return books.stream().map(book -> new BookDto(

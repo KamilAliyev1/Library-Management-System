@@ -1,28 +1,17 @@
-//package com.FinalProject.service.impl;
+package com.FinalProject.service.impl;
+
+import com.FinalProject.exception.StudentNotFoundException;
+import com.FinalProject.model.Student;
+import com.FinalProject.repository.StudentRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+
 //
-//import com.FinalProject.dto.studentdto.CreateStudentDto;
-//import com.FinalProject.dto.studentdto.StudentDto;
-//import com.FinalProject.dto.studentdto.UpdateStudentDto;
-//import com.FinalProject.exception.StudentAlreadyExistsException;
-//import com.FinalProject.exception.StudentNotFoundException;
-//import com.FinalProject.mapper.studentMapper.StudentMapper;
-//import com.FinalProject.model.Student;
-//import com.FinalProject.repository.StudentRepository;
-//import com.FinalProject.service.StudentService;
-//import enums.Faculty;
-//import jakarta.annotation.PostConstruct;
-//import lombok.RequiredArgsConstructor;
-////import org.modelmapper.ModelMapper;
-//import org.springframework.stereotype.Service;
-//
-//import java.util.List;
-//import java.util.Optional;
-//import java.util.stream.Collectors;
-//
-//@RequiredArgsConstructor
-//@Service
-//public class StudentServiceImpl {
-//    private final StudentRepository studentRepository;
+@RequiredArgsConstructor
+@Service
+public class StudentServiceImpl {
+    private final StudentRepository studentRepository;
 //    private final StudentMapper studentMapper;
 ////    private final ModelMapper modelMapper;
 //
@@ -63,18 +52,18 @@
 ////    }
 //
 //        //View
-////        @Override
-////        public Student findById (Long id){
-////
-////            var optional = studentRepository.findById(id);
-////
-////            if (optional.isEmpty()) throw new StudentNotFoundException();
-////
-////            return optional.get();
-////        }
+
+        public Student findById (Long id){
+
+            var optional = studentRepository.findById(id);
+
+            if (optional.isEmpty()) throw new StudentNotFoundException();
+
+            return optional.get();
+        }
 //
 //
 ////Orders
 //
 //    }
-//}
+}

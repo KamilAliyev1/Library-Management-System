@@ -4,8 +4,8 @@ package com.FinalProject.service.impl;
 import com.FinalProject.dto.OrderGETv1;
 import com.FinalProject.dto.OrderPOSTv1;
 import com.FinalProject.exception.NotChangeableException;
+import com.FinalProject.exception.OrderMustUpdateException;
 import com.FinalProject.exception.OrderNotFoundException;
-import com.FinalProject.exception.OrderStudentUniqueException;
 import com.FinalProject.exception.StockNotEnoughException;
 import com.FinalProject.mapper.OrderMapper;
 import com.FinalProject.model.Book;
@@ -35,11 +35,16 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
 
     private final BookServiceImpl bookService;
 
-//    private final StudentService studentService;
+    private final StudentServiceImpl studentService;
 
-    void validateStudents(Student student) {
-        if (student.getOrders() != null && !student.getOrders().isEmpty() && student.getOrders().stream().anyMatch(Order::getInProgress))
-            throw new OrderStudentUniqueException();
+    boolean validateStudents(Student student) {
+
+        if(
+                student.getOrders().stream().anyMatch(
+                        t->t.getCreatedAt().equals(LocalDate.now())
+                )
+        )return true;
+        return false;
     }
 
     void validateBooks(List<Long> books) {
@@ -58,9 +63,9 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
     @Override
     public OrderGETv1 add(OrderPOSTv1 dto) {
 
-//        var student  = studentService.findById(dto.studentId);
+        var student  = studentService.findById(dto.studentId);
 
-//        validateStudents(student);
+        if(validateStudents(student))throw new OrderMustUpdateException("cant add new order in same day.please update today's order");
 
         Order order = orderMapper.toEntity(dto);
 
@@ -92,8 +97,7 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
     @Override
     public OrderGETv1 update(Long id, OrderPOSTv1 dto) {
 
-//        var student  = studentService.findById(dto.studentId);
-
+        var student  = studentService.findById(dto.studentId);
 
         Order order = orderRepo.findById(id).orElseThrow(
                 () -> new OrderNotFoundException(
@@ -101,8 +105,6 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
                 )
         );
 
-//        if(student!=order.getStudent())
-//            validateStudents(student);
 
         validateOrderForUpdate(order);
 

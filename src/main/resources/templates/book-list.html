@@ -52,6 +52,7 @@
             <table class="table table-striped table-bordered">
                 <thead class="table-dark">
                 <tr>
+                    <th>id</th>
                     <th>Isbn</th>
                     <th>Name</th>
                     <th>Stock</th>
@@ -62,6 +63,7 @@
                 </thead>
                 <tbody>
                 <tr th:each="book: ${bookList}" class="col-lg-6">
+                    <td th:text="${book.getId()}"></td>
                     <td th:text="${book.getIsbn()}"></td>
                     <td th:text="${book.getName()}"></td>
                     <td th:text="${book.getStock()}"></td>
