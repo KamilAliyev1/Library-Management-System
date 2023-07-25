@@ -37,20 +37,21 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
 
 //    private final StudentService studentService;
 
-    void validateStudents(Student student){
-        if(student.getOrders() !=null && !student.getOrders().isEmpty() && student.getOrders().stream().anyMatch(Order::getInProgress))throw new OrderStudentUniqueException();
+    void validateStudents(Student student) {
+        if (student.getOrders() != null && !student.getOrders().isEmpty() && student.getOrders().stream().anyMatch(Order::getInProgress))
+            throw new OrderStudentUniqueException();
     }
 
-    void validateBooks(List<Long> books){
-        if(!bookService.areAllBooksInStock(books))
+    void validateBooks(List<Long> books) {
+        if (!bookService.areAllBooksInStock(books))
             throw new StockNotEnoughException();
     }
 
-    void validateOrderForUpdate(Order order){
+    void validateOrderForUpdate(Order order) {
 
-        if(!order.getInProgress())throw new NotChangeableException("Cannot be changeable");
+        if (!order.getInProgress()) throw new NotChangeableException("Cannot be changeable");
 
-        if(!order.getCreatedAt().equals(LocalDate.now()))throw new NotChangeableException("create new order");
+        if (!order.getCreatedAt().equals(LocalDate.now())) throw new NotChangeableException("create new order");
     }
 
     @Transactional
@@ -63,13 +64,13 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
 
         Order order = orderMapper.toEntity(dto);
 
-        List<Long> books = new HashSet<>(dto.getBooks()).stream().toList();
+        List<Long> books = new HashSet<>(dto.getBooks()).stream().filter(Objects::nonNull).toList();
 
         validateBooks(books);
 
         order = orderRepo.saveAndFlush(order);
 
-        bookService.updateStockNumbersByIdIn(books,-1);
+        bookService.updateStockNumbersByIdIn(books, -1);
 
         return orderMapper.toGetDto(order);
     }
@@ -78,8 +79,8 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
     public OrderGETv1 get(Long ID) {
 
         var order = orderRepo.findById(ID).orElseThrow(
-                ()->new OrderNotFoundException(
-                    String.format("Order couldn't found with id: %d",ID)
+                () -> new OrderNotFoundException(
+                        String.format("Order couldn't found with id: %d", ID)
                 )
         );
 
@@ -89,14 +90,14 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
 
     @Transactional
     @Override
-    public OrderGETv1 update(Long id,OrderPOSTv1 dto) {
+    public OrderGETv1 update(Long id, OrderPOSTv1 dto) {
 
 //        var student  = studentService.findById(dto.studentId);
 
 
         Order order = orderRepo.findById(id).orElseThrow(
-                ()->new OrderNotFoundException(
-                        String.format("Order couldn't found with id: %d",id)
+                () -> new OrderNotFoundException(
+                        String.format("Order couldn't found with id: %d", id)
                 )
         );
 
@@ -107,19 +108,23 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
 
         var dtoBooksIds = dto.getBooks().stream().filter(Objects::nonNull).distinct().collect(Collectors.toCollection(ArrayList::new));
 
-        var entityBooksIds= order.getBooks().stream().map(Book::getId).collect(Collectors.toList());
+        var entityBooksIds = order.getBooks().stream().map(Book::getId).collect(Collectors.toList());
 
-        if(dtoBooksIds.isEmpty()){disableProgress(id);delete(id);return orderMapper.toGetDto(new Order());}
+        if (dtoBooksIds.isEmpty()) {
+            disableProgress(id);
+            delete(id);
+            return orderMapper.toGetDto(new Order());
+        }
 
-        validateBooks(dtoBooksIds.stream().filter(t->!entityBooksIds.contains(t)).collect(Collectors.toList()));
+        validateBooks(dtoBooksIds.stream().filter(t -> !entityBooksIds.contains(t)).collect(Collectors.toList()));
 
-        var dtoBooks = dtoBooksIds.stream().map(t-> Book.builder().id(t).build()).collect(Collectors.toSet());
+        var dtoBooks = dtoBooksIds.stream().map(t -> Book.builder().id(t).build()).collect(Collectors.toSet());
 
-        bookService.updateStockNumbersByIdIn(entityBooksIds,1);
+        bookService.updateStockNumbersByIdIn(entityBooksIds, 1);
 
-        bookService.updateStockNumbersByIdIn(dtoBooksIds,-1);
+        bookService.updateStockNumbersByIdIn(dtoBooksIds, -1);
 
-        var newOrder = orderMapper.change(dto,order);
+        var newOrder = orderMapper.change(dto, order);
 
         newOrder.setBooks(dtoBooks); // I set this in here .Because DTO's Books can be contain null variable
 
@@ -127,26 +132,26 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
 
         var getDto = orderMapper.toGetDto(newOrder);
 
-        return  getDto;
+        return getDto;
     }
 
     @Override
     public void delete(Long ID) {
 
-        if(orderRepo.isInProgress(ID)) throw new NotChangeableException("still in progress");
+        if (orderRepo.isInProgress(ID)) throw new NotChangeableException("still in progress");
 
         orderRepo.deleteById(ID);
     }
 
     @Scheduled(cron = "0 0 * * *")
-    void checkPeriod(){
+    void checkPeriod() {
 
         var temp = orderRepo.findAll();
         temp = temp.stream().filter(Order::getInProgress).filter(
-                t->
+                t ->
                         t.getCreatedAt()
                                 .plusDays(15).isBefore(LocalDate.now())
-        ).peek(t-> t.setInDelay(true)).collect(Collectors.toList());
+        ).peek(t -> t.setInDelay(true)).collect(Collectors.toList());
         orderRepo.saveAll(temp);
     }
 
@@ -157,7 +162,7 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
 
         var optional = orderRepo.findById(ID);
 
-        if(optional.isEmpty())throw new OrderNotFoundException();
+        if (optional.isEmpty()) throw new OrderNotFoundException();
 
         var order = optional.get();
 
@@ -167,7 +172,7 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
 
         order.setInDelay(false);
 
-        bookService.updateStockNumbersByIdIn(order.getBooks().stream().map(Book::getId).toList(),1);
+        bookService.updateStockNumbersByIdIn(order.getBooks().stream().map(Book::getId).toList(), 1);
 
         orderRepo.save(order);
 
