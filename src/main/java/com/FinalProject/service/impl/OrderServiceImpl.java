@@ -34,11 +34,16 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
 
     private final StudentServiceImpl studentService;
 
-    void validateStudents(Student student,List<Book> books) {
 
-        List<Book> previousBooks = student.getOrders().stream().flatMap(t->t.getBooks().stream()).toList();
+    void validatePreviousBooksExceptOrder(Student student,List<Book> books,Order order){
+
+        List<Book> previousBooks = student.getOrders().stream().filter(t->!t.equals(order)).flatMap(t->t.getBooks().stream()).toList();
 
         if(books.stream().anyMatch(previousBooks::contains))throw new HaveAlreadyBookException("student have this book in previous orders");
+
+    }
+
+    void validateStudents(Student student) {
 
         if(
                 student.getOrders().stream().anyMatch(
@@ -69,7 +74,9 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
 
         List<Long> books = new HashSet<>(dto.getBooks()).stream().filter(Objects::nonNull).toList();
 
-        validateStudents(student,books.stream().map(t->Book.builder().id(t).build()).toList());
+        validatePreviousBooksExceptOrder(student,books.stream().map(t->Book.builder().id(t).build()).toList(),null);
+
+        validateStudents(student);
 
         validateBooks(books);
 
@@ -108,6 +115,7 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
 
         validateOrderForUpdate(order);
 
+
         var dtoBooksIds = dto.getBooks().stream().filter(Objects::nonNull).distinct().collect(Collectors.toCollection(ArrayList::new));
 
         var entityBooksIds = order.getBooks().stream().map(Book::getId).collect(Collectors.toList());
@@ -121,6 +129,8 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
         validateBooks(dtoBooksIds.stream().filter(t -> !entityBooksIds.contains(t)).collect(Collectors.toList()));
 
         var dtoBooks = dtoBooksIds.stream().map(t -> Book.builder().id(t).build()).collect(Collectors.toSet());
+
+        validatePreviousBooksExceptOrder(student,dtoBooks.stream().toList(),order);
 
         bookService.updateStockNumbersByIdIn(entityBooksIds, 1);
 
