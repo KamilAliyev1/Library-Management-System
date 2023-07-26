@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
-public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, OrderPOSTv1> {
+public class OrderServiceImpl implements OrderService {
 
     private final OrderRepo orderRepo;
 
@@ -49,7 +49,7 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
                 student.getOrders().stream().anyMatch(
                         t->t.getCreatedAt().equals(LocalDate.now())
                 )
-        )throw new OrderMustUpdateException("cant add new order in same day.please update today's order");
+        )throw new OrderMustUpdateException("can't add new order in same day.Please update today's order");
     }
 
     void validateBooks(List<Long> books) {
@@ -112,9 +112,7 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
                 )
         );
 
-
         validateOrderForUpdate(order);
-
 
         var dtoBooksIds = dto.getBooks().stream().filter(Objects::nonNull).distinct().collect(Collectors.toCollection(ArrayList::new));
 
