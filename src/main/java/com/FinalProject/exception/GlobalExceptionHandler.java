@@ -41,7 +41,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler({NotChangeableException.class, OrderNotFoundException.class, StockNotEnoughException.class, OrderStudentUniqueException.class, OrderMustUpdateException.class
+    @ExceptionHandler({NotChangeableException.class, OrderNotFoundException.class, StockNotEnoughException.class, OrderStudentUniqueException.class, OrderMustUpdateException.class,HaveAlreadyBookException.class
     })
     public ResponseEntity<?> userExceptions(Exception userException) {
 
