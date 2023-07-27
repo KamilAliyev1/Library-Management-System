@@ -75,12 +75,6 @@ public class CategoryController {
         return "redirect:/categories";
     }
 
-//    @GetMapping("/category/{name}")
-//    public String showBooksByCategoryName(@PathVariable("name") String name, Model model) {
-//        List<BookDto> bookDtoList=categoryService.showBooksByCategoryName(name);
-//        model.addAttribute("books", bookDtoList);
-//        return "category-list";
-//    }
 
     @GetMapping("/search/categoryName")
     public String showBooksByCategoryName(@RequestParam String category, Model model) {

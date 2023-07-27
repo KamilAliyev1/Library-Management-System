@@ -90,22 +90,12 @@ public class CategoryServiceImpl implements CategoryService {
         categoryRepository.deleteById(category.getId());
     }
 
-//    @Override
-//    public List<BookDto> showBooksByCategoryName(String name) {
-//        List<BookDto> bookDtoList=bookService.findAll();
-//        List<BookDto> categoryBook=new ArrayList<>();
-//        for(BookDto bookDto : bookDtoList){
-//            if(bookDto.getCategory()==name)
-//                categoryBook.add(bookDto);
-//        }
-//        return categoryBook;
-//    }
 
     @Override
     public List<BookDto> showBooksByCategoryName(String category) {
         if (bookRepository.findByCategory(category).isEmpty())
             throw new BookNotFoundException("Book not found with category :  " + category);
-       List<Book>  book=bookRepository.findByCategory(category);
+        List<Book> book = bookRepository.findByCategory(category);
         return entityListToResponseList(bookRepository.findByCategory(category));
     }
 }
