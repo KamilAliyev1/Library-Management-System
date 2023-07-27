@@ -12,7 +12,4 @@ public class AboutController {
         return "about";
     }
 
-
-
-
 }
