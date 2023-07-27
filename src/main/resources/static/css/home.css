@@ -82,7 +82,7 @@ span {
 }
 
 .images img {
-    height: 80%;
+    height: 76%;
     width: 60%;
     position: absolute;
     left: 50%;
@@ -96,9 +96,10 @@ span {
 }
 
 .images:hover .shape {
-    bottom: 40px;
+    left: 45%;
 }
 
 .images:hover .image {
     left: 45%;
+    /*bottom: 35px;*/
 }
