@@ -28,6 +28,14 @@
                             <a href="/categories/new" class="btn btn-warning">
                                 <i class="bi bi-journals"></i> Add Category </i></a>
                         </p>
+                        <div class="row gx-5">
+                            <div>
+                                <form th:action="@{/search/category}" class="nav-link p-3">
+                                    <input name="category" class="form-control mr-sm-2 mb-5" type="search" placeholder="Search category"
+                                           aria-label="Search">
+                                </form>
+                            </div>
+                        </div>
                         <div class="col-md-12">
                             <h2 th:case="null">No record found !!</h2>
                             <div th:case="*">
@@ -44,8 +52,11 @@
                                         <td th:text="${category.id}"></td>
                                         <td th:text="${category.name}">
                                         </td>
-                                        <td><a th:href="@{/update/{id}(id=${category.id})}" class="btn btn-warning"><i
-                                                class="bi bi-pencil-square"></i></a>
+                                        <td>
+<!--                                            <a th:href="@{/search/categoryName}" class="btn btn-primary"><i-->
+<!--                                                    class="bi bi-view-list"></i></a>-->
+                                            <a th:href="@{/update/{id}(id=${category.id})}" class="btn btn-warning"><i
+                                                    class="bi bi-pencil-square"></i></a>
                                             <a th:href="@{/remove/{id}(id=${category.id})}" class="btn btn-danger"><i
                                                     class="bi bi-file-x"></i></a></td>
                                     </tr>

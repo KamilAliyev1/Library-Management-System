@@ -8,14 +8,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
-    <link rel="stylesheet" th:href="@{/css/main.css}" href="">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" href=""/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/sidebar.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/containers.css}"/>
 
 </head>
 
 <body>
 <div class="main">
-    <div th:insert="navbar/header :: header"></div>
+    <div th:insert="navbar/sidebar :: sidebar"></div>
     <div class="categories">
         <div class="container">
             <div class="row">
