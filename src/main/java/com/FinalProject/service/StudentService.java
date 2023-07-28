@@ -8,12 +8,13 @@ import com.FinalProject.model.Student;
 import java.util.List;
 
 public interface StudentService {
-    List<StudentDto> getStudentList();
+    List<StudentDto> getStudents();
+
     Long createStudent(CreateStudentDto studentDto);
+
     void  deleteStudentById(Long id);
+
     Student updateStudent(UpdateStudentDto dto);
 
     Student findById(Long id);
-
-//Orders
 }
