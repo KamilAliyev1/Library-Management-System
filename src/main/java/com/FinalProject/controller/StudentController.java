@@ -1,7 +1,9 @@
 package com.FinalProject.controller;
 
+import com.FinalProject.dto.studentdto.CreateStudentDto;
 import com.FinalProject.dto.studentdto.StudentDto;
 import com.FinalProject.service.StudentService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +24,20 @@ public class StudentController {
         model.addAttribute("students", students);
         System.out.println(Arrays.asList(students));
         return "students";
+    }
+
+    @GetMapping("/add")
+    public String createStudentPage(Model model) {
+        CreateStudentDto createStudentDto = new CreateStudentDto();
+        model.addAttribute("student", createStudentDto);
+        return "student-create";
+    }
+
+    @PostMapping
+    public String createStudent(@ModelAttribute("student") CreateStudentDto studentDto, @Valid Model model) {
+        studentService.createStudent(studentDto);
+        model.addAttribute("students", studentService.getStudents());
+        return "redirect:/students";
     }
 
 //    @GetMapping("/getAll")
