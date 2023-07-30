@@ -2,18 +2,29 @@ package com.FinalProject.dto.studentdto;
 
 import com.FinalProject.enums.Faculty;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 import org.mapstruct.Mapper;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Mapper
+@Builder
 public class StudentDto {
+    private Long id;
     private String name;
     private String surname;
-    private Faculty faculty;
+    private String faculty;
     private String studentFIN;
     private boolean deleteStatus;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -31,11 +42,11 @@ public class StudentDto {
         this.surname = surname;
     }
 
-    public Faculty getFaculty() {
+    public String getFaculty() {
         return faculty;
     }
 
-    public void setFaculty(Faculty faculty) {
+    public void setFaculty(String faculty) {
         this.faculty = faculty;
     }
 

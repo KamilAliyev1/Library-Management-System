@@ -24,7 +24,7 @@ public class Student {
     @Column( nullable = false)
     private String surname;
     @Column(name = "faculty",nullable = false)
-    private Faculty faculty;
+    private String faculty;
     @Column(length = 7, unique = true, nullable = false)
     private String studentFIN;
     @Column(updatable = false)
@@ -64,11 +64,11 @@ public class Student {
         this.surname = surname;
     }
 
-    public Faculty getFaculty() {
+    public String getFaculty() {
         return faculty;
     }
 
-    public void setFaculty(Faculty faculty) {
+    public void setFaculty(String faculty) {
         this.faculty = faculty;
     }
 
