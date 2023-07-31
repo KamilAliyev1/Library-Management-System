@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 
-public record OrderGETv1(
+public record OrderDto(
 
         Long id,
         Long studentId,

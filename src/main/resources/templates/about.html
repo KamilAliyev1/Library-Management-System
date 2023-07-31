@@ -2,48 +2,48 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Page</title>
+    <meta name="viewreport" content="width=device-width, initial-scale=1.0">
+    <title>
+        Home Page
+    </title>
     <link rel="stylesheet" type="text/css"
           href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/>
     <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}" href=""/>
 </head>
 <body>
-
-<div class="hero" >
+<div class="hero">
     <nav>
+
         <img src="/img/logo.png" class="logo">
         <ul>
             <li><a th:href="@{/}">Home</a></li>
             <li><a th:href="@{/authors}">Author</a></li>
             <li><a th:href="@{/book}">Book</a></li>
             <li><a th:href="@{/categories}">Category</a></li>
-            <li><a th:href="@{/logout}">Logout</a></li>
         </ul>
+
     </nav>
 
-    <div class="detail">
+    <div class="detel">
         <div class="images">
             <img src="/img/aboutimage.jpeg" class="shape">
-            <img src="/img/aboutimage2.jpeg" class="girls">
+            <img src="/img/aboutimage2.jpeg " class="girls">
         </div>
         <div style="margin-left: 50px">
-            <h1 style="font-size: 25px;">Library <span>Management System</span></h1>
+            <h1 style="font-size: 25px;">Library <span>Management System </span></h1>
             <br>
             <br>
-            <p style="font-size: 20px; font-family: Arial, sans-serif;">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.<br>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.<br>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.<br>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.<br>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.<br>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.<br>
+            <p style="font-size: 20px;font-family:Arial,sans-seriff">
+                Lorem ipsum dolar Lorem ipsum dolar<br>
+                Lorem ipsum dolar Lorem ipsum dolar<br>
+                Lorem ipsum dolar Lorem ipsum dolar<br>
+                Lorem ipsum dolar Lorem ipsum dolar<br>
+                Lorem ipsum dolar Lorem ipsum dolar<br>
+                Lorem ipsum dolar Lorem ipsum dolar<br>
             </p>
         </div>
     </div>
 </div>
-
-
 </body>
 </html>

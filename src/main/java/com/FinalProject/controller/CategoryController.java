@@ -3,23 +3,25 @@ package com.FinalProject.controller;
 import com.FinalProject.dto.BookDto;
 import com.FinalProject.dto.CategoryDto;
 import com.FinalProject.service.CategoryService;
+import com.FinalProject.service.impl.BookServiceImpl;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class CategoryController {
 
     private final CategoryService categoryService;
+    private final BookServiceImpl bookService;
 
 
-    public CategoryController(CategoryService categoryService) {
+    public CategoryController(CategoryService categoryService, BookServiceImpl bookService) {
         this.categoryService = categoryService;
+        this.bookService = bookService;
     }
 
     @GetMapping("/categories")
@@ -60,10 +62,7 @@ public class CategoryController {
 
 
     @PostMapping("/update-category/{id}")
-    public String updateCategory(@PathVariable("id") Long id, CategoryDto category) {
-        CategoryDto categoryDto = categoryService.findCategoryById(id);
-//        categoryDto.setId(id);
-//        categoryDto.setName(category.getName());
+    public String updateCategory(@PathVariable("id") Long id, @RequestBody CategoryDto category) {
         categoryService.updateCategory(id, category);
         return "redirect:/categories";
     }
@@ -74,5 +73,17 @@ public class CategoryController {
         categoryService.deleteCategory(id);
         model.addAttribute("category", categoryService.findAllCategories());
         return "redirect:/categories";
+    }
+
+
+    @GetMapping("/search/categoryName")
+    public String showBooksByCategoryName(@RequestParam String category, Model model) {
+        List<BookDto> bookList = bookService.findAll();
+        List<BookDto> findBooks =
+                bookList.stream().
+                        filter(bookDto -> bookDto.getCategory().contains(category))
+                        .collect(Collectors.toList());
+        model.addAttribute("bookList", findBooks);
+        return "categories-list";
     }
 }
