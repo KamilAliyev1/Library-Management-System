@@ -8,14 +8,16 @@ import com.FinalProject.model.Category;
 import java.util.List;
 
 public interface CategoryService {
-    public List<CategoryDto> findAllCategories();
+     List<CategoryDto> findAllCategories();
 
-    public CategoryDto findCategoryById(Long id);
+     CategoryDto findCategoryById(Long id);
 
-    public void createCategory(CategoryDto category);
+     void createCategory(CategoryDto category);
 
-    public void updateCategory(Long id,CategoryDto category);
+     void updateCategory(Long id,CategoryDto category);
 
-    public void deleteCategory(Long id);
+     void deleteCategory(Long id);
+
+     List<BookDto> showBooksByCategoryName(String name);
 
 }

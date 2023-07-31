@@ -35,7 +35,7 @@ public class BookServiceImpl {
     private final CategoryRepository categoryRepository;
     private final Path root = Paths.get("src/main/resources/static/images");
 
-    private static List<BookDto> entityListToResponseList(List<Book> books) {
+    public static List<BookDto> entityListToResponseList(List<Book> books) {
         return books.stream().map(book -> new BookDto(
                 book.getId(), book.getName(), book.getIsbn(), book.getStock(), book.getAuthor().getFullName(), book.getCategory().getName(), book.getImage())).toList();
     }
