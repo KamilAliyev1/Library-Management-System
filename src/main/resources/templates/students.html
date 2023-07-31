@@ -45,10 +45,15 @@
                                     <tbody>
                                     <tr th:each="student : ${students}">
                                         <td th:text="${student.id}"></td>
-                                        <td th:text="${student.name}">
-                                        <td th:text="${student.surname}">
-                                        <td th:text="${student.faculty}">
-                                        <td th:text="${student.studentFIN}">
+                                        <td th:text="${student.name}"></td>
+                                        <td th:text="${student.surname}"></td>
+                                        <td th:text="${student.faculty}"></td>
+                                        <td th:text="${student.studentFIN}"></td>
+                                        <td>
+                                            <a th:href="@{/students/{id}/delete(id=${student.id})}"
+                                               class="btn btn-danger">
+                                                <i class="bi bi-file-x"></i>
+                                            </a>
                                         </td>
                                     </tr>
                                     </tbody>

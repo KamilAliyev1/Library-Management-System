@@ -68,7 +68,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderGETv1 add(OrderPOSTv1 dto) {
 
-        var student  = studentService.findById(dto.studentId);
+        var student  = studentService.fetchStudentIfExists(dto.studentId);
 
         Order order = orderMapper.toEntity(dto);
 
@@ -104,7 +104,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderGETv1 update(Long id, OrderPOSTv1 dto) {
 
-        var student  = studentService.findById(dto.studentId);
+        var student  = studentService.fetchStudentIfExists(dto.studentId);
 
         Order order = orderRepo.findById(id).orElseThrow(
                 () -> new OrderNotFoundException(

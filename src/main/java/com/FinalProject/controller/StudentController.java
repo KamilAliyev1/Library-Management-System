@@ -40,29 +40,10 @@ public class StudentController {
         return "redirect:/students";
     }
 
-//    @GetMapping("/getAll")
-//    public List<StudentDto> getStudentList() {
-//        return studentService.getStudentList();
-//    }
-//
-//    @PostMapping("/create")
-//    public Long createStudent(CreateStudentDto studentDto) {
-//        return studentService.createStudent(studentDto);
-//
-//    }
-//
-//    @PutMapping("/delete")
-//    public void deleteStudentById(Long id) {
-//        studentService.deleteStudentById(id);
-//    }
-//
-//    @PutMapping("/update")
-//    public Student updateStudent(UpdateStudentDto updateStudentDto) {
-//        return studentService.updateStudent(updateStudentDto);
-//    }
-//
-//    @GetMapping("/getById")
-//    public Student findById(Long id) {
-//        return studentService.findById(id);
-//    }
+    @GetMapping("/{id}/delete")
+    public String deleteStudent(@PathVariable Long id, Model model) {
+        studentService.deleteStudent(id);
+        model.addAttribute("students", studentService.getStudents());
+        return "redirect:/students";
+    }
 }
