@@ -7,6 +7,7 @@ import com.FinalProject.exception.StockNotEnoughException;
 import com.FinalProject.model.Book;
 import com.FinalProject.model.Order;
 import com.FinalProject.model.Student;
+import com.FinalProject.service.impl.BookServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderValidator {
 
-    private final BookService bookService;
+    private final BookServiceImpl bookService;
 
     public void validateBooksConfusionExceptOrder(Student student, List<Book> books, Order order){
 

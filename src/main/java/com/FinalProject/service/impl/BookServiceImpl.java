@@ -29,7 +29,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class BookServiceImpl {
+public class BookServiceImpl  {
 
     private final BookRepository bookRepository;
     private final CategoryRepository categoryRepository;
