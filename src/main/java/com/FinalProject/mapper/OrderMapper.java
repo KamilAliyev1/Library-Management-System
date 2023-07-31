@@ -1,7 +1,7 @@
 package com.FinalProject.mapper;
 
-import com.FinalProject.dto.OrderGETv1;
-import com.FinalProject.dto.OrderPOSTv1;
+import com.FinalProject.dto.OrderDto;
+import com.FinalProject.dto.OrderRequest;
 import com.FinalProject.model.Book;
 import com.FinalProject.model.Order;
 import com.FinalProject.model.Student;
@@ -21,7 +21,7 @@ public interface OrderMapper {
 
     OrderMapper INSTANCE = Mappers.getMapper(OrderMapper.class);
 
-    default Order toEntity(OrderPOSTv1 dto){
+    default Order toEntity(OrderRequest dto){
         return Order.builder().student(Student.builder().ID(dto.getStudentId()).build())
                 .books(dto.getBooks().stream().filter(Objects::nonNull).map(t-> Book.builder().id(t).build()).collect(Collectors.toSet()))
                 .build();
@@ -30,7 +30,7 @@ public interface OrderMapper {
     @Mapping(target = "id",source = "ID")
     @Mapping(target = "studentId",source = "student.ID")
     @Mapping(target = "books",source = "books" ,qualifiedByName = "books")
-    OrderGETv1 toGetDto(Order order);
+    OrderDto toGetDto(Order order);
 
 
     @Named("books")
@@ -46,7 +46,7 @@ public interface OrderMapper {
 
 
 
-    default Order change(OrderPOSTv1 dto,Order entity){
+    default Order change(OrderRequest dto, Order entity){
         entity.setStudent(Student.builder().ID(dto.getStudentId()).build());
         entity.setBooks(dto.getBooks().stream().map(t->Book.builder().id(t).build()).collect(Collectors.toSet()));
         return entity;

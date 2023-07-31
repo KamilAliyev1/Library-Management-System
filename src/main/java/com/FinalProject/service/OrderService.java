@@ -1,22 +1,22 @@
 package com.FinalProject.service;
 
-import com.FinalProject.dto.OrderGETv1;
-import com.FinalProject.dto.OrderPOSTv1;
+import com.FinalProject.dto.OrderDto;
+import com.FinalProject.dto.OrderRequest;
 
 import java.util.List;
 
 public interface OrderService {
 
-    OrderGETv1 add(OrderPOSTv1 dto);
+    OrderDto add(OrderRequest dto);
 
-    OrderGETv1 get(Long ID);
+    OrderDto get(Long ID);
 
-    OrderGETv1 update(Long id,OrderPOSTv1 dto);
+    OrderDto update(Long id, OrderRequest dto);
 
     void delete(Long ID);
 
     void disableProgress(Long ID);
 
-    List<OrderGETv1> getAll();
+    List<OrderDto> getAll();
 
 }
