@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class OrderPOSTv1{
+public class OrderRequest {
         @NotNull
         public Long studentId;
         @NotEmpty

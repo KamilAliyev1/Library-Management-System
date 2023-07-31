@@ -1,7 +1,7 @@
 package com.FinalProject.controller;
 
 
-import com.FinalProject.dto.OrderPOSTv1;
+import com.FinalProject.dto.OrderRequest;
 import com.FinalProject.mapper.OrderMapper;
 import com.FinalProject.model.Order;
 import com.FinalProject.service.OrderService;
@@ -32,8 +32,8 @@ public class OrderController {
     }
 
     @PostMapping("/add")
-    String addOrder(Model model, @ModelAttribute("order") @Valid OrderPOSTv1 orderPOSTv1) {
-        orderService.add(orderPOSTv1);
+    String addOrder(Model model, @ModelAttribute("order") @Valid OrderRequest orderRequest) {
+        orderService.add(orderRequest);
         return "redirect:/orders";
     }
 
@@ -67,7 +67,7 @@ public class OrderController {
 
 
     @PostMapping("/{id}/update")
-    String update(@PathVariable Long id, @ModelAttribute("order") @Valid OrderPOSTv1 dto, Model model) {
+    String update(@PathVariable Long id, @ModelAttribute("order") @Valid OrderRequest dto, Model model) {
 
         var order = orderService.update(id, dto);
 
