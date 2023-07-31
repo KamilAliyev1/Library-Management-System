@@ -1,18 +1,18 @@
 package com.FinalProject.service.impl;
 
 
-import com.FinalProject.dto.OrderGETv1;
-import com.FinalProject.dto.OrderPOSTv1;
+import com.FinalProject.dto.OrderDto;
+import com.FinalProject.dto.OrderRequest;
 import com.FinalProject.exception.NotChangeableException;
-import com.FinalProject.exception.OrderMustUpdateException;
 import com.FinalProject.exception.OrderNotFoundException;
-import com.FinalProject.exception.StockNotEnoughException;
+import com.FinalProject.exception.StudentNotFoundException;
 import com.FinalProject.mapper.OrderMapper;
 import com.FinalProject.model.Book;
 import com.FinalProject.model.Order;
-import com.FinalProject.model.Student;
 import com.FinalProject.repository.OrderRepo;
 import com.FinalProject.service.OrderService;
+import com.FinalProject.service.OrderValidator;
+import com.FinalProject.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
-public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, OrderPOSTv1> {
+public class OrderServiceImpl implements OrderService {
 
     private final OrderRepo orderRepo;
 
@@ -35,43 +35,29 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
 
     private final BookServiceImpl bookService;
 
-    private final StudentServiceImpl studentService;
+    private final StudentService studentService;
 
-    boolean validateStudents(Student student) {
+    private final OrderValidator orderValidator;
 
-        if(
-                student.getOrders().stream().anyMatch(
-                        t->t.getCreatedAt().equals(LocalDate.now())
-                )
-        )return true;
-        return false;
-    }
 
-    void validateBooks(List<Long> books) {
-        if (!bookService.areAllBooksInStock(books))
-            throw new StockNotEnoughException();
-    }
-
-    void validateOrderForUpdate(Order order) {
-
-        if (!order.getInProgress()) throw new NotChangeableException("Cannot be changeable");
-
-        if (!order.getCreatedAt().equals(LocalDate.now())) throw new NotChangeableException("create new order");
-    }
 
     @Transactional
     @Override
-    public OrderGETv1 add(OrderPOSTv1 dto) {
+    public OrderDto add(OrderRequest dto) {
 
         var student  = studentService.findById(dto.studentId);
 
-        if(validateStudents(student))throw new OrderMustUpdateException("cant add new order in same day.please update today's order");
+        if(student==null)throw new StudentNotFoundException();
 
         Order order = orderMapper.toEntity(dto);
 
         List<Long> books = new HashSet<>(dto.getBooks()).stream().filter(Objects::nonNull).toList();
 
-        validateBooks(books);
+        orderValidator.validateBooksConfusionExceptOrder(student,books.stream().map(t->Book.builder().id(t).build()).toList(),null);
+
+        orderValidator.validateNewOrderPermission(student);
+
+        orderValidator.validateBooks(books);
 
         order = orderRepo.saveAndFlush(order);
 
@@ -81,7 +67,7 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
     }
 
     @Override
-    public OrderGETv1 get(Long ID) {
+    public OrderDto get(Long ID) {
 
         var order = orderRepo.findById(ID).orElseThrow(
                 () -> new OrderNotFoundException(
@@ -95,9 +81,11 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
 
     @Transactional
     @Override
-    public OrderGETv1 update(Long id, OrderPOSTv1 dto) {
+    public OrderDto update(Long id, OrderRequest dto) {
 
         var student  = studentService.findById(dto.studentId);
+
+        if(student==null)throw new StudentNotFoundException();
 
         Order order = orderRepo.findById(id).orElseThrow(
                 () -> new OrderNotFoundException(
@@ -105,8 +93,7 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
                 )
         );
 
-
-        validateOrderForUpdate(order);
+        orderValidator.validateOrderForUpdate(order);
 
         var dtoBooksIds = dto.getBooks().stream().filter(Objects::nonNull).distinct().collect(Collectors.toCollection(ArrayList::new));
 
@@ -118,9 +105,11 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
             return orderMapper.toGetDto(new Order());
         }
 
-        validateBooks(dtoBooksIds.stream().filter(t -> !entityBooksIds.contains(t)).collect(Collectors.toList()));
+        orderValidator.validateBooks(dtoBooksIds.stream().filter(t -> !entityBooksIds.contains(t)).collect(Collectors.toList()));
 
         var dtoBooks = dtoBooksIds.stream().map(t -> Book.builder().id(t).build()).collect(Collectors.toSet());
+
+        orderValidator.validateBooksConfusionExceptOrder(student,dtoBooks.stream().toList(),order);
 
         bookService.updateStockNumbersByIdIn(entityBooksIds, 1);
 
@@ -181,7 +170,7 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
     }
 
     @Override
-    public List<OrderGETv1> getAll() {
+    public List<OrderDto> getAll() {
         return orderRepo.findAll().stream().map(orderMapper::toGetDto).collect(Collectors.toList());
     }
 

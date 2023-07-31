@@ -17,7 +17,7 @@
 <nav th:fragment="sidebar">
     <div class="side-panel">
         <div class="head-image-side-panel">
-            <img th:src="@{img/useravatar.jpg}" alt="Avatar" width="188px" height="188px"/>
+            <img th:src="@{/img/useravatar.jpg}" alt="Avatar" width="188px" height="188px"/>
             <h4 class="head">
                 <b>Book Management System</b>
             </h4>
@@ -25,12 +25,10 @@
         </div>
         <div class="middle-side-panel">
             <div>
-                <b><a href="/authors">Authors</a></b>
+                <b><a href="/">Home</a></b>
             </div>
             <div>
-                <b><a href="/">Home</a></b>
-
-
+                <b><a href="/authors">Authors</a></b>
             </div>
             <div>
                 <b><a href="/book">Books</a></b>
