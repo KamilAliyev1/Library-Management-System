@@ -25,7 +25,7 @@
                 <div class="card-body">
                     <div th:switch="${students}" class="container my-5">
                         <p class="my-5">
-                            <a href="/categories/new" class="btn btn-warning">
+                            <a th:href="@{/students/add}" class="btn btn-warning">
                                 <i class="bi bi-journals"></i> Add Student </i></a>
                         </p>
                         <div class="col-md-12">

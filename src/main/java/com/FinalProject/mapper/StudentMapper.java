@@ -1,5 +1,6 @@
 package com.FinalProject.mapper;
 
+import com.FinalProject.dto.studentdto.CreateStudentDto;
 import com.FinalProject.dto.studentdto.StudentDto;
 import com.FinalProject.model.Student;
 import org.springframework.stereotype.Component;
@@ -13,6 +14,15 @@ public class StudentMapper {
                 .surname(student.getSurname())
                 .faculty(student.getFaculty())
                 .studentFIN(student.getStudentFIN())
+                .build();
+    }
+
+    public Student mapCreateAuthorDtoToEntity(CreateStudentDto studentDto) {
+        return Student.builder()
+                .name(studentDto.getName())
+                .surname(studentDto.getSurname())
+                .studentFIN(studentDto.getStudentFIN())
+                .faculty(studentDto.getFaculty())
                 .build();
     }
 }

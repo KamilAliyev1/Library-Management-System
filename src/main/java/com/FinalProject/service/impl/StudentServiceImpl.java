@@ -19,15 +19,6 @@ import java.util.stream.Collectors;
 public class StudentServiceImpl implements StudentService {
     private final StudentRepository studentRepository;
     private final StudentMapper studentMapper;
-//    private final ModelMapper modelMapper;
-
-//    public List<CategoryDto> findAllCategories() {
-//
-//        List<Category> categories = categoryRepository.findAll();
-//        return categories.stream()
-//                .map(categoryMapper::categoryToCategoryDto)
-//                .collect(Collectors.toList());
-//    }
 
     public List<StudentDto> getStudents() {
         List<Student> students = studentRepository.findAll();
@@ -37,8 +28,10 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Long createStudent(CreateStudentDto studentDto) {
-        return null;
+    public void createStudent(CreateStudentDto studentDto) {
+        Student student = studentMapper.mapCreateAuthorDtoToEntity(studentDto);
+        student.setDeleteStatus(false);
+        studentRepository.save(student);
     }
 
     @Override
@@ -89,16 +82,12 @@ public class StudentServiceImpl implements StudentService {
 //
 //        //View
 //
-        public Student findById (Long id){
+    public Student findById(Long id) {
 
-            var optional = studentRepository.findById(id);
+        var optional = studentRepository.findById(id);
 
-            if (optional.isEmpty()) throw new StudentNotFoundException();
+        if (optional.isEmpty()) throw new StudentNotFoundException();
 
-            return optional.get();
-        }
-
-
-//Orders
-
+        return optional.get();
+    }
 }

@@ -19,17 +19,23 @@ public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ID;
+
     @Column(nullable = false)
     private String name;
-    @Column( nullable = false)
+
+    @Column(nullable = false)
     private String surname;
-    @Column(name = "faculty",nullable = false)
+
+    @Column(name = "faculty", nullable = false)
     private String faculty;
+
     @Column(length = 7, unique = true, nullable = false)
     private String studentFIN;
+
     @Column(updatable = false)
     private boolean deleteStatus;
-    @OneToMany(mappedBy = "student",cascade = CascadeType.ALL)
+
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     private Set<Order> orders;
 
     public Set<Order> getOrders() {
