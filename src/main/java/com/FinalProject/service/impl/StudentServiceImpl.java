@@ -42,8 +42,14 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Student updateStudent(UpdateStudentDto dto) {
-        return null;
+    public void updateStudent(Long id, UpdateStudentDto studentDto) {
+        Student student = fetchStudentIfExists(id);
+        student.setName(studentDto.getName());
+        student.setSurname(studentDto.getSurname());
+        student.setStudentFIN(studentDto.getStudentFIN());
+        student.setFaculty(studentDto.getFaculty());
+
+        studentRepository.save(student);
     }
 
     @Override
