@@ -1,8 +1,18 @@
 package com.FinalProject.dto.studentdto;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
+import org.mapstruct.Mapper;
 
-@Data
+@Mapper
+@Builder
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class CreateStudentDto {
     private String name;
     private String surname;

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Student Category</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/sidebar.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/containers.css}"/>
+
+</head>
+
+<body>
+<div class="main">
+    <div th:insert="navbar/sidebar :: sidebar"></div>
+    <div class="categories">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 container justify-content-center card">
+                    <h1 class="text-center"> Update Student </h1>
+                    <div class="card-body">
+                        <form th:action="@{/students/{id}/update(id=${student.id})}" th:object="${student}"
+                              method="POST"
+                              enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label> Student Name </label>
+                                <input
+                                        type="text"
+                                        name="name"
+                                        th:field="*{name}"
+                                        class="form-control"
+                                        placeholder="Enter Student Name"
+                                />
+                            </div>
+
+                            <div class="form-group">
+                                <label> Student Surname </label>
+                                <input
+                                        type="text"
+                                        name="name"
+                                        th:field="*{surname}"
+                                        class="form-control"
+                                        placeholder="Enter Student Surname"
+                                />
+                            </div>
+
+                            <div class="form-group">
+                                <label> Student FIN </label>
+                                <input
+                                        type="text"
+                                        name="name"
+                                        th:field="*{studentFIN}"
+                                        class="form-control"
+                                        placeholder="Enter Student FIN"
+                                />
+                            </div>
+
+                            <div class="form-group">
+                                <label> Student Faculty </label>
+                                <input
+                                        type="text"
+                                        name="name"
+                                        th:field="*{faculty}"
+                                        class="form-control"
+                                        placeholder="Enter Student Faculty"
+                                />
+                            </div>
+
+                            <div class="box-footer flex justify-end">
+                                <button type="submit" class="btn btn-warning">
+                                    Submit
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
