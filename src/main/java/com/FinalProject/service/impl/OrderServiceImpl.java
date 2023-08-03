@@ -34,7 +34,7 @@ public class OrderServiceImpl implements OrderService {
 
     private final StudentRepository studentRepository;
 
-    private final OrderMapper orderMapper = OrderMapper.INSTANCE;
+    private final OrderMapper orderMapper;
 
     private final BookServiceImpl bookService;
 
@@ -121,7 +121,7 @@ public class OrderServiceImpl implements OrderService {
 
         bookService.updateStockNumbersByIdIn(dtoBooksIds, -1);
 
-        var newOrder = orderMapper.change(dto, order);
+        var newOrder = orderMapper.setDtoChangesToEntity(dto, order);
 
         newOrder.setBooks(dtoBooks); // I set this in here .Because DTO's Books can be contain null variable
 
@@ -157,11 +157,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void disableProgress(Long ID) {
 
-        var optional = orderRepo.findById(ID);
+        var order = orderRepo.findById(ID).orElseThrow(
+                ()->new OrderNotFoundException("order not founded")
+        );
 
-        if (optional.isEmpty()) throw new OrderNotFoundException();
-
-        var order = optional.get();
+        if(!order.getInProgress())return;
 
         order.setFinishedAt(LocalDate.now());
 
