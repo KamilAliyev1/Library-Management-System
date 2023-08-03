@@ -3,10 +3,7 @@ package com.FinalProject.service.impl;
 
 import com.FinalProject.dto.OrderGETv1;
 import com.FinalProject.dto.OrderPOSTv1;
-import com.FinalProject.exception.NotChangeableException;
-import com.FinalProject.exception.OrderMustUpdateException;
-import com.FinalProject.exception.OrderNotFoundException;
-import com.FinalProject.exception.StockNotEnoughException;
+import com.FinalProject.exception.*;
 import com.FinalProject.mapper.OrderMapper;
 import com.FinalProject.model.Book;
 import com.FinalProject.model.Order;
@@ -27,7 +24,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
-public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, OrderPOSTv1> {
+public class OrderServiceImpl implements OrderService {
 
     private final OrderRepo orderRepo;
 
@@ -37,14 +34,22 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
 
     private final StudentServiceImpl studentService;
 
-    boolean validateStudents(Student student) {
+
+    void validatePreviousBooksExceptOrder(Student student,List<Book> books,Order order){
+
+        List<Book> previousBooks = student.getOrders().stream().filter(t->!t.equals(order)).flatMap(t->t.getBooks().stream()).toList();
+
+        if(books.stream().anyMatch(previousBooks::contains))throw new HaveAlreadyBookException("student have this book in previous orders");
+
+    }
+
+    void validateStudents(Student student) {
 
         if(
                 student.getOrders().stream().anyMatch(
                         t->t.getCreatedAt().equals(LocalDate.now())
                 )
-        )return true;
-        return false;
+        )throw new OrderMustUpdateException("can't add new order in same day.Please update today's order");
     }
 
     void validateBooks(List<Long> books) {
@@ -65,11 +70,13 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
 
         var student  = studentService.findById(dto.studentId);
 
-        if(validateStudents(student))throw new OrderMustUpdateException("cant add new order in same day.please update today's order");
-
         Order order = orderMapper.toEntity(dto);
 
         List<Long> books = new HashSet<>(dto.getBooks()).stream().filter(Objects::nonNull).toList();
+
+        validatePreviousBooksExceptOrder(student,books.stream().map(t->Book.builder().id(t).build()).toList(),null);
+
+        validateStudents(student);
 
         validateBooks(books);
 
@@ -105,7 +112,6 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
                 )
         );
 
-
         validateOrderForUpdate(order);
 
         var dtoBooksIds = dto.getBooks().stream().filter(Objects::nonNull).distinct().collect(Collectors.toCollection(ArrayList::new));
@@ -121,6 +127,8 @@ public class OrderServiceImpl implements OrderService<OrderGETv1, OrderPOSTv1, O
         validateBooks(dtoBooksIds.stream().filter(t -> !entityBooksIds.contains(t)).collect(Collectors.toList()));
 
         var dtoBooks = dtoBooksIds.stream().map(t -> Book.builder().id(t).build()).collect(Collectors.toSet());
+
+        validatePreviousBooksExceptOrder(student,dtoBooks.stream().toList(),order);
 
         bookService.updateStockNumbersByIdIn(entityBooksIds, 1);
 

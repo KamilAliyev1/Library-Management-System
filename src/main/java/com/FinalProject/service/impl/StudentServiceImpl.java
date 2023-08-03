@@ -1,21 +1,50 @@
 package com.FinalProject.service.impl;
 
+import com.FinalProject.dto.studentdto.CreateStudentDto;
+import com.FinalProject.dto.studentdto.StudentDto;
+import com.FinalProject.dto.studentdto.UpdateStudentDto;
 import com.FinalProject.exception.StudentNotFoundException;
+import com.FinalProject.mapper.StudentMapper;
 import com.FinalProject.model.Student;
 import com.FinalProject.repository.StudentRepository;
+import com.FinalProject.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
 
-//
 @RequiredArgsConstructor
 @Service
-public class StudentServiceImpl {
+public class StudentServiceImpl implements StudentService {
     private final StudentRepository studentRepository;
-//    private final StudentMapper studentMapper;
-////    private final ModelMapper modelMapper;
-//
-//    //List
+    private final StudentMapper studentMapper;
+
+    public List<StudentDto> getStudents() {
+        List<Student> students = studentRepository.findAll();
+        return students.stream()
+                .map(studentMapper::mapStudentDtoToEntity)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void createStudent(CreateStudentDto studentDto) {
+        Student student = studentMapper.mapCreateAuthorDtoToEntity(studentDto);
+        student.setDeleteStatus(false);
+        studentRepository.save(student);
+    }
+
+    @Override
+    public void deleteStudentById(Long id) {
+
+    }
+
+    @Override
+    public Student updateStudent(UpdateStudentDto dto) {
+        return null;
+    }
+
+    //List
 //    @Override
 //    public List<StudentDto> getStudentList() {
 //
@@ -44,26 +73,21 @@ public class StudentServiceImpl {
 //        }
 //
 //        //Update
-////    @Override
-////    public Student updateStudent(UpdateStudentDto dto) {
-////        return studentRepository
-////                .findById(dto.getId()).map(student -> modelMapper.map(dto,Student.class))
-////                .orElseThrow(StudentNotFoundException::new);
-////    }
+//    @Override
+//    public Student updateStudent(UpdateStudentDto dto) {
+//        return studentRepository
+//                .findById(dto.getId()).map(student -> modelMapper.map(dto,Student.class))
+//                .orElseThrow(StudentNotFoundException::new);
+//    }
 //
 //        //View
-
-        public Student findById (Long id){
-
-            var optional = studentRepository.findById(id);
-
-            if (optional.isEmpty()) throw new StudentNotFoundException();
-
-            return optional.get();
-        }
 //
-//
-////Orders
-//
-//    }
+    public Student findById(Long id) {
+
+        var optional = studentRepository.findById(id);
+
+        if (optional.isEmpty()) throw new StudentNotFoundException();
+
+        return optional.get();
+    }
 }
