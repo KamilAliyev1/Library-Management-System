@@ -13,67 +13,72 @@
 <body>
 <div class="main">
     <div th:insert="navbar/sidebar :: sidebar"></div>
-    <div class="categories">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-6 container flex justify-content-center card">
-                    <h1 class="text-center"> Create New Student </h1>
-                    <div class="card-body">
-                        <form th:action="@{/students}" th:object="${student}" method="POST"
-                              enctype="multipart/form-data">
-                            <div class="form-group">
-                                <label> Student Name </label>
-                                <input
-                                        type="text"
-                                        name="name"
-                                        th:field="*{name}"
-                                        class="form-control"
-                                        placeholder="Enter Student Name"
-                                />
-                            </div>
+    <div class="category w-100 d-flex justify-content-center align-items-center">
+        <div class="container-fluid">
+            <div class="card col-lg-7 col-md-6 col-sm-6 container-fluid flex justify-content-center p-4">
+                <div class="card-header rounded d-flex justify-content-center mb-3">
+                    <h2 class="mb-0"> Add New Student </h2>
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/students}" th:object="${student}" method="POST"
+                          enctype="multipart/form-data">
+                        <div class="form-group mb-4">
+                            <label for="name"> Student Name </label>
+                            <input
+                                    id="name"
+                                    type="text"
+                                    name="name"
+                                    th:field="*{name}"
+                                    class="form-control"
+                                    placeholder="Enter Student Name"
+                            />
+                        </div>
 
-                            <div class="form-group">
-                                <label> Student Surname </label>
-                                <input
-                                        type="text"
-                                        name="name"
-                                        th:field="*{surname}"
-                                        class="form-control"
-                                        placeholder="Enter Student Surname"
-                                />
-                            </div>
+                        <div class="form-group mb-4">
+                            <label for="surname"> Student Surname </label>
+                            <input
+                                    id="surname"
+                                    type="text"
+                                    name="surname"
+                                    th:field="*{surname}"
+                                    class="form-control"
+                                    placeholder="Enter Student Surname"
+                            />
+                        </div>
 
-                            <div class="form-group">
-                                <label> Student FIN </label>
-                                <input
-                                        type="text"
-                                        name="name"
-                                        th:field="*{studentFIN}"
-                                        class="form-control"
-                                        placeholder="Enter Student FIN"
-                                />
-                            </div>
+                        <div class="form-group mb-4">
+                            <label for="studentFIN"> Student FIN </label>
+                            <input
+                                    type="text"
+                                    name="studentFIN"
+                                    id="studentFIN"
+                                    th:field="*{studentFIN}"
+                                    class="form-control"
+                                    placeholder="Enter Student FIN"
+                            />
+                        </div>
 
-                            <div class="form-group">
-                                <label> Student Faculty </label>
-                                <input
-                                        type="text"
-                                        name="name"
-                                        th:field="*{faculty}"
-                                        class="form-control"
-                                        placeholder="Enter Student Faculty"
-                                />
-                            </div>
+                        <div class="form-group mb-5">
+                            <label for="faculty"> Student Faculty </label>
+                            <input
+                                    type="text"
+                                    id="faculty"
+                                    name="faculty"
+                                    th:field="*{faculty}"
+                                    class="form-control"
+                                    placeholder="Enter Student Faculty"
+                            />
+                        </div>
 
-                            <div class="box-footer flex justify-end">
-                                <button type="submit" class="btn btn-warning">
-                                    Submit
-                                </button>
-                            </div>
-                        </form>
-                    </div>
+                        <div class="d-flex align-items-center justify-content-end">
+                            <button type="submit" class="btn btn-primary w-100">
+                                Submit
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
+
         </div>
     </div>
 </div>

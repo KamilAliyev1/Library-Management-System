@@ -2,6 +2,8 @@ package com.FinalProject.controller;
 
 import com.FinalProject.dto.BookDto;
 import com.FinalProject.dto.BookRequest;
+import com.FinalProject.service.AuthorService;
+import com.FinalProject.service.CategoryService;
 import com.FinalProject.service.impl.BookServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +24,9 @@ import java.util.stream.Collectors;
 @Slf4j
 public class BookController {
 
+    private final AuthorService authorService;
     private final BookServiceImpl bookService;
+    private final CategoryService categoryService;
 
     @PostMapping("/{isbn}/update")
     public String update(@PathVariable("isbn") String isbn,
@@ -50,6 +54,8 @@ public class BookController {
     @GetMapping("/add")
     public String bookForm(Model model) {
         model.addAttribute("bookRequest", new BookRequest());
+        model.addAttribute("categories", categoryService.findAllCategories());
+        model.addAttribute("authors", authorService.getAuthors());
         return "book-create";
     }
 
