@@ -20,4 +20,5 @@ public interface BookService {
     void updateStockNumbersByIdIn(List<Long> ids, int amount);
      List<BookDto> showBooksByCategoryName(String category);
 
+
 }

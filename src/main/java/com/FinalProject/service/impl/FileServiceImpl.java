@@ -60,7 +60,7 @@ public class FileServiceImpl implements FIleService {
 
     @Override
     public boolean isPng(MultipartFile file) {
-        return Objects.equals(file.getContentType(), "image/png");
+        return file.getContentType().equals("/png"));
     }
 
 }

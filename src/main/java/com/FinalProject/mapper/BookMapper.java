@@ -19,7 +19,7 @@ public class BookMapper {
                 book.getId(), book.getName(), book.getIsbn(), book.getStock(), book.getAuthor().getFullName(), book.getCategory().getName(), book.getImage())).toList();
     }
 
-    private BookDto entityToResponse(Book book) {
+    public BookDto entityToResponse(Book book) {
         return BookDto.builder()
                 .id(book.getId())
                 .stock(book.getStock())

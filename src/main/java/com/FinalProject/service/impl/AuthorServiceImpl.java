@@ -2,6 +2,7 @@ package com.FinalProject.service.impl;
 
 import com.FinalProject.dto.AuthorsDto;
 import com.FinalProject.dto.BookDto;
+import com.FinalProject.dto.BookRequest;
 import com.FinalProject.exception.AuthorsNotFoundException;
 import com.FinalProject.mapper.AuthorsMapper;
 import com.FinalProject.model.Authors;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -76,10 +78,16 @@ public class AuthorServiceImpl implements AuthorService {
     public List<BookDto> showAuthorBooks(Long authorId) {
         List<Book> fromDb = bookRepository.findBooksByAuthorId(authorId);
         List<BookDto> bookDtoList = new ArrayList<>();
-        for (Book books : fromDb){
+        for (Book books : fromDb) {
             bookDtoList.add(fromDbToModel(books));
         }
         return bookDtoList;
+    }
+
+    @Override
+    public void setBookToAuthor(BookRequest bookRequests, Book book) {
+        Optional<Authors> authors = authorRepository.findById(bookRequests.getAuthorId());
+        authors.ifPresent(book::setAuthor);
     }
 
     @Override
@@ -89,7 +97,7 @@ public class AuthorServiceImpl implements AuthorService {
         authorRepository.save(author);
     }
 
-    private BookDto fromDbToModel(Book books){
+    private BookDto fromDbToModel(Book books) {
         return BookDto.builder()
                 .id(books.getId())
                 .name(books.getName())

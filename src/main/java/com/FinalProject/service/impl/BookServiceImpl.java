@@ -2,12 +2,12 @@ package com.FinalProject.service.impl;
 
 import com.FinalProject.dto.BookDto;
 import com.FinalProject.dto.BookRequest;
-import com.FinalProject.dto.CategoryDto;
 import com.FinalProject.exception.BookNotFoundException;
 import com.FinalProject.mapper.BookMapper;
 import com.FinalProject.mapper.CategoryMapper;
 import com.FinalProject.model.Book;
 import com.FinalProject.repository.BookRepository;
+import com.FinalProject.service.AuthorService;
 import com.FinalProject.service.BookService;
 import com.FinalProject.service.CategoryService;
 import jakarta.transaction.Transactional;
@@ -16,9 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 @Slf4j
@@ -31,18 +29,17 @@ public class BookServiceImpl implements BookService {
     private final CategoryMapper categoryMapper;
     private final FIleService fileService;
     private final BookMapper bookMapper;
+    @Lazy
+    private final AuthorService authorService;
 
     @Transactional
     @Override
-    public void create(BookRequest bookRequests) {
-        var book = bookMapper.requestToEntity(bookRequests);
+    public void create(BookRequest bookRequest) {
+        var book = bookMapper.requestToEntity(bookRequest);
         checkBookByIsbn(book);
-        CategoryDto categoryDto = categoryService.findCategoryById(bookRequests.getCategoryId());
-        Set<Book> books = new HashSet<>();
-        books.add(book);
-        categoryDto.setBooks(books);
-        book.setCategory(categoryMapper.categoryDtoToCategory(categoryDto));
-        fileService.save(bookRequests.getFile());
+        categoryService.setBookToCategory(bookRequest, book);
+        authorService.setBookToAuthor(bookRequest, book);
+        fileService.save(bookRequest.getFile());
         bookRepository.save(book);
     }
 
@@ -53,31 +50,17 @@ public class BookServiceImpl implements BookService {
         });
     }
 
+    public BookDto update(String isbn, BookRequest bookRequest) {
+        Book book = bookRepository.findByIsbn(isbn).orElseThrow(() -> new BookNotFoundException("Book not found with isbn : " + isbn));
+        categoryService.setBookToCategory(bookRequest, book);
+        authorService.setBookToAuthor(bookRequest, book);
+        fileService.save(bookRequest.getFile());
+        bookRepository.save(book);
+        return bookMapper.entityToResponse(bookRepository.save(book));
+    }
 
-    //    public BookDto update(String isbn, BookRequest bookRequest) {
-//        Category bookCategory = Category.builder()
-//                .name(bookRequest.getCategory())
-//                .build();
-//        Authors author = Authors.builder()
-//                .fullName(bookRequest.getAuthorName())
-//                .build();
-//        Book book = bookRepository.findByIsbn(isbn).orElseThrow(() -> new BookNotFoundException("Book not found with isbn : " + isbn));
-//        Optional<Category> category = categoryRepository.findByName(bookCategory.getName());
-//        if (category.isPresent()) {
-//            book.setCategory(category.get());
-//        } else {
-//            categoryRepository.save(bookCategory);
-//            book.setCategory(bookCategory);
-//        }
-//        book.setAuthor(author);
-//        book.setStock(bookRequest.getStock());
-//        book.setIsbn(bookRequest.getIsbn());
-//        book.setName(bookRequest.getName());
-//        book.setImage(bookRequest.getFile().getOriginalFilename());
-//        save(bookRequest.getFile());
-//        return entityToResponse(bookRepository.save(book));
-//    }
     @Override
+    @Transactional
     public void delete(String isbn) {
         bookRepository.findByIsbn(isbn).ifPresentOrElse(book -> {
             bookRepository.deleteByIsbn(isbn);

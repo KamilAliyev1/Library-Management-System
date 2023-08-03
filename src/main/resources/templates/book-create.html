@@ -55,7 +55,7 @@
 
                             <div class="form-group">
                                 <label for="pizza">Book Author</label>
-                                <select class="form-control selectpicker" th:field="*{authorName}" id="author">
+                                <select class="form-control selectpicker" th:field="*{authorId}" id="author">
                                     <option value="">Choose Book Author</option>
                                     <option th:each="author : ${authors}"
                                             th:value="${author.id}"

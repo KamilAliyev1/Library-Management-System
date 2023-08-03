@@ -1,6 +1,8 @@
 package com.FinalProject.service;
 
+import com.FinalProject.dto.BookRequest;
 import com.FinalProject.dto.CategoryDto;
+import com.FinalProject.model.Book;
 
 import java.util.List;
 
@@ -16,5 +18,7 @@ public interface CategoryService {
     void deleteCategory(Long id);
 
     CategoryDto findByName(String name);
+     void setBookToCategory(BookRequest bookRequests, Book book);
+
 
 }

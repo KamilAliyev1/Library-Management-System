@@ -1,9 +1,11 @@
 package com.FinalProject.service.impl;
 
+import com.FinalProject.dto.BookRequest;
 import com.FinalProject.dto.CategoryDto;
 import com.FinalProject.exception.CategoryAlreadyExistsException;
 import com.FinalProject.exception.CategoryNotFoundException;
 import com.FinalProject.mapper.CategoryMapper;
+import com.FinalProject.model.Book;
 import com.FinalProject.model.Category;
 import com.FinalProject.repository.CategoryRepository;
 import com.FinalProject.service.BookService;
@@ -12,6 +14,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -85,6 +88,12 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto findByName(String name) {
         return categoryMapper.categoryToCategoryDto(categoryRepository.findByName(name).orElseThrow(() -> new CategoryNotFoundException("Category not found")));
+    }
+
+    @Override
+    public void setBookToCategory(BookRequest bookRequests, Book book) {
+        Optional<Category> category = categoryRepository.findById(bookRequests.getCategoryId());
+        category.ifPresent(book::setCategory);
     }
 }
 
