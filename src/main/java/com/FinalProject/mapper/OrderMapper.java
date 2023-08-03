@@ -1,41 +1,48 @@
 package com.FinalProject.mapper;
 
-import com.FinalProject.dto.OrderGETv1;
-import com.FinalProject.dto.OrderPOSTv1;
+import com.FinalProject.dto.OrderDto;
+import com.FinalProject.dto.OrderRequest;
 import com.FinalProject.model.Book;
 import com.FinalProject.model.Order;
 import com.FinalProject.model.Student;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Named;
-import org.mapstruct.factory.Mappers;
+import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
+@Component
+public class OrderMapper {
 
-@Mapper(componentModel = "spring")
-public interface OrderMapper {
-
-    OrderMapper INSTANCE = Mappers.getMapper(OrderMapper.class);
-
-    default Order toEntity(OrderPOSTv1 dto){
+    public Order toEntity(OrderRequest dto){
         return Order.builder().student(Student.builder().ID(dto.getStudentId()).build())
                 .books(dto.getBooks().stream().filter(Objects::nonNull).map(t-> Book.builder().id(t).build()).collect(Collectors.toSet()))
                 .build();
-    };
+    }
 
-    @Mapping(target = "id",source = "ID")
-    @Mapping(target = "studentId",source = "student.ID")
-    @Mapping(target = "books",source = "books" ,qualifiedByName = "books")
-    OrderGETv1 toGetDto(Order order);
+    public OrderDto toGetDto(Order order) {
 
+        if ( order == null ) {
+            return null;
+        }
 
-    @Named("books")
-    default List<Long> map(Set<Book> books){
-        List<Long> temp =  books==null || books.isEmpty()?new LinkedList():books.stream().map(Book::getId).collect(Collectors.toCollection(LinkedList::new));
+        Long id = order.getID();
+        Long studentId = orderStudentID( order );
+        List<Long> books = map( order.getBooks() );
+        Boolean inProgress = order.getInProgress();
+        LocalDate createdAt = order.getCreatedAt();
+        LocalDate finishedAt = order.getFinishedAt();
+        Boolean inDelay = order.getInDelay();
+
+        OrderDto orderDto = new OrderDto( id, studentId, books, inProgress, createdAt, finishedAt, inDelay );
+
+        return orderDto;
+    }
+
+    public List<Long> map(Set<Book> books){
+        List<Long> temp =  books==null || books.isEmpty()?new LinkedList<>():books.stream().map(Book::getId).collect(Collectors.toCollection(LinkedList::new));
         var size = temp.size();
         for (int i = 0; i < 15-size; i++) {
             temp.add(null);
@@ -44,14 +51,28 @@ public interface OrderMapper {
         return temp;
     }
 
+    private Long orderStudentID(Order order) {
+        if ( order == null ) {
+            return null;
+        }
+        Student student = order.getStudent();
+        if ( student == null ) {
+            return null;
+        }
+        Long iD = student.getID();
+        if ( iD == null ) {
+            return null;
+        }
+        return iD;
+    }
 
 
-    default Order change(OrderPOSTv1 dto,Order entity){
+
+    public Order setDtoChangesToEntity(OrderRequest dto, Order entity){
         entity.setStudent(Student.builder().ID(dto.getStudentId()).build());
         entity.setBooks(dto.getBooks().stream().map(t->Book.builder().id(t).build()).collect(Collectors.toSet()));
         return entity;
     }
-
 
 
 }

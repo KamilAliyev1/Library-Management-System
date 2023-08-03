@@ -1,15 +1,19 @@
 package com.FinalProject.service.impl;
 
 
-import com.FinalProject.dto.OrderGETv1;
-import com.FinalProject.dto.OrderPOSTv1;
-import com.FinalProject.exception.*;
+import com.FinalProject.dto.OrderDto;
+import com.FinalProject.dto.OrderRequest;
+import com.FinalProject.exception.NotChangeableException;
+import com.FinalProject.exception.OrderNotFoundException;
+import com.FinalProject.exception.StudentNotFoundException;
 import com.FinalProject.mapper.OrderMapper;
 import com.FinalProject.model.Book;
 import com.FinalProject.model.Order;
-import com.FinalProject.model.Student;
 import com.FinalProject.repository.OrderRepo;
+import com.FinalProject.repository.StudentRepository;
 import com.FinalProject.service.OrderService;
+import com.FinalProject.service.OrderValidator;
+import com.FinalProject.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -28,57 +32,36 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderRepo orderRepo;
 
-    private final OrderMapper orderMapper = OrderMapper.INSTANCE;
+    private final StudentRepository studentRepository;
+
+    private final OrderMapper orderMapper;
 
     private final BookServiceImpl bookService;
 
-    private final StudentServiceImpl studentService;
+    private final StudentService studentService;
 
+    private final OrderValidator orderValidator;
 
-    void validatePreviousBooksExceptOrder(Student student,List<Book> books,Order order){
-
-        List<Book> previousBooks = student.getOrders().stream().filter(t->!t.equals(order)).flatMap(t->t.getBooks().stream()).toList();
-
-        if(books.stream().anyMatch(previousBooks::contains))throw new HaveAlreadyBookException("student have this book in previous orders");
-
-    }
-
-    void validateStudents(Student student) {
-
-        if(
-                student.getOrders().stream().anyMatch(
-                        t->t.getCreatedAt().equals(LocalDate.now())
-                )
-        )throw new OrderMustUpdateException("can't add new order in same day.Please update today's order");
-    }
-
-    void validateBooks(List<Long> books) {
-        if (!bookService.areAllBooksInStock(books))
-            throw new StockNotEnoughException();
-    }
-
-    void validateOrderForUpdate(Order order) {
-
-        if (!order.getInProgress()) throw new NotChangeableException("Cannot be changeable");
-
-        if (!order.getCreatedAt().equals(LocalDate.now())) throw new NotChangeableException("create new order");
-    }
 
     @Transactional
     @Override
-    public OrderGETv1 add(OrderPOSTv1 dto) {
+    public OrderDto add(OrderRequest dto) {
 
-        var student  = studentService.findById(dto.studentId);
+        var student = studentRepository
+                .findById(dto.studentId)
+                .orElseThrow(() -> new StudentNotFoundException("Student don't find with id: " + dto.studentId));
+
+        if (student == null) throw new StudentNotFoundException();
 
         Order order = orderMapper.toEntity(dto);
 
         List<Long> books = new HashSet<>(dto.getBooks()).stream().filter(Objects::nonNull).toList();
 
-        validatePreviousBooksExceptOrder(student,books.stream().map(t->Book.builder().id(t).build()).toList(),null);
+        orderValidator.validateBooksConfusionExceptOrder(student, books.stream().map(t -> Book.builder().id(t).build()).toList(), null);
 
-        validateStudents(student);
+        orderValidator.validateNewOrderPermission(student);
 
-        validateBooks(books);
+        orderValidator.validateBooks(books);
 
         order = orderRepo.saveAndFlush(order);
 
@@ -88,7 +71,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderGETv1 get(Long ID) {
+    public OrderDto get(Long ID) {
 
         var order = orderRepo.findById(ID).orElseThrow(
                 () -> new OrderNotFoundException(
@@ -102,9 +85,13 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     @Override
-    public OrderGETv1 update(Long id, OrderPOSTv1 dto) {
+    public OrderDto update(Long id, OrderRequest dto) {
 
-        var student  = studentService.findById(dto.studentId);
+        var student = studentRepository
+                .findById(dto.studentId)
+                .orElseThrow(() -> new StudentNotFoundException("Student don't find with id: " + dto.studentId));
+
+        if (student == null) throw new StudentNotFoundException();
 
         Order order = orderRepo.findById(id).orElseThrow(
                 () -> new OrderNotFoundException(
@@ -112,7 +99,7 @@ public class OrderServiceImpl implements OrderService {
                 )
         );
 
-        validateOrderForUpdate(order);
+        orderValidator.validateOrderForUpdate(order);
 
         var dtoBooksIds = dto.getBooks().stream().filter(Objects::nonNull).distinct().collect(Collectors.toCollection(ArrayList::new));
 
@@ -124,17 +111,17 @@ public class OrderServiceImpl implements OrderService {
             return orderMapper.toGetDto(new Order());
         }
 
-        validateBooks(dtoBooksIds.stream().filter(t -> !entityBooksIds.contains(t)).collect(Collectors.toList()));
+        orderValidator.validateBooks(dtoBooksIds.stream().filter(t -> !entityBooksIds.contains(t)).collect(Collectors.toList()));
 
         var dtoBooks = dtoBooksIds.stream().map(t -> Book.builder().id(t).build()).collect(Collectors.toSet());
 
-        validatePreviousBooksExceptOrder(student,dtoBooks.stream().toList(),order);
+        orderValidator.validateBooksConfusionExceptOrder(student, dtoBooks.stream().toList(), order);
 
         bookService.updateStockNumbersByIdIn(entityBooksIds, 1);
 
         bookService.updateStockNumbersByIdIn(dtoBooksIds, -1);
 
-        var newOrder = orderMapper.change(dto, order);
+        var newOrder = orderMapper.setDtoChangesToEntity(dto, order);
 
         newOrder.setBooks(dtoBooks); // I set this in here .Because DTO's Books can be contain null variable
 
@@ -170,11 +157,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void disableProgress(Long ID) {
 
-        var optional = orderRepo.findById(ID);
+        var order = orderRepo.findById(ID).orElseThrow(
+                ()->new OrderNotFoundException("order not founded")
+        );
 
-        if (optional.isEmpty()) throw new OrderNotFoundException();
-
-        var order = optional.get();
+        if(!order.getInProgress())return;
 
         order.setFinishedAt(LocalDate.now());
 
@@ -189,7 +176,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderGETv1> getAll() {
+    public List<OrderDto> getAll() {
         return orderRepo.findAll().stream().map(orderMapper::toGetDto).collect(Collectors.toList());
     }
 

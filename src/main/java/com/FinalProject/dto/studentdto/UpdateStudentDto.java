@@ -1,14 +1,22 @@
 package com.FinalProject.dto.studentdto;
 
-import com.FinalProject.enums.Faculty;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
+//import org.mapstruct.Mapper;
 
-@Data
+//@Mapper
+@Builder
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class UpdateStudentDto {
     private Long id;
     private String name;
     private String surname;
-    private Faculty faculty;
+    private String faculty;
     private String studentFIN;
-    private boolean deleteStatus;
 }

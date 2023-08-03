@@ -1,14 +1,17 @@
 package com.FinalProject.model;
 
-
-import com.FinalProject.enums.Faculty;
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Column;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.CascadeType;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
 import java.util.Set;
-
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -32,8 +35,7 @@ public class Student {
     @Column(length = 7, unique = true, nullable = false)
     private String studentFIN;
 
-    @Column(updatable = false)
-    private boolean deleteStatus;
+    private Boolean deleteStatus;
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     private Set<Order> orders;
@@ -86,7 +88,7 @@ public class Student {
         this.studentFIN = studentFIN;
     }
 
-    public boolean isDeleteStatus() {
+    public Boolean getDeleteStatus() {
         return deleteStatus;
     }
 

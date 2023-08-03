@@ -14,16 +14,16 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class StudentServiceImpl implements StudentService {
     private final StudentRepository studentRepository;
     private final StudentMapper studentMapper;
 
     public List<StudentDto> getStudents() {
-        List<Student> students = studentRepository.findAll();
+        List<Student> students = studentRepository.getStudentsByDeleteStatusFalse();
         return students.stream()
-                .map(studentMapper::mapStudentDtoToEntity)
+                .map(studentMapper::mapStudentEntityToDto)
                 .collect(Collectors.toList());
     }
 
@@ -35,59 +35,31 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public void deleteStudentById(Long id) {
-
+    public void deleteStudent(Long id) {
+        Student student = fetchStudentIfExists(id);
+        student.setDeleteStatus(true);
+        studentRepository.save(student);
     }
 
     @Override
-    public Student updateStudent(UpdateStudentDto dto) {
-        return null;
+    public void updateStudent(Long id, UpdateStudentDto studentDto) {
+        Student student = fetchStudentIfExists(id);
+        student.setName(studentDto.getName());
+        student.setSurname(studentDto.getSurname());
+        student.setStudentFIN(studentDto.getStudentFIN());
+        student.setFaculty(studentDto.getFaculty());
+
+        studentRepository.save(student);
     }
 
-    //List
-//    @Override
-//    public List<StudentDto> getStudentList() {
-//
-//        return studentRepository.findAll().stream()
-//                .map(studentMapper::mapEntityToDto).collect(Collectors.toList());
-//    }
-//
-//    //Create
-//    @Override
-//    public Long createStudent(CreateStudentDto createStudentDto) {
-//        var student = studentRepository.findByStudentFIN(createStudentDto
-//                .getStudentFIN()).isPresent();
-//        if (student) {
-//            new StudentAlreadyExistsException(
-//                    "Student already exists with " + createStudentDto.getStudentFIN() + "fin");
-////        } else studentRepository.save(modelMapper.map(createStudentDto, Student.class));
-//            return studentRepository.findByStudentFIN(createStudentDto.getStudentFIN()).get().getID();
-//        }
-//
-//        //Delete
-//        @Override
-//        public void deleteStudentById (Long id){
-//            Optional<Student> byId = studentRepository.findById(id);
-//            byId.get().setDeleteStatus(true);
-//            studentRepository.save(byId.get());
-//        }
-//
-//        //Update
-//    @Override
-//    public Student updateStudent(UpdateStudentDto dto) {
-//        return studentRepository
-//                .findById(dto.getId()).map(student -> modelMapper.map(dto,Student.class))
-//                .orElseThrow(StudentNotFoundException::new);
-//    }
-//
-//        //View
-//
-    public Student findById(Long id) {
+    @Override
+    public StudentDto getStudent(Long id) {
+        return studentMapper.mapStudentEntityToDto(fetchStudentIfExists(id));
+    }
 
-        var optional = studentRepository.findById(id);
-
-        if (optional.isEmpty()) throw new StudentNotFoundException();
-
-        return optional.get();
+    public Student fetchStudentIfExists(Long id) {
+        return studentRepository
+                .findById(id)
+                .orElseThrow(() -> new StudentNotFoundException("Student don't find with id: " + id));
     }
 }
