@@ -2,8 +2,8 @@ package com.FinalProject.controller;
 
 import com.FinalProject.dto.BookDto;
 import com.FinalProject.dto.CategoryDto;
+import com.FinalProject.service.BookService;
 import com.FinalProject.service.CategoryService;
-import com.FinalProject.service.impl.BookServiceImpl;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,10 +16,10 @@ import java.util.stream.Collectors;
 public class CategoryController {
 
     private final CategoryService categoryService;
-    private final BookServiceImpl bookService;
+    private final BookService bookService;
 
 
-    public CategoryController(CategoryService categoryService, BookServiceImpl bookService) {
+    public CategoryController(CategoryService categoryService, BookService bookService) {
         this.categoryService = categoryService;
         this.bookService = bookService;
     }

@@ -3,14 +3,11 @@ package com.FinalProject.controller;
 import com.FinalProject.dto.BookDto;
 import com.FinalProject.dto.BookRequest;
 import com.FinalProject.service.AuthorService;
+import com.FinalProject.service.BookService;
 import com.FinalProject.service.CategoryService;
-import com.FinalProject.service.impl.BookServiceImpl;
+import com.FinalProject.service.impl.FileServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -25,15 +22,16 @@ import java.util.stream.Collectors;
 public class BookController {
 
     private final AuthorService authorService;
-    private final BookServiceImpl bookService;
+    private final BookService bookService;
     private final CategoryService categoryService;
+    private final FileServiceImpl fileService;
 
-    @PostMapping("/{isbn}/update")
-    public String update(@PathVariable("isbn") String isbn,
-                         @ModelAttribute("bookRequest") BookRequest bookRequest) {
-        bookService.update(isbn, bookRequest);
-        return "redirect:/book";
-    }
+//    @PostMapping("/{isbn}/update")
+//    public String update(@PathVariable("isbn") String isbn,
+//                         @ModelAttribute("bookRequest") BookRequest bookRequest) {
+//        bookService.update(isbn, bookRequest);
+//        return "redirect:/book";
+//    }
 
     @GetMapping("/{isbn}/update")
     public String updatePage(@PathVariable("isbn") String isbn, @ModelAttribute("bookRequest") BookRequest bookRequest) {
@@ -46,6 +44,7 @@ public class BookController {
             return "book-create";
         }
         bookService.create(bookRequest);
+
         model.addAttribute("book", bookService.findAll());
         return "redirect:/book";
     }
@@ -74,15 +73,6 @@ public class BookController {
         return "redirect:/book";
     }
 
-
-    @GetMapping("/images/{imageName}")
-    public ResponseEntity<Resource> getImage(@PathVariable String imageName) {
-        var resource = bookService.load(imageName);
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=\"" + imageName + "\"")
-                .contentType(MediaType.IMAGE_PNG).body(resource);
-
-    }
 
     @GetMapping("/search")
     public String findByIsbn(@RequestParam String isbn, Model model) {

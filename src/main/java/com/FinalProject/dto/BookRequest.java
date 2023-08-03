@@ -15,6 +15,6 @@ public class BookRequest {
     private String isbn;
     private int stock;
     private String authorName;
-    private String category;
+    private Long categoryId;
     private MultipartFile file;
 }

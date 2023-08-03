@@ -35,15 +35,15 @@
                                 <input type="number" name="stock" th:field="*{stock}" class="form-control"
                                        placeholder="Enter Book Stock"/>
                             </div>
-<!--                            <div class="form-group">-->
-<!--                                <label>Book Category</label>-->
-<!--                                <input type="text" name="category" th:field="*{category}" class="form-control"-->
-<!--                                       placeholder="Enter Book Category"/>-->
-<!--                            </div>-->
+                            <!--                            <div class="form-group">-->
+                            <!--                                <label>Book Category</label>-->
+                            <!--                                <input type="text" name="category" th:field="*{category}" class="form-control"-->
+                            <!--                                       placeholder="Enter Book Category"/>-->
+                            <!--                            </div>-->
 
                             <div class="form-group">
                                 <label for="pizza">Book Category</label>
-                                <select class="form-control selectpicker" th:field="*{category}" id="pizza">
+                                <select class="form-control selectpicker" th:field="*{categoryId}" id="pizza">
                                     <option value="">Choose Book Category</option>
                                     <option th:each="category : ${categories}"
                                             th:value="${category.id}"
@@ -65,11 +65,11 @@
                                 </select>
                             </div>
 
-<!--                            <div class="form-group">-->
-<!--                                <label>Book Author</label>-->
-<!--                                <input type="text" name="authorName" th:field="*{authorName}" class="form-control"-->
-<!--                                       placeholder="Enter Author Name"/>-->
-<!--                            </div>-->
+                            <!--                            <div class="form-group">-->
+                            <!--                                <label>Book Author</label>-->
+                            <!--                                <input type="text" name="authorName" th:field="*{authorName}" class="form-control"-->
+                            <!--                                       placeholder="Enter Author Name"/>-->
+                            <!--                            </div>-->
                             <div class="form-group">
                                 <label>Book Picture</label>
                                 <input type="file" name="file" th:field="*{file}" class="form-control"
