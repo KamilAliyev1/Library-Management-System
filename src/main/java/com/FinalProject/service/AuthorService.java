@@ -2,7 +2,7 @@ package com.FinalProject.service;
 
 import com.FinalProject.dto.AuthorsDto;
 import com.FinalProject.dto.BookDto;
-import com.FinalProject.dto.BookRequest;
+import com.FinalProject.request.BookRequest;
 import com.FinalProject.model.Book;
 import org.springframework.stereotype.Service;
 

@@ -1,10 +1,9 @@
 package com.FinalProject.service.impl;
 
 import com.FinalProject.dto.BookDto;
-import com.FinalProject.dto.BookRequest;
+import com.FinalProject.request.BookRequest;
 import com.FinalProject.exception.BookNotFoundException;
 import com.FinalProject.mapper.BookMapper;
-import com.FinalProject.mapper.CategoryMapper;
 import com.FinalProject.model.Book;
 import com.FinalProject.repository.BookRepository;
 import com.FinalProject.service.AuthorService;
@@ -26,7 +25,6 @@ public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
     @Lazy
     private final CategoryService categoryService;
-    private final CategoryMapper categoryMapper;
     private final FIleService fileService;
     private final BookMapper bookMapper;
     @Lazy

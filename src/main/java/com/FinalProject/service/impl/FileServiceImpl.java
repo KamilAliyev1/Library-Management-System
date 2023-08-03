@@ -11,7 +11,6 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Objects;
 
 @Service
 public class FileServiceImpl implements FIleService {
@@ -34,7 +33,6 @@ public class FileServiceImpl implements FIleService {
     }
 
     @Override
-
     public void save(MultipartFile multipartFile) {
         if (isPng(multipartFile))
             try {
@@ -60,7 +58,7 @@ public class FileServiceImpl implements FIleService {
 
     @Override
     public boolean isPng(MultipartFile file) {
-        return file.getContentType().equals("/png"));
+        return file.getContentType().equals("image/png");
     }
 
 }

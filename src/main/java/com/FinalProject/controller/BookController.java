@@ -1,7 +1,7 @@
 package com.FinalProject.controller;
 
 import com.FinalProject.dto.BookDto;
-import com.FinalProject.dto.BookRequest;
+import com.FinalProject.request.BookRequest;
 import com.FinalProject.service.AuthorService;
 import com.FinalProject.service.BookService;
 import com.FinalProject.service.CategoryService;

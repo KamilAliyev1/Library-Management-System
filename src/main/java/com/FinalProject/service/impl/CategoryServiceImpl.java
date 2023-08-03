@@ -1,6 +1,6 @@
 package com.FinalProject.service.impl;
 
-import com.FinalProject.dto.BookRequest;
+import com.FinalProject.request.BookRequest;
 import com.FinalProject.dto.CategoryDto;
 import com.FinalProject.exception.CategoryAlreadyExistsException;
 import com.FinalProject.exception.CategoryNotFoundException;

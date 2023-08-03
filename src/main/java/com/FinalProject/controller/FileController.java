@@ -14,15 +14,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 @RequiredArgsConstructor
 public class FileController {
 
-
     private final FileServiceImpl fileService;
-
     @GetMapping("/images/{imageName}")
     public ResponseEntity<Resource> getImage(@PathVariable String imageName) {
         var resource = fileService.load(imageName);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=\"" + imageName + "\"")
                 .contentType(MediaType.IMAGE_PNG).body(resource);
-
     }
 }
