@@ -1,12 +1,12 @@
 package com.FinalProject.dto.studentdto;
+
 import com.FinalProject.enums.Faculty;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import org.mapstruct.Mapper;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Mapper
+//@Mapper
 public class StudentRequest {
     private Long ID;
     private String name;
