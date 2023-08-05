@@ -36,7 +36,14 @@ public class BookController {
     }
 
     @GetMapping("/{isbn}/update")
-    public String updatePage(@PathVariable("isbn") String isbn, @ModelAttribute("bookRequest") BookRequest bookRequest) {
+    public String updatePage(
+            @PathVariable("isbn") String isbn,
+            @ModelAttribute("bookRequest") BookRequest bookRequest,
+            Model model) {
+        BookDto book = bookService.findByIsbn(isbn);
+        model.addAttribute("book", book);
+        model.addAttribute("categories", categoryService.findAllCategories());
+        model.addAttribute("authors", authorService.getAuthors());
         return "book-update";
     }
 
