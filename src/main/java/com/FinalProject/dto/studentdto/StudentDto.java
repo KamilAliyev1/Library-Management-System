@@ -5,9 +5,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
-import org.mapstruct.Mapper;
+//import org.mapstruct.Mapper;
 
-@Mapper
+//@Mapper
 @Builder
 @Setter
 @Getter

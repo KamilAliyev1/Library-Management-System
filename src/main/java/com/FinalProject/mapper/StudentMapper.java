@@ -7,9 +7,19 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class StudentMapper {
-    public StudentDto mapStudentDtoToEntity(Student student) {
+    public StudentDto mapStudentEntityToDto(Student student) {
         return StudentDto.builder()
                 .id(student.getID())
+                .name(student.getName())
+                .surname(student.getSurname())
+                .faculty(student.getFaculty())
+                .studentFIN(student.getStudentFIN())
+                .build();
+    }
+
+    public Student mapStudentToDtoEntity(StudentDto student) {
+        return Student.builder()
+                .ID(student.getId())
                 .name(student.getName())
                 .surname(student.getSurname())
                 .faculty(student.getFaculty())

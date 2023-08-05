@@ -2,7 +2,9 @@ package com.FinalProject.controller;
 
 import com.FinalProject.dto.studentdto.CreateStudentDto;
 import com.FinalProject.dto.studentdto.StudentDto;
+import com.FinalProject.dto.studentdto.UpdateStudentDto;
 import com.FinalProject.service.StudentService;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -40,29 +42,24 @@ public class StudentController {
         return "redirect:/students";
     }
 
-//    @GetMapping("/getAll")
-//    public List<StudentDto> getStudentList() {
-//        return studentService.getStudentList();
-//    }
-//
-//    @PostMapping("/create")
-//    public Long createStudent(CreateStudentDto studentDto) {
-//        return studentService.createStudent(studentDto);
-//
-//    }
-//
-//    @PutMapping("/delete")
-//    public void deleteStudentById(Long id) {
-//        studentService.deleteStudentById(id);
-//    }
-//
-//    @PutMapping("/update")
-//    public Student updateStudent(UpdateStudentDto updateStudentDto) {
-//        return studentService.updateStudent(updateStudentDto);
-//    }
-//
-//    @GetMapping("/getById")
-//    public Student findById(Long id) {
-//        return studentService.findById(id);
-//    }
+    @GetMapping("/{id}/delete")
+    public String deleteStudent(@PathVariable Long id, Model model) {
+        studentService.deleteStudent(id);
+        model.addAttribute("students", studentService.getStudents());
+        return "redirect:/students";
+    }
+
+    @GetMapping("/{id}/update")
+    public String updateStudentPage(@PathVariable("id") Long id, Model model) {
+        System.out.println("ID: " + id);
+        StudentDto student = studentService.getStudent(id);
+        model.addAttribute("student", student);
+        return "student-update";
+    }
+
+    @PostMapping("/{id}/update")
+    public String updateStudent(@PathVariable("id") Long id, @RequestBody UpdateStudentDto student) {
+        studentService.updateStudent(id, student);
+        return "redirect:/students";
+    }
 }

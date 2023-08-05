@@ -10,6 +10,7 @@ import com.FinalProject.mapper.OrderMapper;
 import com.FinalProject.model.Book;
 import com.FinalProject.model.Order;
 import com.FinalProject.repository.OrderRepo;
+import com.FinalProject.repository.StudentRepository;
 import com.FinalProject.service.OrderService;
 import com.FinalProject.service.OrderValidator;
 import com.FinalProject.service.StudentService;
@@ -31,7 +32,9 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderRepo orderRepo;
 
-    private final OrderMapper orderMapper = OrderMapper.INSTANCE;
+    private final StudentRepository studentRepository;
+
+    private final OrderMapper orderMapper;
 
     private final BookServiceImpl bookService;
 
@@ -40,20 +43,21 @@ public class OrderServiceImpl implements OrderService {
     private final OrderValidator orderValidator;
 
 
-
     @Transactional
     @Override
     public OrderDto add(OrderRequest dto) {
 
-        var student  = studentService.findById(dto.studentId);
+        var student = studentRepository
+                .findById(dto.studentId)
+                .orElseThrow(() -> new StudentNotFoundException("Student don't find with id: " + dto.studentId));
 
-        if(student==null)throw new StudentNotFoundException();
+        if (student == null) throw new StudentNotFoundException();
 
         Order order = orderMapper.toEntity(dto);
 
         List<Long> books = new HashSet<>(dto.getBooks()).stream().filter(Objects::nonNull).toList();
 
-        orderValidator.validateBooksConfusionExceptOrder(student,books.stream().map(t->Book.builder().id(t).build()).toList(),null);
+        orderValidator.validateBooksConfusionExceptOrder(student, books.stream().map(t -> Book.builder().id(t).build()).toList(), null);
 
         orderValidator.validateNewOrderPermission(student);
 
@@ -83,9 +87,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDto update(Long id, OrderRequest dto) {
 
-        var student  = studentService.findById(dto.studentId);
+        var student = studentRepository
+                .findById(dto.studentId)
+                .orElseThrow(() -> new StudentNotFoundException("Student don't find with id: " + dto.studentId));
 
-        if(student==null)throw new StudentNotFoundException();
+        if (student == null) throw new StudentNotFoundException();
 
         Order order = orderRepo.findById(id).orElseThrow(
                 () -> new OrderNotFoundException(
@@ -109,13 +115,13 @@ public class OrderServiceImpl implements OrderService {
 
         var dtoBooks = dtoBooksIds.stream().map(t -> Book.builder().id(t).build()).collect(Collectors.toSet());
 
-        orderValidator.validateBooksConfusionExceptOrder(student,dtoBooks.stream().toList(),order);
+        orderValidator.validateBooksConfusionExceptOrder(student, dtoBooks.stream().toList(), order);
 
         bookService.updateStockNumbersByIdIn(entityBooksIds, 1);
 
         bookService.updateStockNumbersByIdIn(dtoBooksIds, -1);
 
-        var newOrder = orderMapper.change(dto, order);
+        var newOrder = orderMapper.setDtoChangesToEntity(dto, order);
 
         newOrder.setBooks(dtoBooks); // I set this in here .Because DTO's Books can be contain null variable
 
@@ -151,11 +157,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void disableProgress(Long ID) {
 
-        var optional = orderRepo.findById(ID);
+        var order = orderRepo.findById(ID).orElseThrow(
+                ()->new OrderNotFoundException("order not founded")
+        );
 
-        if (optional.isEmpty()) throw new OrderNotFoundException();
-
-        var order = optional.get();
+        if(!order.getInProgress())return;
 
         order.setFinishedAt(LocalDate.now());
 

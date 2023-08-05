@@ -35,16 +35,41 @@
                                 <input type="number" name="stock" th:field="*{stock}" class="form-control"
                                        placeholder="Enter Book Stock"/>
                             </div>
+<!--                            <div class="form-group">-->
+<!--                                <label>Book Category</label>-->
+<!--                                <input type="text" name="category" th:field="*{category}" class="form-control"-->
+<!--                                       placeholder="Enter Book Category"/>-->
+<!--                            </div>-->
+
                             <div class="form-group">
-                                <label>Book Category</label>
-                                <input type="text" name="category" th:field="*{category}" class="form-control"
-                                       placeholder="Enter Book Category"/>
+                                <label for="pizza">Book Category</label>
+                                <select class="form-control selectpicker" th:field="*{category}" id="pizza">
+                                    <option value="">Choose Book Category</option>
+                                    <option th:each="category : ${categories}"
+                                            th:value="${category.id}"
+                                            th:text="${category.name}">category
+                                    </option>
+
+                                </select>
                             </div>
+
                             <div class="form-group">
-                                <label>Book Author</label>
-                                <input type="text" name="authorName" th:field="*{authorName}" class="form-control"
-                                       placeholder="Enter Author Name"/>
+                                <label for="pizza">Book Author</label>
+                                <select class="form-control selectpicker" th:field="*{authorName}" id="author">
+                                    <option value="">Choose Book Author</option>
+                                    <option th:each="author : ${authors}"
+                                            th:value="${author.id}"
+                                            th:text="${author.fullName}">author
+                                    </option>
+
+                                </select>
                             </div>
+
+<!--                            <div class="form-group">-->
+<!--                                <label>Book Author</label>-->
+<!--                                <input type="text" name="authorName" th:field="*{authorName}" class="form-control"-->
+<!--                                       placeholder="Enter Author Name"/>-->
+<!--                            </div>-->
                             <div class="form-group">
                                 <label>Book Picture</label>
                                 <input type="file" name="file" th:field="*{file}" class="form-control"
