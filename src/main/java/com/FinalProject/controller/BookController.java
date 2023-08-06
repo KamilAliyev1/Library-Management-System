@@ -69,8 +69,8 @@ public class BookController {
 
     @GetMapping
     public String findAll(Model model) {
-        List<BookDto> bookList = bookService.findAll();
-        model.addAttribute("bookList", bookList);
+        List<BookDto> books = bookService.findAll();
+        model.addAttribute("books", books);
         return "book-list";
     }
 
