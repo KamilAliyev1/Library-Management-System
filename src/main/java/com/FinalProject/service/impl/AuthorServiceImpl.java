@@ -4,6 +4,7 @@ import com.FinalProject.dto.AuthorsDto;
 import com.FinalProject.dto.BookDto;
 import com.FinalProject.exception.AuthorsNotFoundException;
 import com.FinalProject.mapper.AuthorsMapper;
+import com.FinalProject.mapper.BookMapper;
 import com.FinalProject.model.Authors;
 import com.FinalProject.model.Book;
 import com.FinalProject.repository.AuthorRepository;
@@ -18,11 +19,11 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class AuthorServiceImpl implements AuthorService {
+
     private final AuthorRepository authorRepository;
     private final AuthorsMapper authorsMapper;
     private final BookRepository bookRepository;
-
-
+    private final BookMapper bookMapper;
 
     @Override
     public List<AuthorsDto> getAuthors() {
@@ -76,8 +77,8 @@ public class AuthorServiceImpl implements AuthorService {
     public List<BookDto> showAuthorBooks(Long authorId) {
         List<Book> fromDb = bookRepository.findBooksByAuthorId(authorId);
         List<BookDto> bookDtoList = new ArrayList<>();
-        for (Book books : fromDb){
-            bookDtoList.add(fromDbToModel(books));
+        for (Book books : fromDb) {
+            bookDtoList.add(bookMapper.mapEntityToDto(books));
         }
         return bookDtoList;
     }
@@ -88,14 +89,4 @@ public class AuthorServiceImpl implements AuthorService {
         author.setDelete(true);
         authorRepository.save(author);
     }
-
-    private BookDto fromDbToModel(Book books){
-        return BookDto.builder()
-                .id(books.getId())
-                .name(books.getName())
-                .category(books.getCategory().getName())
-                .build();
-    }
-
-
 }

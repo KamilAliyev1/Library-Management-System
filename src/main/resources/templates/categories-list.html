@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>All Categories</title>
+    <title>Students</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
@@ -16,32 +16,23 @@
 <body>
 <div class="main">
     <div th:insert="navbar/sidebar :: sidebar"></div>
-    <div class="category">
-        <h3>Categories</h3>
-    </div>
-    <div class="categories">
-        <div class="container my-2">
+    <div class="category w-100">
+        <div class="container-fluid my-2">
             <div class="card">
+                <div class="card-header">
+                    <div class="container-fluid d-flex justify-content-between align-items-center">
+                        <h3 class="mb-0">Categories</h3>
+                        <a th:href="@{/categories/new}" class="btn btn-primary">
+                            <i class="bi bi-plus"></i> Add Category </i>
+                        </a>
+                    </div>
+                </div>
                 <div class="card-body">
-                    <div th:switch="${categories}" class="container my-5">
-                        <p class="my-5">
-                            <a href="/categories/new" class="btn btn-warning">
-                                <i class="bi bi-journals"></i> Add Category </i></a>
-                        </p>
-                        <div class="row gx-5">
-                            <div>
-                                <form th:action="@{/search/category}" class="nav-link p-3">
-                                    <input name="category" class="form-control mr-sm-2 mb-5" type="search"
-                                           placeholder="Search category"
-                                           aria-label="Search">
-                                </form>
-                            </div>
-                        </div>
+                    <div th:switch="${categories}" class="my-5">
                         <div class="col-md-12">
                             <h2 th:case="null">No record found !!</h2>
-
                             <div th:case="*">
-                                <table class="table table-striped table-responsive-md">
+                                <table class="table table-bordered table-hover table-responsive-md">
                                     <thead>
                                     <tr>
                                         <th>ID</th>
@@ -52,15 +43,17 @@
                                     <tbody>
                                     <tr th:each="category : ${categories}">
                                         <td th:text="${category.id}"></td>
-                                        <td th:text="${category.name}">
-                                        </td>
+                                        <td th:text="${category.name}"></td>
                                         <td>
-                                            <!--                                            <a th:href="@{/search/categoryName}" class="btn btn-primary"><i-->
-                                            <!--                                                    class="bi bi-view-list"></i></a>-->
-                                            <a th:href="@{/update/{id}(id=${category.id})}" class="btn btn-warning"><i
-                                                    class="bi bi-pencil-square"></i></a>
-                                            <a th:href="@{/remove/{id}(id=${category.id})}" class="btn btn-danger"><i
-                                                    class="bi bi-file-x"></i></a></td>
+                                            <a th:href="@{/update/{id}(id=${category.id})}"
+                                               class="btn btn-primary">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <a th:href="@{/remove/{id}(id=${category.id})}"
+                                               class="btn btn-danger">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -72,6 +65,7 @@
         </div>
     </div>
 </div>
+
 </body>
 
 </html>
