@@ -66,7 +66,6 @@ public class BookController {
         return "book-create";
     }
 
-
     @GetMapping
     public String findAll(Model model) {
         List<BookDto> books = bookService.findAll();
