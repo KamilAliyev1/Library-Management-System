@@ -51,7 +51,6 @@ public class StudentController {
 
     @GetMapping("/{id}/update")
     public String updateStudentPage(@PathVariable("id") Long id, Model model) {
-        System.out.println("ID: " + id);
         StudentDto student = studentService.getStudent(id);
         model.addAttribute("student", student);
         return "student-update";
