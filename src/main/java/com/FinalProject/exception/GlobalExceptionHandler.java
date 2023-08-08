@@ -1,5 +1,6 @@
 package com.FinalProject.exception;
 
+import com.FinalProject.security.UserNotFound;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
@@ -41,7 +42,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler({NotChangeableException.class, OrderNotFoundException.class, StockNotEnoughException.class, OrderStudentUniqueException.class, OrderMustUpdateException.class,HaveAlreadyBookException.class
+    @ExceptionHandler({NotChangeableException.class, OrderNotFoundException.class, StockNotEnoughException.class, OrderStudentUniqueException.class, OrderMustUpdateException.class, HaveAlreadyBookException.class
     })
     public ResponseEntity<?> userExceptions(Exception userException) {
 
@@ -56,6 +57,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(FileAlreadyExistsException.class)
     public ResponseEntity<?> fileAlreadyExistException(FileAlreadyExistsException fileAlreadyExistsException) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(fileAlreadyExistsException.getMessage());
+    }
+
+    @ExceptionHandler(UserNotFound.class)
+    public ResponseEntity<?> userNotFoundException(UserNotFound userNotFound) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(userNotFound.getMessage());
     }
 
 //    @ExceptionHandler(TokenExpiredException.class)

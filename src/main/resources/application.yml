@@ -6,15 +6,20 @@ spring:
   application:
     name: auth-service
   datasource:
+    password: ${DB_PASSWORD:postgres}
     username: ${DB_USERNAME:postgres}
-    password: ${DB_PASSWORD:123456}
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/library-management-system}
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/final_project}
   jpa:
     show-sql: true
     database-platform: ${DB_PLATFORM:org.hibernate.dialect.PostgreSQLDialect}
     generate-ddl: true
     hibernate:
       ddl-auto: update
+
+
+
+
+# MySQL8Dialect
   thymeleaf: # Thymeleaf
     cache: false
     mode: HTML
