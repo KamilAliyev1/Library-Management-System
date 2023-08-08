@@ -9,10 +9,9 @@ public interface BookService {
 
     void create(BookRequest bookRequest);
 
-    //    BookDto update(String isbn, BookRequest bookRequest);
+    BookDto update(String isbn, BookRequest bookRequest);
     void delete(String isbn);
-
-    //    BookDto findByIsbn(String isbn);
+    BookDto findByIsbn(String isbn);
     List<BookDto> findAll();
 
     boolean areAllBooksInStock(List<Long> id);

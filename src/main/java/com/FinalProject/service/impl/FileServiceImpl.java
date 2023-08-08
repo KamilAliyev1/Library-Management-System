@@ -1,6 +1,5 @@
 package com.FinalProject.service.impl;
 
-import com.FinalProject.exception.FileAlreadyExistsException;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -11,6 +10,7 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 @Service
 public class FileServiceImpl implements FIleService {
@@ -34,13 +34,13 @@ public class FileServiceImpl implements FIleService {
 
     @Override
     public void save(MultipartFile multipartFile) {
-        if (isPng(multipartFile))
+        if (isPng(multipartFile)) {
             try {
-                Files.copy(multipartFile.getInputStream(), this.root.resolve((multipartFile.getOriginalFilename())));
+                Files.copy(multipartFile.getInputStream(), this.root.resolve((multipartFile.getOriginalFilename())), StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException e) {
-                throw new FileAlreadyExistsException("file is already found :" + multipartFile.getOriginalFilename());
+                e.printStackTrace();
             }
-        else {
+        } else {
             throw new IllegalArgumentException("Only PNG files are allowed");
         }
 

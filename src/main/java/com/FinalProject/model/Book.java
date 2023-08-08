@@ -32,7 +32,6 @@ public class Book {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @Column(unique = true)
     private String image;
 
     public Book(String isbn, String name, int stock, Authors author, Category category) {

@@ -26,12 +26,12 @@ public class BookController {
     private final CategoryService categoryService;
     private final FileServiceImpl fileService;
 
-//    @PostMapping("/{isbn}/update")
-//    public String update(@PathVariable("isbn") String isbn,
-//                         @ModelAttribute("bookRequest") BookRequest bookRequest) {
-//        bookService.update(isbn, bookRequest);
-//        return "redirect:/book";
-//    }
+    @PostMapping("/{isbn}/update")
+    public String update(@PathVariable("isbn") String isbn,
+                         @ModelAttribute("bookRequest") BookRequest bookRequest) {
+        bookService.update(isbn, bookRequest);
+        return "redirect:/book";
+    }
 
     @GetMapping("/{isbn}/update")
     public String updatePage(
