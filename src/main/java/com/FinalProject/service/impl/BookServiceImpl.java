@@ -9,6 +9,7 @@ import com.FinalProject.model.Book;
 import com.FinalProject.repository.AuthorRepository;
 import com.FinalProject.repository.BookRepository;
 import com.FinalProject.repository.CategoryRepository;
+import com.FinalProject.service.BookService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
@@ -27,7 +28,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class BookServiceImpl {
+public class BookServiceImpl implements BookService {
 
     private final BookMapper bookMapper;
     private final BookRepository bookRepository;
@@ -112,6 +113,11 @@ public class BookServiceImpl {
                 .image(bookRequest.getFile().getOriginalFilename()).build();
     }
 
+    @Override
+    public List<BookDto> create(List<BookRequest> bookRequests) {
+        return null;
+    }
+
     public BookDto update(String isbn, BookRequest bookRequest) {
         Book book = bookRepository
                 .findByIsbn(isbn)
@@ -158,6 +164,12 @@ public class BookServiceImpl {
                                 .findByIsbn(isbn)
                                 .orElseThrow(() -> new BookNotFoundException("Book not found with isbn :" + isbn))
                 )
+        );
+    }
+
+    public List<BookDto> searchBooks(String isbn, Long categoryId, Long authorId) {
+        return bookMapper.mapEntityListToResponseList(
+                bookRepository.searchBooks(isbn, categoryId, authorId)
         );
     }
 
