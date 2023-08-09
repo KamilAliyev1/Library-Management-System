@@ -17,6 +17,8 @@ public interface BookService {
 
     BookDto findByIsbn(String isbn);
 
+    List<BookDto> searchBooks(String isbn, Long categoryId, Long authorId);
+
     List<BookDto> findByAuthor(String authorFullName);
 
     List<BookDto> findAll();
