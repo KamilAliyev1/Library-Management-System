@@ -5,15 +5,11 @@ import com.FinalProject.exception.BookNotFoundException;
 import com.FinalProject.mapper.BookMapper;
 import com.FinalProject.model.Book;
 import com.FinalProject.repository.BookRepository;
-import com.FinalProject.repository.CategoryRepository;
-import com.FinalProject.service.BookService;
+import com.FinalProject.service.*;
 import com.FinalProject.request.BookRequest;
-import com.FinalProject.service.AuthorService;
 import com.FinalProject.service.BookService;
-import com.FinalProject.service.CategoryService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
