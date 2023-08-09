@@ -1,4 +1,4 @@
-package com.FinalProject.dto;
+package com.FinalProject.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

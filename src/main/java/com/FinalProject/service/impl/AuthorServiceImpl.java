@@ -2,9 +2,9 @@ package com.FinalProject.service.impl;
 
 import com.FinalProject.dto.AuthorsDto;
 import com.FinalProject.dto.BookDto;
+import com.FinalProject.request.BookRequest;
 import com.FinalProject.exception.AuthorsNotFoundException;
 import com.FinalProject.mapper.AuthorsMapper;
-import com.FinalProject.mapper.BookMapper;
 import com.FinalProject.model.Authors;
 import com.FinalProject.model.Book;
 import com.FinalProject.repository.AuthorRepository;
@@ -15,15 +15,16 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class AuthorServiceImpl implements AuthorService {
-
     private final AuthorRepository authorRepository;
     private final AuthorsMapper authorsMapper;
     private final BookRepository bookRepository;
-    private final BookMapper bookMapper;
+
+
 
     @Override
     public List<AuthorsDto> getAuthors() {
@@ -78,9 +79,15 @@ public class AuthorServiceImpl implements AuthorService {
         List<Book> fromDb = bookRepository.findBooksByAuthorId(authorId);
         List<BookDto> bookDtoList = new ArrayList<>();
         for (Book books : fromDb) {
-            bookDtoList.add(bookMapper.mapEntityToDto(books));
+            bookDtoList.add(fromDbToModel(books));
         }
         return bookDtoList;
+    }
+
+    @Override
+    public void setBookToAuthor(BookRequest bookRequests, Book book) {
+        Optional<Authors> authors = authorRepository.findById(bookRequests.getAuthorId());
+        authors.ifPresent(book::setAuthor);
     }
 
     @Override
@@ -89,4 +96,14 @@ public class AuthorServiceImpl implements AuthorService {
         author.setDelete(true);
         authorRepository.save(author);
     }
+
+    private BookDto fromDbToModel(Book books) {
+        return BookDto.builder()
+                .id(books.getId())
+                .name(books.getName())
+                .category(books.getCategory().getName())
+                .build();
+    }
+
+
 }

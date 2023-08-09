@@ -1,33 +1,37 @@
 package com.FinalProject.service.impl;
 
-import com.FinalProject.dto.BookDto;
+import com.FinalProject.request.BookRequest;
 import com.FinalProject.dto.CategoryDto;
-import com.FinalProject.exception.BookNotFoundException;
 import com.FinalProject.exception.CategoryAlreadyExistsException;
 import com.FinalProject.exception.CategoryNotFoundException;
-import com.FinalProject.mapper.BookMapper;
 import com.FinalProject.mapper.CategoryMapper;
 import com.FinalProject.model.Book;
 import com.FinalProject.model.Category;
-import com.FinalProject.repository.BookRepository;
 import com.FinalProject.repository.CategoryRepository;
+import com.FinalProject.service.BookService;
 import com.FinalProject.service.CategoryService;
-import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+
 @Service
-@RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
 
-    private final BookMapper bookMapper;
-    private final CategoryMapper categoryMapper;
     private final CategoryRepository categoryRepository;
 
-    //    private final BookServiceImpl bookService;
-    private final BookRepository bookRepository;
+    private final CategoryMapper categoryMapper;
+
+    private final BookService bookService;
+
+    public CategoryServiceImpl(CategoryRepository categoryRepository, CategoryMapper categoryMapper, @Lazy BookService bookService) {
+        this.categoryRepository = categoryRepository;
+        this.categoryMapper = categoryMapper;
+        this.bookService = bookService;
+    }
 
     @Override
     public List<CategoryDto> findAllCategories() {
@@ -62,6 +66,7 @@ public class CategoryServiceImpl implements CategoryService {
         }
     }
 
+
     @Override
     public void updateCategory(Long id, CategoryDto categoryDto) {
         if (categoryRepository.findById(id).isPresent()) {
@@ -81,11 +86,14 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<BookDto> showBooksByCategoryName(String category) {
-        if (bookRepository.findByCategory(category).isEmpty())
-            throw new BookNotFoundException("Book not found with category :  " + category);
-        List<Book> book = bookRepository.findByCategory(category);
-        return bookMapper.mapEntityListToResponseList(bookRepository.findByCategory(category));
+    public CategoryDto findByName(String name) {
+        return categoryMapper.categoryToCategoryDto(categoryRepository.findByName(name).orElseThrow(() -> new CategoryNotFoundException("Category not found")));
+    }
+
+    @Override
+    public void setBookToCategory(BookRequest bookRequests, Book book) {
+        Optional<Category> category = categoryRepository.findById(bookRequests.getCategoryId());
+        category.ifPresent(book::setCategory);
     }
 }
 
