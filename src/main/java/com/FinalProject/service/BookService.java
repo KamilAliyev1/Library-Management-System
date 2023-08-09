@@ -9,7 +9,7 @@ public interface BookService {
 
     void create(BookRequest bookRequest);
 
-    BookDto update(String isbn, BookRequest bookRequest);
+    void update(String isbn, BookRequest bookRequest);
   
     void delete(String isbn);
   

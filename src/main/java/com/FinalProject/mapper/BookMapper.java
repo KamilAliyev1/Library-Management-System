@@ -12,33 +12,36 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookMapper {
 
-
-    public List<BookDto> entityListToDtoList(List<Book> books) {
-        return books.stream().map(book -> new BookDto
-
-                (
-                        book.getId(),
-                        book.getName(),
-                        book.getIsbn(),
-                        book.getStock(),
-                        book.getAuthor().getFullName(),
-                        book.getCategory().getName(),
-                        book.getImage())).toList();
+    public BookDto mapEntityToDto(Book book) {
+        return BookDto.builder()
+                .id(book.getId())
+                .name(book.getName())
+                .category(book.getCategory().getName())
+                .build();
     }
 
-    public BookDto entityToDto(Book book) {
-        return BookDto.builder()
+    public BookDto mapEntityToResponse(Book book) {
+        return BookDto
+                .builder()
                 .id(book.getId())
                 .stock(book.getStock())
                 .authorName(book.getAuthor().getFullName())
                 .category(book.getCategory().getName())
-                .isbn(book.getIsbn())
-                .name(book.getName())
+                .isbn(book.getIsbn()).name(book.getName())
                 .image(book.getImage())
+                .categoryId(book.getCategory().getId())
+                .authorId(book.getAuthor().getId())
                 .build();
     }
 
-    public Book requestToEntity(BookRequest bookRequest) {
+    public List<BookDto> mapEntityListToResponseList(List<Book> books) {
+        return books
+                .stream()
+                .map(this::mapEntityToResponse)
+                .toList();
+    }
+
+    public Book mapRequestToEntity(BookRequest bookRequest) {
         return Book.builder()
                 .isbn(bookRequest.getIsbn())
                 .name(bookRequest.getName())
@@ -46,5 +49,4 @@ public class BookMapper {
                 .image(bookRequest.getFile().getOriginalFilename())
                 .build();
     }
-
 }

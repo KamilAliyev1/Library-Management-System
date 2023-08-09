@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 @RequiredArgsConstructor(onConstructor = @__(@Lazy))
 public class BookServiceImpl implements BookService {
 
@@ -32,24 +31,13 @@ public class BookServiceImpl implements BookService {
     @Lazy
     private final AuthorService authorService;
 
-  @Transactional
-    public void create(BookRequest bookRequests) {
-        var book = requestToEntity(bookRequests);
-        var category = categoryRepository.findById(bookRequests.getCategoryId()).orElseThrow(() ->
-                new CategoryNotFoundException("Not found Category such id: " + bookRequests.getCategoryId())
-        );
-        var author = authorRepository.findById(bookRequests.getAuthorId()).orElseThrow(() ->
-                new AuthorsNotFoundException("Not found Author such id = " + bookRequests.getAuthorId())
-        );
-
-        book.setCategory(category);
-        book.setAuthor(author);
-        Optional<Book> bookOptional = bookRepository.findByIsbn(book.getIsbn());
-
-        if (bookOptional.isPresent())
-            throw new BookAlreadyFoundException("Book already found with isbn: " + bookOptional.get().getIsbn());
-
-        save(bookRequests.getFile());
+    @Transactional
+    public void create(BookRequest bookRequest) {
+        var book = bookMapper.mapRequestToEntity(bookRequest);
+        checkBookByIsbn(book);
+        categoryService.setBookToCategory(bookRequest, book);
+        authorService.setBookToAuthor(bookRequest, book);
+        fileService.save(bookRequest.getFile());
         bookRepository.save(book);
     }
 
@@ -59,34 +47,38 @@ public class BookServiceImpl implements BookService {
         });
     }
 
-    @Override
-    public List<BookDto> create(List<BookRequest> bookRequests) {
-        return null;
-    }
-
-    public BookDto update(String isbn, BookRequest bookRequest) {
+    public void update(String isbn, BookRequest bookRequest) {
         Book book = bookRepository
                 .findByIsbn(isbn)
                 .orElseThrow(() -> new BookNotFoundException("Book not found with isbn : " + isbn));
 
 
-        var category = categoryRepository.findById(bookRequest.getCategoryId()).orElseThrow(() ->
-                new CategoryNotFoundException("Not found Category such id: " + bookRequest.getCategoryId())
-        );
-        var author = authorRepository.findById(bookRequest.getAuthorId()).orElseThrow(() ->
-                new AuthorsNotFoundException("Not found Author such id = " + bookRequest.getAuthorId())
-        );
+//        var category = categoryRepository.findById(bookRequest.getCategoryId()).orElseThrow(() ->
+//                new CategoryNotFoundException("Not found Category such id: " + bookRequest.getCategoryId())
+//        );
+//        var author = authorRepository.findById(bookRequest.getAuthorId()).orElseThrow(() ->
+//                new AuthorsNotFoundException("Not found Author such id = " + bookRequest.getAuthorId())
+//        );
 
-        book.setCategory(category);
-        book.setAuthor(author);
-        book.setStock(bookRequest.getStock());
-        book.setIsbn(bookRequest.getIsbn());
         book.setName(bookRequest.getName());
+        book.setIsbn(bookRequest.getIsbn());
         book.setImage(bookRequest.getFile().getOriginalFilename());
-        save(bookRequest.getFile());
-        return bookMapper.mapEntityToResponse(bookRepository.save(book));
+        book.setStock(bookRequest.getStock());
+
+        categoryService.setBookToCategory(bookRequest, book);
+        authorService.setBookToAuthor(bookRequest, book);
+        fileService.save(bookRequest.getFile());
+        bookRepository.save(book);
+
+//        book.setCategory(category);
+//        book.setAuthor(author);
+//        book.setStock(bookRequest.getStock());
+//        book.setIsbn(bookRequest.getIsbn());
+//        book.setName(bookRequest.getName());
+//        book.setImage(bookRequest.getFile().getOriginalFilename());
+//        save(bookRequest.getFile());
     }
-  
+
     @Override
     @Transactional
     public void delete(String isbn) {
@@ -114,18 +106,23 @@ public class BookServiceImpl implements BookService {
         );
     }
 
+    @Override
     public List<BookDto> findByAuthor(String authorFullName) {
-        Authors author = new Authors();
-        author.setFullName(authorFullName);
-        List<Book> bookList = bookRepository.findByAuthor(author);
-        if (bookList.isEmpty()) throw new BookNotFoundException("Book not found with author : " + author.getFullName());
-
-        return bookMapper.mapEntityListToResponseList(bookList);
+        return null;
     }
+
+//    public List<BookDto> findByAuthor(String authorFullName) {
+//        Authors author = new Authors();
+//        author.setFullName(authorFullName);
+//        List<Book> bookList = bookRepository.findByAuthor(author);
+//        if (bookList.isEmpty()) throw new BookNotFoundException("Book not found with author : " + author.getFullName());
+//
+//        return bookMapper.mapEntityListToResponseList(bookList);
+//    }
 
     @Override
     public List<BookDto> findAll() {
-        return bookMapper.entityListToDtoList(bookRepository.findAll());
+        return bookMapper.mapEntityListToResponseList(bookRepository.findAll());
     }
 
     @Override
@@ -143,7 +140,7 @@ public class BookServiceImpl implements BookService {
         if (bookRepository.findByCategory(category).isEmpty())
             throw new BookNotFoundException("Book not found with category :  " + category);
         List<Book> book = bookRepository.findByCategory(category);
-        return bookMapper.entityListToDtoList(bookRepository.findByCategory(category));
+        return bookMapper.mapEntityListToResponseList(bookRepository.findByCategory(category));
     }
 
 
