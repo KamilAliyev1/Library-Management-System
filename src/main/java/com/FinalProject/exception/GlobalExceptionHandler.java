@@ -7,7 +7,6 @@ import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.nio.file.FileAlreadyExistsException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,14 +53,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getFieldError().getDefaultMessage());
     }
 
-    @ExceptionHandler(FileAlreadyExistsException.class)
-    public ResponseEntity<?> fileAlreadyExistException(FileAlreadyExistsException fileAlreadyExistsException) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(fileAlreadyExistsException.getMessage());
-    }
-
     @ExceptionHandler(UserNotFound.class)
     public ResponseEntity<?> userNotFoundException(UserNotFound userNotFound) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(userNotFound.getMessage());
+    }
+
+    @ExceptionHandler(BookAlreadyFoundException.class)
+    public ResponseEntity<?> bookAlreadyFoundException(BookAlreadyFoundException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
     }
 
 //    @ExceptionHandler(TokenExpiredException.class)

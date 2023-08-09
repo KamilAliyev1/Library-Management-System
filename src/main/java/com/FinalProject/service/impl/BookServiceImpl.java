@@ -1,6 +1,7 @@
 package com.FinalProject.service.impl;
 
 import com.FinalProject.dto.BookDto;
+import com.FinalProject.exception.BookAlreadyFoundException;
 import com.FinalProject.exception.BookNotFoundException;
 import com.FinalProject.mapper.BookMapper;
 import com.FinalProject.model.Book;
@@ -44,7 +45,7 @@ public class BookServiceImpl implements BookService {
 
     private void checkBookByIsbn(Book book) {
         bookRepository.findByIsbn(book.getIsbn()).ifPresent(book1 -> {
-            throw new RuntimeException("Book not found with isbn:" + book1.getIsbn());
+            throw new BookAlreadyFoundException("Book found with isbn:" + book1.getIsbn());
         });
     }
 
