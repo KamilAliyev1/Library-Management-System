@@ -28,12 +28,18 @@
                 </div>
                 <div class="card-body">
                     <div class="container-fluid">
-                        <form th:action="@{/author/search}" >
+                        <form th:action="@{/author/search}">
                             <div class="d-flex justify-content-between align-items-center">
-                                <input name="query" class="form-control mr-sm-2" type="search"
-                                       placeholder="Search Author by Name"
-                                       aria-label="Search">
+                                <input
+                                        name="query"
+                                        type="search"
+                                        id="query"
+                                        th:value="${param.query}"
+                                        class="form-control mr-sm-2"
+                                        placeholder="Search Author by Name"
+                                        aria-label="Search">
                                 <button class="btn btn-primary">Search</button>
+                                <button class="btn btn-done ml-2" type="button" onclick="resetForm()">Clear</button>
                             </div>
                         </form>
                     </div>
@@ -85,5 +91,11 @@
         </div>
     </div>
 </div>
+<script>
+    const resetForm = () => {
+        document.getElementById('query').value = '';
+        window.location.href = '/authors';
+    }
+</script>
 </body>
 </html>

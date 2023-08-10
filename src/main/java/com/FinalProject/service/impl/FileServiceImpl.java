@@ -1,5 +1,6 @@
 package com.FinalProject.service.impl;
 
+import com.FinalProject.service.FIleService;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Objects;
 
 @Service
 public class FileServiceImpl implements FIleService {
@@ -36,7 +38,11 @@ public class FileServiceImpl implements FIleService {
     public void save(MultipartFile multipartFile) {
         if (isPng(multipartFile)) {
             try {
-                Files.copy(multipartFile.getInputStream(), this.root.resolve((multipartFile.getOriginalFilename())), StandardCopyOption.REPLACE_EXISTING);
+                Files.copy(
+                        multipartFile.getInputStream(),
+                        root.resolve((Objects.requireNonNull(multipartFile.getOriginalFilename()))),
+                        StandardCopyOption.REPLACE_EXISTING
+                );
             } catch (IOException e) {
                 e.printStackTrace();
             }
