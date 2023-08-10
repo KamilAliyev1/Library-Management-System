@@ -1,24 +1,22 @@
 package com.FinalProject.dto;
 
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.List;
 
-
-public record OrderDto(
-
-        Long id,
-        Long studentId,
-
-        List<Long> books,
-
-        Boolean inProgress,
-
-        LocalDate createdAt,
-
-        LocalDate finishedAt,
-        Boolean inDelay
-
-) {
-
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class OrderDto {
+    Long id;
+    Long studentId;
+    String studentFullName;
+    List<String> books;
+    Boolean inProgress;
+    LocalDate createdAt;
+    LocalDate finishedAt;
+    Boolean inDelay;
 }

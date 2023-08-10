@@ -2,6 +2,7 @@ package com.FinalProject.confiquration;
 
 import com.FinalProject.exception.TokenExpiredException;
 import com.FinalProject.security.TokenRepository;
+import com.FinalProject.security.UserNotFound;
 import com.FinalProject.service.impl.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -39,7 +40,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String jwt = service.extractToken(request);
         String userEmail = null;
         if (jwt == null) {
-            filterChain.doFilter(request,response);
+            filterChain.doFilter(request, response);
             return;
         }
 
@@ -55,7 +56,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
+            UserDetails userDetails;
+            try {
+                userDetails = this.userDetailsService.loadUserByUsername(userEmail);
+            } catch (UserNotFound userNotFound) {
+                Cookie cookie = new Cookie("jwt", null);
+                cookie.setMaxAge(0);
+                cookie.setPath("/");
+                response.addCookie(cookie);
+                response.sendRedirect("/login");
+                return;
+            }
             var isTokenValid = tokenRepository.findByToken(jwt).map(t -> !t.isExpired() && !t.isRevoked()).orElse(false);
             if (service.isTokenValid(jwt, userDetails) && isTokenValid) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(

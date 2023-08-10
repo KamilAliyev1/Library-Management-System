@@ -1,6 +1,10 @@
 server:
   port: 9000
-
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
+      enabled: true
 
 spring:
   application:
@@ -15,6 +19,11 @@ spring:
     generate-ddl: true
     hibernate:
       ddl-auto: update
+
+
+
+
+  # MySQL8Dialect
   thymeleaf: # Thymeleaf
     cache: false
     mode: HTML
@@ -24,3 +33,6 @@ spring:
       static-locations: file:src/main/resources/static/
       cache:
         period: 0
+  servlet:
+    multipart:
+      max-file-size: 10048576
