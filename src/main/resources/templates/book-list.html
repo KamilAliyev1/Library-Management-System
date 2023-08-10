@@ -28,39 +28,41 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="container">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="row gx-5">
-                                <div>
-                                    <form th:action="@{/book/search}" class="nav-link p-3">
-                                        <input name="isbn" class="form-control mr-sm-2 mb-5" type="search"
-                                               placeholder="Search book by isbn"
-                                               aria-label="Search">
-                                    </form>
-                                </div>
-                            </div>
+                    <div class="container-fluid">
+                        <form th:action="@{/book/search}" method="GET">
+                            <div class="d-flex justify-content-between align-items-center gap-x-4">
+                                <input
+                                        name="isbn"
+                                        id="isbn"
+                                        th:value="${param.isbn}"
+                                        class="form-control mr-sm-2"
+                                        type="search"
+                                        placeholder="Search book by isbn"
+                                        aria-label="Search"/>
 
-                            <div class="row gx-5">
-                                <div>
-                                    <form th:action="@{/book/search/category}" class="nav-link p-3">
-                                        <input name="category" class="form-control mr-sm-2 mb-5" type="search"
-                                               placeholder="Search book by category"
-                                               aria-label="Search">
-                                    </form>
-                                </div>
-                            </div>
+                                <select class="form-control mr-sm-2" id="author" th:selected="${param.authorId}"
+                                        name="authorId">
+                                    <option value="">Search Book by Author</option>
+                                    <option th:each="author : ${authors}"
+                                            th:value="${author.id}"
+                                            th:text="${author.fullName}"
+                                    >
+                                    </option>
+                                </select>
 
-                            <div class="row gx-5">
-                                <div>
-                                    <form th:action="@{/book/search/author}" class="nav-link p-3">
-                                        <input name="author" class="form-control mr-sm-2 mb-5" type="search"
-                                               placeholder="Search book by author"
-                                               aria-label="Search">
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
+                                <select class="form-control mr-sm-2" id="category" name="categoryId">
+                                    <option value="">Search Book by Category</option>
+                                    <option th:each="category : ${categories}"
+                                            th:value="${category.id}"
+                                            th:text="${category.name}"
+                                            th:selected="${category.id == param.categoryId}">
+                                    </option>
+                                </select>
 
+                                <button class="btn btn-primary">Search</button>
+                                <button class="btn btn-done ml-2" type="button" onclick="resetForm()">Clear</button>
+                            </div>
+                        </form>
                     </div>
                     <div th:switch="${books}" class="my-5">
                         <div class="col-md-12">
@@ -112,5 +114,14 @@
         </div>
     </div>
 </div>
+
+<script>
+    const resetForm = () => {
+        document.getElementById('isbn').value = '';
+        document.getElementById('category').value = null;
+        document.getElementById('author').value = null;
+        window.location.href = '/book';
+    }
+</script>
 </body>
 </html>

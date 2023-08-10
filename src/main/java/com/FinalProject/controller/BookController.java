@@ -7,6 +7,10 @@ import com.FinalProject.service.BookService;
 import com.FinalProject.service.CategoryService;
 import com.FinalProject.service.impl.FileServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,7 +22,6 @@ import java.util.stream.Collectors;
 @Controller
 @RequestMapping("/book")
 @RequiredArgsConstructor
-@Slf4j
 public class BookController {
 
     private final AuthorService authorService;
@@ -56,7 +59,6 @@ public class BookController {
         return "redirect:/book";
     }
 
-
     @GetMapping("/add")
     public String bookForm(Model model) {
         model.addAttribute("bookRequest", new BookRequest());
@@ -69,6 +71,8 @@ public class BookController {
     public String findAll(Model model) {
         List<BookDto> books = bookService.findAll();
         model.addAttribute("books", books);
+        model.addAttribute("authors", authorService.getAuthors());
+        model.addAttribute("categories", categoryService.findAllCategories());
         return "book-list";
     }
 
@@ -81,13 +85,18 @@ public class BookController {
 
 
     @GetMapping("/search")
-    public String findByIsbn(@RequestParam String isbn, Model model) {
-        List<BookDto> bookList = bookService.findAll();
-        List<BookDto> findBooks =
-                bookList.stream().
-                        filter(bookDto -> bookDto.getIsbn().equals(isbn))
-                        .collect(Collectors.toList());
-        model.addAttribute("bookList", findBooks);
+    public String searchBooks(
+            @RequestParam(name = "isbn", required = false) String isbn,
+            @RequestParam(name = "categoryId", required = false) Long categoryId,
+            @RequestParam(name = "authorId", required = false) Long authorId,
+            Model model) {
+
+        List<BookDto> books = bookService.searchBooks(isbn, categoryId, authorId);
+
+        model.addAttribute("books", books);
+        model.addAttribute("authors", authorService.getAuthors());
+        model.addAttribute("categories", categoryService.findAllCategories());
+
         return "book-list";
     }
 
