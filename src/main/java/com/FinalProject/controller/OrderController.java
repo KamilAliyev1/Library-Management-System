@@ -1,10 +1,12 @@
 package com.FinalProject.controller;
 
-
+import com.FinalProject.dto.BookDto;
 import com.FinalProject.dto.OrderRequest;
+import com.FinalProject.dto.studentdto.StudentDto;
 import com.FinalProject.mapper.OrderMapper;
-import com.FinalProject.model.Order;
+import com.FinalProject.service.BookService;
 import com.FinalProject.service.OrderService;
+import com.FinalProject.service.StudentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -13,21 +15,24 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/orders")
 public class OrderController {
 
+    private final BookService bookService;
     private final OrderService orderService;
-
-    private final OrderMapper orderMapper;
-
+    private final StudentService studentService;
 
     @GetMapping("/add")
     String addPage(Model model) {
-        var s = orderMapper.toGetDto(new Order());
-        model.addAttribute("order", s);
+        var order = new OrderRequest();
+        List<StudentDto> students = studentService.getStudents();
+        List<BookDto> books = bookService.findAll();
+
+        model.addAttribute("order", order);
+        model.addAttribute("books", books);
+        model.addAttribute("students", students);
         return "order-create";
     }
 
@@ -36,7 +41,6 @@ public class OrderController {
         orderService.add(orderRequest);
         return "redirect:/orders";
     }
-
 
     @GetMapping("/search/")
     String get(@RequestParam Long id, Model model) {
@@ -50,14 +54,12 @@ public class OrderController {
         return "redirect:/orders";
     }
 
-
     @GetMapping
     String getAll(Model model) {
-        var all = orderService.getAll();
-        model.addAttribute("orders", all);
+        var orders = orderService.getAll();
+        model.addAttribute("orders", orders);
         return "order-list";
     }
-
 
     @GetMapping("/{id}/delete")
     String delete(@PathVariable Long id) {
@@ -65,12 +67,10 @@ public class OrderController {
         return "redirect:/orders";
     }
 
-
     @PostMapping("/{id}/update")
     String update(@PathVariable Long id, @ModelAttribute("order") @Valid OrderRequest dto, Model model) {
 
         var order = orderService.update(id, dto);
-
         model.addAttribute("order", order);
 
         return "order-update";
@@ -81,6 +81,4 @@ public class OrderController {
         model.addAttribute("order", orderService.get(id));
         return "order-update";
     }
-
-
 }

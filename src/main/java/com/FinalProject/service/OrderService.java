@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface OrderService {
 
-    OrderDto add(OrderRequest dto);
+    void add(OrderRequest dto);
 
     OrderDto get(Long ID);
 
@@ -18,5 +18,4 @@ public interface OrderService {
     void disableProgress(Long ID);
 
     List<OrderDto> getAll();
-
 }
