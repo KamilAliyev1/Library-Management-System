@@ -10,16 +10,15 @@ import lombok.NoArgsConstructor;
 import java.util.LinkedList;
 import java.util.List;
 
-
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 public class OrderRequest {
+
         @NotNull
         public Long studentId;
+
         @NotEmpty
         public List<Long> books = new LinkedList<>();
-
-
 }
