@@ -23,13 +23,6 @@ public class AuthenticationController {
 
     private final AuthenticationService service;
 
-
-    @GetMapping("/lms")
-    public String lms() {
-        return "redirect:/login";
-    }
-
-
     @GetMapping("/login")
     public String loginForm(Model model) {
         model.addAttribute("login", new AuthenticationRequest());
@@ -64,12 +57,6 @@ public class AuthenticationController {
         model.addAttribute("register", new RegisterRequest());
         return "register";
     }
-
-
-//    @PostMapping("/authenticate")
-//    public ResponseEntity<?> authenticate(@ModelAttribute("request") AuthenticationRequest request) {
-//        return ResponseEntity.ok(service.authenticate(request));
-//    }
 
 
 }

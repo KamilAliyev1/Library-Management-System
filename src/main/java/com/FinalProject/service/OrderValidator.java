@@ -14,28 +14,28 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.util.List;
 
-
 @Component
 @RequiredArgsConstructor
 public class OrderValidator {
 
     private final BookServiceImpl bookService;
 
-    public void validateBooksConfusionExceptOrder(Student student, List<Book> books, Order order){
+    public void validateBooksConfusionExceptOrder(Student student, List<Book> books, Order order) {
 
-        List<Book> previousBooks = student.getOrders().stream().filter(t->!t.equals(order)).flatMap(t->t.getBooks().stream()).toList();
+        List<Book> previousBooks = student
+                .getOrders()
+                .stream()
+                .filter(t -> !t.equals(order))
+                .flatMap(t -> t.getBooks().stream())
+                .toList();
 
-        if(books.stream().anyMatch(previousBooks::contains))throw new HaveAlreadyBookException("student have this book in previous orders");
-
+        if (books.stream().anyMatch(previousBooks::contains))
+            throw new HaveAlreadyBookException("Student have this book in previous orders");
     }
 
     public void validateNewOrderPermission(Student student) {
-
-        if(
-                student.getOrders().stream().anyMatch(
-                        t->t.getCreatedAt().equals(LocalDate.now())
-                )
-        )throw new OrderMustUpdateException("can't add new order in same day.Please update today's order");
+        if (student.getOrders().stream().anyMatch(t -> t.getCreatedAt().equals(LocalDate.now())))
+            throw new OrderMustUpdateException("Can't add new order in same day. Please update today's order");
     }
 
     public void validateBooks(List<Long> books) {
@@ -47,8 +47,7 @@ public class OrderValidator {
 
         if (!order.getInProgress()) throw new NotChangeableException("Cannot be changeable");
 
-        if (!order.getCreatedAt().equals(LocalDate.now())) throw new NotChangeableException("create new order");
+        if (!order.getCreatedAt().equals(LocalDate.now())) throw new NotChangeableException("Create new order");
     }
-
 }
 

@@ -8,4 +8,8 @@ public class BookAlreadyFoundException extends RuntimeException {
     public BookAlreadyFoundException(String message) {
         super(message);
     }
+
+    public BookAlreadyFoundException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

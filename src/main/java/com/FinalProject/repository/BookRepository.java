@@ -22,8 +22,9 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Query("SELECT CASE WHEN COUNT(b) > 0 THEN false ELSE true END FROM Book b WHERE b.id IN :id AND b.stock = 0")
     boolean areAllBooksInStock(@Param("id") List<Long> id);
+
     @Query("SELECT CASE WHEN COUNT(b)<>:size THEN false ELSE true END FROM Book b WHERE b.id in :id")
-    boolean areAllBooksInTable(@Param("id") List<Long> id,@Param("size") Long size);
+    boolean areAllBooksInTable(@Param("id") List<Long> id, @Param("size") Long size);
 
     @Query("select b from Book b where b.category.name ilike :category")
     List<Book> findByCategory(String category);
@@ -34,10 +35,21 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findByAuthor(Authors author);
 
     Optional<Book> findByIsbn(String isbn);
+
     @Modifying
     @Query("UPDATE Book b SET b.stock=b.stock+:i where b.id in :ids")
     int updateStockNumbersByIdIn(@Param("ids") List<Long> ids, int i);
+
+    @Query("SELECT b FROM Book b " +
+            "WHERE (:isbn IS NULL OR LOWER(b.isbn) LIKE %:isbn%) " +
+            "AND (:categoryId IS NULL OR b.category.id = :categoryId) " +
+            "AND (:authorId IS NULL OR b.author.id = :authorId)")
+    List<Book> searchBooks(
+            @Param("isbn") String isbn,
+            @Param("categoryId") Long categoryId,
+            @Param("authorId") Long authorId);
 }
+
 /* 1)SELECT CASE
     WHEN COUNT(b)!=COUNT(ids) THEN 'false'
     ELSE 'true'

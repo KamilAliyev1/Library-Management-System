@@ -22,7 +22,6 @@
 .side-panel > .head-image-side-panel > img {
     border-radius: 50%;
     border: 3px solid white;
-
 }
 
 .head {
@@ -41,7 +40,6 @@
     line-height: 1.8;
     font-family: Arial, sans-serif;
     font-weight: 350;
-
 }
 
 .side-panel > .middle-side-panel b {
@@ -76,7 +74,6 @@
 .side-panel > .middle-side-panel div:nth-child(3) {
     padding-top: 20px;
 }
-
 
 /*side-panel-footer*/
 .side-panel > .footer-side-panel {

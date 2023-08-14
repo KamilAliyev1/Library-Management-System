@@ -41,8 +41,8 @@ public class AuthorController {
 
     @GetMapping("/authors")
     public String listAuthor(Model model) {
-        List<AuthorsDto> author = authorService.getAuthors();
-        model.addAttribute("author", author);
+        List<AuthorsDto> authors = authorService.getAuthors();
+        model.addAttribute("authors", authors);
         return "author-list";
     }
 
@@ -55,8 +55,8 @@ public class AuthorController {
     @GetMapping("/author/search")
     public String searchAuthor(@RequestParam(value = "query") String query,
                                Model model) {
-        List<AuthorsDto> author = authorService.searchBook(query);
-        model.addAttribute("author", author);
+        List<AuthorsDto> authors = authorService.searchBook(query);
+        model.addAttribute("authors", authors);
         return "author-list";
     }
 
