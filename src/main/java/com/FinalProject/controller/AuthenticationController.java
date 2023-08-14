@@ -29,6 +29,11 @@ public class AuthenticationController {
         return "login";
     }
 
+    @GetMapping("/lms")
+    public String loginLms() {
+        return "redirect:login";
+    }
+
     @PostMapping("/login")
     public String login(
             @ModelAttribute("login") AuthenticationRequest request, HttpServletResponse response) {
