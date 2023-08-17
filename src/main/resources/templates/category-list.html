@@ -1,76 +1,113 @@
-<!--<!DOCTYPE html>-->
-<!--<html xmlns:th="http://www.thymeleaf.org">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <meta http-equiv="x-ua-compatible" content="ie=edge">-->
-<!--    <title>All Categories</title>-->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta charset="ISO-8859-1">
+<title>Categories</title>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<!--    <meta name="viewport" content="width=device-width, initial-scale=1">-->
-<!--    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">-->
-<!--    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">-->
-<!--    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">-->
-<!--    <link rel="stylesheet" th:href="@{/css/containers.css}" href="">-->
-<!--    <link rel="stylesheet" type="text/css" th:href="@{/css/sidebar.css}" href=""/>-->
+<link rel="stylesheet" th:href="@{/css/containers.css}" href="">
+<link rel="stylesheet" type="text/css" th:href="@{/css/sidebar.css}" href="">
+</head>
+<body>
+<div class="main">
+    <div th:insert="navbar/sidebar :: sidebar"></div>
+    <div class="category w-100">
+        <div class="container-fluid my-2">
+            <div class="card">
+                <div class="card-header">
+                    <div class="container-fluid d-flex justify-content-between align-items-center">
+                        <h3 class="mb-0">Categories</h3>
+                        <a th:href="@{/categories/new}" class="btn btn-primary">
+                            <i class="bi bi-plus"></i> Add Category </i>
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="container-fluid">
+                        <form th:action="@{/search/category}">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <input
+                                        name="name"
+                                        type="search"
+                                        id="name"
+                                        th:value="${param.name}"
+                                        class="form-control mr-sm-2"
+                                        placeholder="Search Category"
+                                        aria-label="Search">
+                                <button class="btn btn-primary">Search</button>
+                                <button class="btn btn-done ml-2" type="button" onclick="resetForm()">Clear</button>
+                            </div>
+                        </form>
+                        <br>
+                        <form th:action="@{/search/books}">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <input
+                                        name="book"
+                                        type="search"
+                                        id="book"
+                                        th:value="${param.book}"
+                                        class="form-control mr-sm-2"
+                                        placeholder="Show Books by Category"
+                                        aria-label="Search">
+                                <button class="btn btn-primary">Search</button>
+                                <button class="btn btn-done ml-2" type="button" onclick="resetForm()">Clear</button>
+                            </div>
+                        </form>
+                    </div>
 
-<!--</head>-->
-<!--<body>-->
-<!--<div class="main">-->
-<!--    <div th:insert="navbar/sidebar :: sidebar"></div>-->
-<!--    <div class="category">-->
-<!--        <h3>Categories</h3>-->
-<!--    </div>-->
-<!--    <div class="categories">-->
-<!--        <div class="container my-2">-->
-<!--            <div class="card">-->
-<!--                <div class="card-body">-->
-<!--                    <div th:switch="${categories}" class="container my-5">-->
-<!--                        <p class="my-5">-->
-<!--                            <a href="/search/categoryName" class="btn btn-warning">-->
-<!--                                <i class="bi bi-journals"></i> Add Category </i></a>-->
-<!--                        </p>-->
-<!--                        <div class="col-md-12">-->
-<!--                            <h2 th:case="null">No record found !!</h2>-->
-<!--                            <div th:case="*">-->
-<!--                                <table class="table table-striped table-bordered">-->
-<!--                                    <thead class="table-dark">-->
-<!--                                    <tr>-->
-<!--                                        <th>id</th>-->
-<!--                                        <th>Isbn</th>-->
-<!--                                        <th>Name</th>-->
-<!--                                        <th>Stock</th>-->
-<!--                                        <th>Author</th>-->
-<!--                                        <th>Category</th>-->
-<!--                                        <th>Image</th>-->
-<!--                                    </tr>-->
-<!--                                    </thead>-->
-<!--                                    <tbody>-->
-<!--                                    <tr th:each="book: ${bookList}" class="col-lg-6">-->
-<!--                                        <td th:text="${book.getId()}"></td>-->
-<!--                                        <td th:text="${book.getIsbn()}"></td>-->
-<!--                                        <td th:text="${book.getName()}"></td>-->
-<!--                                        <td th:text="${book.getStock()}"></td>-->
-<!--                                        <td th:text="${book.getAuthorName()}"></td>-->
-<!--                                        <td th:text="${book.getCategory()}"></td>-->
-<!--                                        <td>-->
-<!--                                            <img th:src="@{/book/images/__${book.getImage()}__}" width="150" height="150"/>-->
-<!--                                        </td>-->
-<!--                                        <td>-->
-<!--                                            <a th:href="@{/book/{isbn}/update(isbn=${book.getIsbn()})}"-->
-<!--                                               class="btn btn-primary">Update</a>-->
-<!--                                            <a th:href="@{/book/{isbn}/remove(isbn=${book.getIsbn()})}"-->
-<!--                                               class="btn btn-danger">Delete</a>-->
-<!--                                        </td>-->
-<!--                                    </tr>-->
-<!--                                    </tbody>-->
-<!--                                </table>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
-<!--</body>-->
+                    <div th:switch="${categories}" class="my-5">
+                        <div class="col-md-12">
+                            <h2 th:case="null">No record found !!</h2>
+                            <div th:case="*">
+                                <table class="table table-bordered table-hover table-responsive-md">
+                                    <thead>
+                                    <tr>
+                                        <th> Category Name</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="category: ${categories}" class="col-lg-6">
+                                        <td th:text="${category.id}"></td>
+                                        <td th:text="${category.name}"></td>
+                                        <td>
+                                            <a th:href="@{/category/update/{id}(id=${category.id})}"
+                                               class="btn btn-primary">
+                                                <i class="bi bi-pencil"></i></a>
+                                            <a th:href="@{/category/remove/{id}(id=${category.id})}" class="btn btn-danger">
+                                                <i class="bi bi-trash"></i></a>
+                                        </td>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    const resetForm = () => {
+        document.getElementById('name').value = '';
+        document.getElementById('book').value = '';
+        window.location.href = '/categories';
+    }
 
-<!--</html>-->
+
+
+</script>
+</body>
+</html>
+
+
+
+
+
+
