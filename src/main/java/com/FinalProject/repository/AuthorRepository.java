@@ -11,6 +11,6 @@ public interface AuthorRepository extends JpaRepository<Authors, Long> {
 
     List<Authors> findByDeleteFalse();
 
-    @Query("SELECT c from Authors c WHERE c.fullName LIKE CONCAT('%', :query, '%')")
+    @Query("SELECT c from Authors c WHERE lower(c.fullName) LIKE CONCAT('%', :query, '%')")
     List<Authors> searchAuthors(String query);
 }
