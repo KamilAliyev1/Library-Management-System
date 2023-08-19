@@ -55,8 +55,6 @@ public class OrderController {
         model.addAttribute("books", books);
         model.addAttribute("orders", orders);
         model.addAttribute("students", students);
-
-//        model.addAttribute("orders", List.of(orderService.get(id)));
         return "orders/order-list";
     }
 

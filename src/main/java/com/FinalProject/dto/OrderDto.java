@@ -14,6 +14,7 @@ public class OrderDto {
     Long id;
     Long studentId;
     String studentFullName;
+    String studentFin;
     List<String> books;
     Boolean inProgress;
     LocalDate createdAt;

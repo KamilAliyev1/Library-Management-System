@@ -62,6 +62,7 @@
                                     <thead>
                                     <tr>
                                         <th>ID</th>
+                                        <th>Student FIN</th>
                                         <th>Student Name</th>
                                         <th>Books</th>
                                         <th>In Progress</th>
@@ -74,6 +75,7 @@
                                     <tbody>
                                     <tr th:each="order: ${orders}" class="col-lg-6">
                                         <td th:text="${order.id}"></td>
+                                        <td th:text="${order.studentFin}"></td>
                                         <td th:text="${order.studentFullName}"></td>
                                         <td>
                                             <p th:each="book : ${order.books}" th:text="${book}"></p>
@@ -88,21 +90,21 @@
                                             <span th:if="${order.inDelay}" class="badge-pill badge-success">Yes</span>
                                             <span th:unless="${order.inDelay}" class="badge-pill badge-danger">No</span>
                                         </td>
-                                        <td th:text="${order.createdAt}"></td>
-                                        <td th:text="${order.finishedAt}"></td>
+                                        <td th:text="${#temporals.format(order.createdAt, 'dd.MM.yyyy')}"></td>
+                                        <td th:text="${#temporals.format(order.finishedAt, 'dd.MM.yyyy')}"></td>
                                         <td>
                                             <a th:href="@{/orders/{id}/update(id=${order.id})}"
-                                               class="btn btn-primary">
+                                               class="btn btn-primary btn-sm">
                                                 <i class="bi bi-pencil"></i>
                                             </a>
 
                                             <a th:href="@{/orders/{id}/delete(id=${order.id})}"
-                                               class="btn btn-danger">
+                                               class="btn btn-danger btn-sm">
                                                 <i class="bi bi-trash"></i>
                                             </a>
 
                                             <a th:href="@{/orders/{id}/disableProgress(id=${order.id})}"
-                                               class="btn btn-warning">
+                                               class="btn btn-warning btn-sm">
                                                 <i class="bi bi-arrow-clockwise"></i>
                                             </a>
 
