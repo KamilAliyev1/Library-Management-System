@@ -59,6 +59,13 @@ public class OrderMapper {
         return new OrderDto(id, studentId, studentFullName, books, inProgress, createdAt, finishedAt, inDelay);
     }
 
+    public List<OrderDto> mapEntityListToDtoList(List<Order> orders) {
+        return orders
+                .stream()
+                .map(this::toGetDto)
+                .toList();
+    }
+
     public List<Long> map(Set<Book> books) {
         List<Long> temp = books == null || books.isEmpty() ? new LinkedList<>() : books.stream().map(Book::getId).collect(Collectors.toCollection(LinkedList::new));
         var size = temp.size();

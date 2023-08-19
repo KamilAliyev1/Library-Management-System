@@ -27,6 +27,33 @@
                     </div>
                 </div>
                 <div class="card-body">
+                    <div class="container-fluid">
+                        <form th:action="@{/orders/search}" method="GET">
+                            <div class="d-flex justify-content-between align-items-center gap-x-4">
+
+                                <select class="form-control mr-sm-2" id="student"
+                                        name="studentId">
+                                    <option value="">Search Order by Student</option>
+                                    <option th:each="student : ${students}"
+                                            th:value="${student.id}"
+                                            th:text="${student.name + ' ' + student.surname}"
+                                    >
+                                    </option>
+                                </select>
+
+                                <select class="form-control mr-sm-2" id="book" name="bookId">
+                                    <option value="">Search Order by Book</option>
+                                    <option th:each="book : ${books}"
+                                            th:value="${book.id}"
+                                            th:text="${book.name}">
+                                    </option>
+                                </select>
+
+                                <button class="btn btn-primary">Search</button>
+                                <button class="btn btn-done ml-2" type="button" onclick="resetForm()">Clear</button>
+                            </div>
+                        </form>
+                    </div>
                     <div th:switch="${orders}" class="my-5">
                         <div class="col-md-12">
                             <h2 th:case="null">No record found !!</h2>
@@ -91,5 +118,14 @@
         </div>
     </div>
 </div>
+
+<script>
+    const resetForm = () => {
+        document.getElementById('student').value = null;
+        document.getElementById('book').value = null;
+        window.location.href = '/orders';
+    }
+</script>
+
 </body>
 </html>
