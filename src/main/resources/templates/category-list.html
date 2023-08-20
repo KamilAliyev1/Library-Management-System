@@ -47,16 +47,18 @@
                         <br>
                         <form th:action="@{/search/books}">
                             <div class="d-flex justify-content-between align-items-center">
-                                <input
-                                        name="book"
-                                        type="search"
-                                        id="book"
-                                        th:value="${param.book}"
-                                        class="form-control mr-sm-2"
-                                        placeholder="Show Books by Category"
-                                        aria-label="Search">
+                                <select class="form-control mr-sm-2" id="category" name="categoryId">
+                                    <option value="">Search Book by Category</option>
+                                    <option th:each="category : ${categories}"
+                                            th:value="${category.id}"
+                                            th:text="${category.name}"
+                                            th:selected="${category.id == param.categoryId}">
+                                    </option>
+                                </select>
                                 <button class="btn btn-primary">Search</button>
-                                <button class="btn btn-done ml-2" type="button" onclick="resetForm()">Clear</button>
+                                <button class="btn btn-done ml-2" type="button" onclick="resetSearchByCategoryForm()">
+                                    Clear
+                                </button>
                             </div>
                         </form>
                     </div>
@@ -65,6 +67,13 @@
                         <div class="col-md-12">
                             <h2 th:case="null">No record found !!</h2>
                             <div th:case="*">
+                                <div class="d-flex justify-content-end align-items-center mb-3">
+                                    <button type="button" class="btn btn-primary">
+                                        Categories
+                                        <span th:text="${categories.size()}" class="badge badge-light">4</span>
+                                    </button>
+                                </div>
+
                                 <table class="table table-bordered table-hover table-responsive-md">
                                     <thead>
                                     <tr>
@@ -77,11 +86,11 @@
                                         <td th:text="${category.name}"></td>
                                         <td class="w-25">
                                             <a th:href="@{/category/update/{id}(id=${category.id})}"
-                                               class="btn btn-primary">
+                                               class="btn btn-primary btn-sm">
                                                 <i class="bi bi-pencil"></i>
                                             </a>
                                             <a th:href="@{/category/remove/{id}(id=${category.id})}"
-                                               class="btn btn-danger">
+                                               class="btn btn-danger btn-sm">
                                                 <i class="bi bi-trash"></i>
                                             </a>
                                         </td>
@@ -99,6 +108,11 @@
     const resetForm = () => {
         document.getElementById('name').value = '';
         document.getElementById('book').value = '';
+        window.location.href = '/categories';
+    }
+
+    const resetSearchByCategoryForm = () => {
+        document.getElementById('category').value = null;
         window.location.href = '/categories';
     }
 </script>

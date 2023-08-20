@@ -7,39 +7,44 @@
     <style>
         body {
             padding: 40px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-content: center;
         }
 
         .container {
-            max-width: 400px;
+            max-width: 450px;
             margin: 0 auto;
         }
     </style>
 </head>
 <body>
 <div class="container">
-    <h1>Registration Page</h1>
+    <h1>Registration</h1>
 
     <form action="#" th:action="@{/register}" th:object="${register}" method="post">
         <div class="form-group">
-            <label>FirstName:</label>
-            <input type="text" name="name" th:field="*{firstname}" class="form-control" required>
+            <label for="firstname">First Name:</label>
+            <input type="text" name="firstname" id="firstname" th:field="*{firstname}" class="form-control" required>
         </div>
         <div class="form-group">
-            <label>LastName:</label>
-            <input type="text" name="name" th:field="*{lastname}" class="form-control" required>
+            <label for="lastname">Last Name:</label>
+            <input type="text" name="lastname" id="lastname" th:field="*{lastname}" class="form-control" required>
         </div>
 
         <div class="form-group">
-            <label>Email:</label>
-            <input type="text" name="email" th:field="*{email}" class="form-control" required>
+            <label for="email">Email:</label>
+            <input type="email" name="email" id="email" th:field="*{email}" class="form-control" required>
         </div>
 
         <div class="form-group">
-            <label>Password:</label>
-            <input type="password" name="password" th:field="*{password}" class="form-control" required>
+            <label for="password">Password:</label>
+            <input type="password" minlength="8" name="password" id="password" th:field="*{password}" class="form-control" required>
         </div>
 
-        <button type="submit" class="btn btn-primary">Register</button>
+        <button type="submit" class="btn btn-primary w-100">Register</button>
     </form>
 </div>
 

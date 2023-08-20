@@ -24,7 +24,4 @@ public interface BookService {
     boolean areAllBooksInStock(List<Long> id);
 
     void updateStockNumbersByIdIn(List<Long> ids, int amount);
-     List<BookDto> showBooksByCategoryName(String category);
-
-
 }
