@@ -1,5 +1,6 @@
 package com.FinalProject.service.impl;
 
+import com.FinalProject.dto.BookDto;
 import com.FinalProject.request.BookRequest;
 import com.FinalProject.dto.CategoryDto;
 import com.FinalProject.exception.CategoryAlreadyExistsException;
@@ -43,15 +44,23 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDto findCategoryById(Long id) {
-        Category optionalCategory = categoryRepository.findById(id).get();
+    public CategoryDto findCategoryByName(String name) {
+        Category optionalCategory = categoryRepository.findByName(name).get();
         CategoryDto categoryDto = categoryMapper.categoryToCategoryDto(optionalCategory);
 //        List<BookDto> bookRequest = bookService.findByCategory(categoryDto.getName());
         if (optionalCategory == null) {
-            throw new CategoryNotFoundException("No  category present with id=" + id);
+            throw new CategoryNotFoundException("No  category present with id=" + name);
         } else {
             return categoryDto;
         }
+    }
+
+    @Override
+    public CategoryDto findCategoryById(Long id) {
+        Category category = categoryRepository.findById(id).get();
+        CategoryDto categoryDto = categoryMapper.categoryToCategoryDto(category);
+        return categoryDto;
+
     }
 
 
@@ -85,10 +94,15 @@ public class CategoryServiceImpl implements CategoryService {
         categoryRepository.deleteById(category.getId());
     }
 
-    @Override
-    public CategoryDto findByName(String name) {
-        return categoryMapper.categoryToCategoryDto(categoryRepository.findByName(name).orElseThrow(() -> new CategoryNotFoundException("Category not found")));
-    }
+//    @Override
+//    public List<BookDto> showBooksByCategoryName(String name) {
+//        bookService.
+//    }
+
+//    @Override
+//    public CategoryDto findByName(String name) {
+//        return categoryMapper.categoryToCategoryDto(categoryRepository.findByName(name).orElseThrow(() -> new CategoryNotFoundException("Category not found")));
+//    }
 
     @Override
     public void setBookToCategory(BookRequest bookRequests, Book book) {

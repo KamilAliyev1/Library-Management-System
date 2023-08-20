@@ -11,8 +11,8 @@ spring:
     name: auth-service
   datasource:
     username: ${DB_USERNAME:postgres}
-    password: ${DB_PASSWORD:123456}
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/library-management-system}
+    password: ${DB_PASSWORD:636847482008t}
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/postgres}
   jpa:
     show-sql: true
     database-platform: ${DB_PLATFORM:org.hibernate.dialect.PostgreSQLDialect}
