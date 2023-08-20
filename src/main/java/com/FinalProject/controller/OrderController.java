@@ -1,9 +1,9 @@
 package com.FinalProject.controller;
 
 import com.FinalProject.dto.BookDto;
+import com.FinalProject.dto.OrderDto;
 import com.FinalProject.dto.OrderRequest;
 import com.FinalProject.dto.studentdto.StudentDto;
-import com.FinalProject.mapper.OrderMapper;
 import com.FinalProject.service.BookService;
 import com.FinalProject.service.OrderService;
 import com.FinalProject.service.StudentService;
@@ -33,7 +33,7 @@ public class OrderController {
         model.addAttribute("order", order);
         model.addAttribute("books", books);
         model.addAttribute("students", students);
-        return "order-create";
+        return "orders/order-create";
     }
 
     @PostMapping("/add")
@@ -42,10 +42,20 @@ public class OrderController {
         return "redirect:/orders";
     }
 
-    @GetMapping("/search/")
-    String get(@RequestParam Long id, Model model) {
-        model.addAttribute("orders", List.of(orderService.get(id)));
-        return "order-list";
+    @GetMapping("/search")
+    String searchOrders(
+            @RequestParam(name = "studentId", required = false) Long studentId,
+            @RequestParam(name = "bookId", required = false) Long bookId,
+            Model model) {
+
+        List<BookDto> books = bookService.findAll();
+        List<StudentDto> students = studentService.getStudents();
+        List<OrderDto> orders = orderService.searchOrders(studentId, bookId);
+
+        model.addAttribute("books", books);
+        model.addAttribute("orders", orders);
+        model.addAttribute("students", students);
+        return "orders/order-list";
     }
 
     @GetMapping("/{id}/disableProgress")
@@ -56,9 +66,14 @@ public class OrderController {
 
     @GetMapping
     String getAll(Model model) {
-        var orders = orderService.getAll();
+        List<BookDto> books = bookService.findAll();
+        List<OrderDto> orders = orderService.getAll();
+        List<StudentDto> students = studentService.getStudents();
+
+        model.addAttribute("books", books);
         model.addAttribute("orders", orders);
-        return "order-list";
+        model.addAttribute("students", students);
+        return "orders/order-list";
     }
 
     @GetMapping("/{id}/delete")
@@ -73,12 +88,18 @@ public class OrderController {
         var order = orderService.update(id, dto);
         model.addAttribute("order", order);
 
-        return "order-update";
+        return "orders/order-update";
     }
 
     @GetMapping("/{id}/update")
     String updatePage(@PathVariable Long id, Model model) {
-        model.addAttribute("order", orderService.get(id));
-        return "order-update";
+        OrderDto order = orderService.get(id);
+        List<StudentDto> students = studentService.getStudents();
+        List<BookDto> books = bookService.findAll();
+
+        model.addAttribute("order", order);
+        model.addAttribute("books", books);
+        model.addAttribute("students", students);
+        return "orders/order-update";
     }
 }

@@ -54,9 +54,17 @@ public class OrderMapper {
         LocalDate createdAt = order.getCreatedAt();
         LocalDate finishedAt = order.getFinishedAt();
         String studentFullName = order.getStudent().getName().concat(" ").concat(order.getStudent().getSurname());
+        String studentFin = order.getStudent().getStudentFIN();
         Boolean inDelay = order.getInDelay();
 
-        return new OrderDto(id, studentId, studentFullName, books, inProgress, createdAt, finishedAt, inDelay);
+        return new OrderDto(id, studentId, studentFullName, studentFin, books, inProgress, createdAt, finishedAt, inDelay);
+    }
+
+    public List<OrderDto> mapEntityListToDtoList(List<Order> orders) {
+        return orders
+                .stream()
+                .map(this::toGetDto)
+                .toList();
     }
 
     public List<Long> map(Set<Book> books) {

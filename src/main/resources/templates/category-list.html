@@ -74,15 +74,16 @@
                                     </thead>
                                     <tbody>
                                     <tr th:each="category: ${categories}" class="col-lg-6">
-                                        <td th:text="${category.id}"></td>
                                         <td th:text="${category.name}"></td>
-                                        <td>
-
+                                        <td class="w-25">
                                             <a th:href="@{/category/update/{id}(id=${category.id})}"
                                                class="btn btn-primary">
-                                                <i class="bi bi-pencil"></i></a>
-                                            <a th:href="@{/category/remove/{id}(id=${category.id})}" class="btn btn-danger">
-                                                <i class="bi bi-trash"></i></a>
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <a th:href="@{/category/remove/{id}(id=${category.id})}"
+                                               class="btn btn-danger">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
                                         </td>
                                     </tbody>
                                 </table>
@@ -100,9 +101,6 @@
         document.getElementById('book').value = '';
         window.location.href = '/categories';
     }
-
-
-
 </script>
 </body>
 </html>
