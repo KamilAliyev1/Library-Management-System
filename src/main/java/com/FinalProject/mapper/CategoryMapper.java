@@ -5,6 +5,9 @@ import com.FinalProject.model.Category;
 import com.FinalProject.request.CategoryRequest;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class CategoryMapper {
     public CategoryDto categoryToCategoryDto(Category category) {
@@ -27,6 +30,10 @@ public class CategoryMapper {
                 .build();
     }
 
-
+    public List<CategoryDto> categoryDtoListToCategoryList(List<Category> categories) {
+        return categories.stream()
+                .map(this::categoryToCategoryDto)
+                .collect(Collectors.toList());
+    }
 }
 
