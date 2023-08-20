@@ -43,7 +43,7 @@ public class AuthenticationController {
         Cookie cookie = new Cookie("jwt", token);
         response.addCookie(cookie);
         System.out.println(token);
-        return "redirect:/about";
+        return "redirect:/contact";
     }
 
 
