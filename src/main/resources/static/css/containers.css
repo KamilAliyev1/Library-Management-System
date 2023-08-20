@@ -3,7 +3,7 @@
     font-family: Nunito, sans-serif;
 }
 
-.categories,.books,.authors {
+.categories, .books, .authors {
     margin-top: 8%;
     margin-left: 0;
     width: 100%;
@@ -11,7 +11,8 @@
     font-family: Nunito, sans-serif;
 
 }
-.orders{
+
+.orders {
     margin-top: 5%;
     margin-left: 0;
     width: 100%;

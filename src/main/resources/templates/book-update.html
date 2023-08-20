@@ -12,66 +12,114 @@
 <body>
 <div class="main">
     <div th:insert="navbar/sidebar :: sidebar"></div>
-    <div class="books">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-6 container justify-content-center card">
-                    <h1 class="text-center">Update Book</h1>
-                    <div class="card-body">
-                        <form role="form" method="post"
-                              th:action="@{/book/{isbn}/update(isbn=${bookRequest.getIsbn()})}"
-                              th:object="${book}" enctype="multipart/form-data">
-                            <div class="form-group">
-                                <label>Book ISBN</label>
-                                <input type="text" name="isbn" th:field="*{isbn}" class="form-control"
-                                       placeholder="Enter Book ISBN"/>
-                            </div>
-                            <div class="form-group">
-                                <label>Book Name</label>
-                                <input type="text" name="name" th:field="*{name}" class="form-control"
-                                       placeholder="Enter Book Name"/>
-                            </div>
-                            <div class="form-group">
-                                <label>Book Stock</label>
-                                <input type="number" name="stock" th:field="*{stock}" class="form-control"
-                                       placeholder="Enter Book Stock"/>
-                            </div>
-                            <div class="form-group">
-                                <label for="category">Book Category</label>
-                                <select class="form-control selectpicker" th:field="*{categoryId}" id="category">
-                                    <option value="">Choose Book Category</option>
-                                    <option th:each="category : ${categories}"
-                                            th:value="${category.id}"
-                                            th:text="${category.name}">category
-                                    </option>
+    <div class="category w-100 d-flex justify-content-center align-items-center">
+        <div class="container-fluid">
+            <div class="card col-lg-7 col-md-6 col-sm-6 container-fluid flex justify-content-center p-4">
+                <div class="card-header rounded d-flex justify-content-center mb-3">
+                    <h2 th:text="${book.name}" class="mb-0"></h2>
+                </div>
+                <div class="card-body">
+                    <form role="form" method="post"
+                          th:action="@{/book/{isbn}/update(isbn=${bookRequest.getIsbn()})}"
+                          th:object="${book}" enctype="multipart/form-data">
+                        <div class="form-group mb-4">
+                            <label for="isbn"> Book ISBN </label>
+                            <input
+                                    required
+                                    min="1000000000000"
+                                    max="9999999999999"
+                                    id="isbn"
+                                    type="number"
+                                    name="name"
+                                    th:field="*{isbn}"
+                                    class="form-control"
+                                    placeholder="Enter Book ISBN"
+                            />
+                            <span class="text-danger" id="isbnError"></span>
+                        </div>
 
-                                </select>
-                            </div>
+                        <div class="form-group mb-4">
+                            <label for="name"> Book name </label>
+                            <input
+                                    required
+                                    id="name"
+                                    type="text"
+                                    name="name"
+                                    th:field="*{name}"
+                                    class="form-control"
+                                    placeholder="Enter Book name"
+                            />
+                        </div>
 
-                            <div class="form-group">
-                                <label for="author">Book Author</label>
-                                <select class="form-control selectpicker" th:field="*{authorId}" id="author">
-                                    <option value="">Choose Book Author</option>
-                                    <option th:each="author : ${authors}"
-                                            th:value="${author.id}"
-                                            th:text="${author.fullName}">author
-                                    </option>
+                        <div class="form-group mb-4">
+                            <label for="stock"> Stock </label>
+                            <input
+                                    required
+                                    type="number"
+                                    name="stock"
+                                    id="stock"
+                                    th:field="*{stock}"
+                                    class="form-control"
+                                    placeholder="Enter Stock"
+                            />
+                        </div>
 
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <input type="file" name="file" th:field="*{file}"/>
-                            </div>
+                        <div class="form-group">
+                            <label for="category">Book Category</label>
+                            <select required class="form-control selectpicker" th:field="*{categoryId}" id="category">
+                                <option value="">Choose Book Category</option>
+                                <option th:each="category : ${categories}"
+                                        th:value="${category.id}"
+                                        th:text="${category.name}">category
+                                </option>
 
-                            <div>
-                                <button type="submit" class="btn btn-primary">Submit</button>
-                            </div>
-                        </form>
-                    </div>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="author">Book Author</label>
+                            <select required class="form-control selectpicker" th:field="*{authorId}" id="author">
+                                <option value="">Choose Book Author</option>
+                                <option th:each="author : ${authors}"
+                                        th:value="${author.id}"
+                                        th:text="${author.fullName}">author
+                                </option>
+
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Book Picture</label>
+                            <input required type="file" name="file" th:field="*{file}" class="form-control"
+                                   placeholder="Enter Book Picture"/>
+                        </div>
+
+                        <div class="d-flex align-items-center justify-content-end">
+                            <button onclick="validateForm()" type="submit" class="btn btn-primary w-100">
+                                Submit
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script>
+    function validateForm() {
+        let isbn = document.getElementById("isbn");
+        let isbnError = document.getElementById("isbnError");
+
+        let isbnValue = isbn.value;
+        let inputValueLength = isbnValue.length;
+
+        if (inputValueLength !== 13)
+            isbnError.textContent = "ISBN must be exactly 13 digits.";
+        else if (isbnValue < 0 || isbnValue > 9999999999999)
+            isbnError.textContent = "ISBN must be between 0 and 9999999999999.";
+        else
+            isbnError.textContent = "";
+    }
+</script>
 </body>
 </html>
