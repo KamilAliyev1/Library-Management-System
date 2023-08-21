@@ -2,13 +2,12 @@ package com.FinalProject.service.impl;
 
 import com.FinalProject.request.BookRequest;
 import com.FinalProject.dto.CategoryDto;
-import com.FinalProject.exception.CategoryAlreadyExistsException;
 import com.FinalProject.exception.CategoryNotFoundException;
 import com.FinalProject.mapper.CategoryMapper;
 import com.FinalProject.model.Book;
 import com.FinalProject.model.Category;
 import com.FinalProject.repository.CategoryRepository;
-import com.FinalProject.service.BookService;
+import com.FinalProject.request.CategoryRequest;
 import com.FinalProject.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,20 +20,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
 
-    private final BookService bookService;
     private final CategoryMapper categoryMapper;
     private final CategoryRepository categoryRepository;
-
-//    public CategoryServiceImpl(CategoryRepository categoryRepository, CategoryMapper categoryMapper, @Lazy BookService bookService) {
-//        this.categoryRepository = categoryRepository;
-//        this.categoryMapper = categoryMapper;
-//        this.bookService = bookService;
-//    }
 
     @Override
     public List<CategoryDto> findAllCategories() {
 
-        List<Category> categories = categoryRepository.findAll();
+        List<Category> categories = categoryRepository.findAllByOrderByIdDesc();
         return categories.stream()
                 .map(categoryMapper::categoryToCategoryDto)
                 .collect(Collectors.toList());
@@ -53,13 +45,9 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void createCategory(CategoryDto categoryDto) {
-        Category category = categoryMapper.categoryDtoToCategory(categoryDto);
-        if (category != null) {
-            categoryRepository.save(new Category(category.getId(), category.getName(), category.getBook()));
-        } else {
-            throw new CategoryAlreadyExistsException("Category already exists!");
-        }
+    public void createCategory(CategoryRequest categoryRequest) {
+        Category category = categoryMapper.categoryRequestToCategory(categoryRequest);
+        categoryRepository.save(category);
     }
 
     @Override

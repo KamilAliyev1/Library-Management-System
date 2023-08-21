@@ -2,6 +2,7 @@ package com.FinalProject.controller;
 
 import com.FinalProject.dto.BookDto;
 import com.FinalProject.dto.CategoryDto;
+import com.FinalProject.request.CategoryRequest;
 import com.FinalProject.service.BookService;
 import com.FinalProject.service.CategoryService;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -14,24 +15,25 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/categories")
 public class CategoryController {
 
-    private final CategoryService categoryService;
     private final BookService bookService;
+    private final CategoryService categoryService;
 
-    @GetMapping("/categories")
+    @GetMapping
     public String findAll(Model model) {
         List<CategoryDto> categories = categoryService.findAllCategories();
         model.addAttribute("categories", categories);
-        return "category-list";
+        return "categories/category-list";
     }
 
-    @GetMapping("/search/category")
+    @GetMapping("/search")
     public String findByName(@RequestParam String name, Model model) {
         List<CategoryDto> categories = categoryService.findCategoryByName(name);
         model.addAttribute("categories", categories);
 
-        return "category-list";
+        return "categories/category-list";
     }
 
     @GetMapping("/search/books")
@@ -39,36 +41,38 @@ public class CategoryController {
         List<BookDto> books = bookService.searchBooks(null, categoryId, null);
         model.addAttribute("books", books);
 
-        return "category-book-list";
+        return "categories/category-book-list";
     }
 
-    @GetMapping("/categories/new")
+    @GetMapping("/new")
     public String categoryForm(Model model) {
-        CategoryDto categoryDto = new CategoryDto();
-        model.addAttribute("category", categoryDto);
-        return "category-create";
+        System.out.println("categoryForm");
+        var category = new CategoryRequest();
+        model.addAttribute("category", category);
+        return "categories/category-create";
     }
 
-    @PostMapping("/categories")
-    public String createCategory(@ModelAttribute("category") CategoryDto category) {
+    @PostMapping
+    public String createCategory(@ModelAttribute("category") CategoryRequest category) {
+        System.out.println("CATEGORY: " + category.toString());
         categoryService.createCategory(category);
         return "redirect:/categories";
     }
 
-    @GetMapping("/category/update/{id}")
+    @GetMapping("/{id}/update")
     public String showUpdateForm(@PathVariable("id") Long id, Model model) {
         final CategoryDto category = categoryService.findCategoryById(id);
         model.addAttribute("category", category);
-        return "category-update";
+        return "categories/category-update";
     }
 
-    @PostMapping("/update-category/{id}")
+    @PostMapping("/{id}")
     public String updateCategory(@PathVariable("id") Long id, @RequestBody CategoryDto category) {
         categoryService.updateCategory(id, category);
         return "redirect:/categories";
     }
 
-    @GetMapping("/category/remove/{id}")
+    @GetMapping("/{id}/remove")
     public String deleteCategory(@PathVariable Long id, Model model) {
         categoryService.deleteCategory(id);
         model.addAttribute("category", categoryService.findAllCategories());

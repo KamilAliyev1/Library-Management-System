@@ -58,6 +58,13 @@
                         <div class="col-md-12">
                             <h2 th:case="null">No record found !!</h2>
                             <div th:case="*">
+                                <div class="d-flex justify-content-end align-items-center mb-3">
+                                    <button type="button" class="btn btn-primary">
+                                        Orders
+                                        <span th:text="${orders.size()}" class="badge badge-light">4</span>
+                                    </button>
+                                </div>
+
                                 <table class="table table-bordered table-hover table-responsive-md">
                                     <thead>
                                     <tr>

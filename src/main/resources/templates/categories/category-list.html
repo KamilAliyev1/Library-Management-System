@@ -30,7 +30,7 @@
                 </div>
                 <div class="card-body">
                     <div class="container-fluid">
-                        <form th:action="@{/search/category}">
+                        <form th:action="@{/categories/search}">
                             <div class="d-flex justify-content-between align-items-center">
                                 <input
                                         name="name"
@@ -45,7 +45,7 @@
                             </div>
                         </form>
                         <br>
-                        <form th:action="@{/search/books}">
+                        <form th:action="@{categories/search/books}">
                             <div class="d-flex justify-content-between align-items-center">
                                 <select class="form-control mr-sm-2" id="category" name="categoryId">
                                     <option value="">Search Book by Category</option>
@@ -85,11 +85,11 @@
                                     <tr th:each="category: ${categories}" class="col-lg-6">
                                         <td th:text="${category.name}"></td>
                                         <td class="w-25">
-                                            <a th:href="@{/category/update/{id}(id=${category.id})}"
+                                            <a th:href="@{/categories/{id}/update(id=${category.id})}"
                                                class="btn btn-primary btn-sm">
                                                 <i class="bi bi-pencil"></i>
                                             </a>
-                                            <a th:href="@{/category/remove/{id}(id=${category.id})}"
+                                            <a th:href="@{/categories/{id}/remove(id=${category.id})}"
                                                class="btn btn-danger btn-sm">
                                                 <i class="bi bi-trash"></i>
                                             </a>
@@ -107,7 +107,6 @@
 <script>
     const resetForm = () => {
         document.getElementById('name').value = '';
-        document.getElementById('book').value = '';
         window.location.href = '/categories';
     }
 

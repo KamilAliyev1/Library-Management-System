@@ -17,7 +17,7 @@
         <div class="container-fluid">
             <div class="card col-lg-6 col-md-6 col-sm-6 container-fluid flex justify-content-center p-4">
                 <div class="card-header rounded d-flex justify-content-center mb-3">
-                    <h2 th:text="${category.name}" class="mb-0"></h2>
+                    <h2 class="mb-0"> Add New Category </h2>
                 </div>
                 <div class="card-body">
                     <form th:action="@{/categories}" th:object="${category}" method="POST"
@@ -25,6 +25,7 @@
                         <div class="form-group mb-4">
                             <label for="name"> Category Name </label>
                             <input
+                                    required
                                     id="name"
                                     type="text"
                                     name="name"

@@ -12,7 +12,6 @@ import com.FinalProject.repository.OrderRepo;
 import com.FinalProject.repository.StudentRepository;
 import com.FinalProject.service.OrderService;
 import com.FinalProject.service.OrderValidator;
-import com.FinalProject.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -33,7 +32,6 @@ public class OrderServiceImpl implements OrderService {
     private final StudentRepository studentRepository;
     private final OrderMapper orderMapper;
     private final BookServiceImpl bookService;
-    private final StudentService studentService;
     private final OrderValidator orderValidator;
 
     @Transactional
