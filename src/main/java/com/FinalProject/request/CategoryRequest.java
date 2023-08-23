@@ -9,6 +9,5 @@ import lombok.*;
 @Builder
 
 public class CategoryRequest {
-
     private String name;
 }

@@ -1,7 +1,6 @@
 package com.FinalProject.service.impl;
 
 import com.FinalProject.dto.BookDto;
-import com.FinalProject.exception.BookAlreadyFoundException;
 import com.FinalProject.exception.BookNotFoundException;
 import com.FinalProject.mapper.BookMapper;
 import com.FinalProject.model.Book;
@@ -40,7 +39,7 @@ public class BookServiceImpl implements BookService {
 
     private void checkBookByIsbn(Book book) {
         bookRepository.findByIsbn(book.getIsbn()).ifPresent(book1 -> {
-            throw new BookAlreadyFoundException("Book found with isbn:" + book1.getIsbn());
+            throw new BookNotFoundException("Book not found with isbn:" + book1.getIsbn());
         });
     }
 
@@ -48,14 +47,6 @@ public class BookServiceImpl implements BookService {
         Book book = bookRepository
                 .findByIsbn(isbn)
                 .orElseThrow(() -> new BookNotFoundException("Book not found with isbn : " + isbn));
-
-
-//        var category = categoryRepository.findById(bookRequest.getCategoryId()).orElseThrow(() ->
-//                new CategoryNotFoundException("Not found Category such id: " + bookRequest.getCategoryId())
-//        );
-//        var author = authorRepository.findById(bookRequest.getAuthorId()).orElseThrow(() ->
-//                new AuthorsNotFoundException("Not found Author such id = " + bookRequest.getAuthorId())
-//        );
 
         book.setName(bookRequest.getName());
         book.setIsbn(bookRequest.getIsbn());
@@ -66,14 +57,6 @@ public class BookServiceImpl implements BookService {
         authorService.setBookToAuthor(bookRequest, book);
         fileService.save(bookRequest.getFile());
         bookRepository.save(book);
-
-//        book.setCategory(category);
-//        book.setAuthor(author);
-//        book.setStock(bookRequest.getStock());
-//        book.setIsbn(bookRequest.getIsbn());
-//        book.setName(bookRequest.getName());
-//        book.setImage(bookRequest.getFile().getOriginalFilename());
-//        save(bookRequest.getFile());
     }
 
     @Override
@@ -108,18 +91,9 @@ public class BookServiceImpl implements BookService {
         return null;
     }
 
-//    public List<BookDto> findByAuthor(String authorFullName) {
-//        Authors author = new Authors();
-//        author.setFullName(authorFullName);
-//        List<Book> bookList = bookRepository.findByAuthor(author);
-//        if (bookList.isEmpty()) throw new BookNotFoundException("Book not found with author : " + author.getFullName());
-//
-//        return bookMapper.mapEntityListToResponseList(bookList);
-//    }
-
     @Override
     public List<BookDto> findAll() {
-        return bookMapper.mapEntityListToResponseList(bookRepository.findAll());
+        return bookMapper.mapEntityListToResponseList(bookRepository.findAllByOrderByIdDesc());
     }
 
     @Override
@@ -131,14 +105,4 @@ public class BookServiceImpl implements BookService {
     public void updateStockNumbersByIdIn(List<Long> books, int i) {
         bookRepository.updateStockNumbersByIdIn(books, i);
     }
-
-    @Override
-    public List<BookDto> showBooksByCategoryName(String category) {
-        if (bookRepository.findByCategory(category).isEmpty())
-            throw new BookNotFoundException("Book not found with category :  " + category);
-        List<Book> book = bookRepository.findByCategory(category);
-        return bookMapper.mapEntityListToResponseList(bookRepository.findByCategory(category));
-    }
-
-
 }

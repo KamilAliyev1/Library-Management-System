@@ -20,11 +20,10 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class AuthorServiceImpl implements AuthorService {
+
     private final AuthorRepository authorRepository;
     private final AuthorsMapper authorsMapper;
     private final BookRepository bookRepository;
-
-
 
     @Override
     public List<AuthorsDto> getAuthors() {
@@ -43,7 +42,6 @@ public class AuthorServiceImpl implements AuthorService {
         author.setBirthDate(authorsDto.getBirthDate());
         authorRepository.save(author);
     }
-
 
     @Override
     public void updateAuthor(Long id, AuthorsDto request) {
@@ -104,6 +102,4 @@ public class AuthorServiceImpl implements AuthorService {
                 .category(books.getCategory().getName())
                 .build();
     }
-
-
 }

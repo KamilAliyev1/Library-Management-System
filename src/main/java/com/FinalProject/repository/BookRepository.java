@@ -14,6 +14,9 @@ import java.util.Set;
 
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
+
+    List<Book> findAllByOrderByIdDesc();
+
     @Query("SELECT u from Book u  join Authors a on u.id = a.id where u.id=:authorId")
     List<Book> findBooksByAuthorId(Long authorId);
 

@@ -1,25 +1,24 @@
 package com.FinalProject.service;
 
-import com.FinalProject.dto.BookDto;
 import com.FinalProject.dto.CategoryDto;
 import com.FinalProject.model.Book;
 import com.FinalProject.request.BookRequest;
+import com.FinalProject.request.CategoryRequest;
 
 import java.util.List;
 
 public interface CategoryService {
-     List<CategoryDto> findAllCategories();
+    List<CategoryDto> findAllCategories();
 
-     CategoryDto findCategoryById(Long id);
-     CategoryDto findCategoryByName(String name);
+    CategoryDto findCategoryById(Long id);
 
-     void createCategory(CategoryDto category);
+    List<CategoryDto> findCategoryByName(String name);
 
-     void updateCategory(Long id,CategoryDto category);
+    void createCategory(CategoryRequest category);
 
-     void deleteCategory(Long id);
-     public void setBookToCategory(BookRequest bookRequests, Book book);
+    void updateCategory(Long id, CategoryDto category);
 
-//     List<BookDto> showBooksByCategoryName(String name);
+    void deleteCategory(Long id);
 
+    void setBookToCategory(BookRequest bookRequests, Book book);
 }

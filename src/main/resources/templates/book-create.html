@@ -25,13 +25,16 @@
                             <label for="isbn"> Book ISBN </label>
                             <input
                                     required
+                                    min="1000000000000"
+                                    max="9999999999999"
+                                    type="number"
                                     id="isbn"
-                                    type="text"
                                     name="name"
                                     th:field="*{isbn}"
                                     class="form-control"
                                     placeholder="Enter Book ISBN"
                             />
+                            <span class="text-danger" id="isbnError"></span>
                         </div>
 
                         <div class="form-group mb-4">
@@ -51,9 +54,10 @@
                             <label for="stock"> Stock </label>
                             <input
                                     required
-                                    type="number"
+                                    min="0"
                                     name="stock"
                                     id="stock"
+                                    type="number"
                                     th:field="*{stock}"
                                     class="form-control"
                                     placeholder="Enter Stock"
@@ -85,13 +89,18 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Book Picture</label>
-                            <input required type="file" name="file" th:field="*{file}" class="form-control"
-                                   placeholder="Enter Book Picture"/>
+                            <label>Book Image</label>
+                            <input
+                                    required
+                                    type="file"
+                                    name="file"
+                                    th:field="*{file}"
+                                    class="form-control"
+                                    placeholder="Enter Book Picture"/>
                         </div>
 
                         <div class="d-flex align-items-center justify-content-end">
-                            <button type="submit" class="btn btn-primary w-100">
+                            <button onclick="validateForm()" type="submit" class="btn btn-primary w-100">
                                 Submit
                             </button>
                         </div>
@@ -101,5 +110,23 @@
         </div>
     </div>
 </div>
+
+<script>
+    function validateForm() {
+        let isbn = document.getElementById("isbn");
+        let isbnError = document.getElementById("isbnError");
+
+        let isbnValue = isbn.value;
+        let inputValueLength = isbnValue.length;
+
+        if (inputValueLength !== 13)
+            isbnError.textContent = "ISBN must be exactly 13 digits.";
+        else if (isbnValue < 0 || isbnValue > 9999999999999)
+            isbnError.textContent = "ISBN must be between 0 and 9999999999999.";
+        else
+            isbnError.textContent = "";
+    }
+</script>
+
 </body>
 </html>

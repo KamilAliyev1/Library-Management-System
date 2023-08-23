@@ -1,87 +1,61 @@
 package com.FinalProject.service.impl;
 
-import com.FinalProject.dto.BookDto;
 import com.FinalProject.request.BookRequest;
 import com.FinalProject.dto.CategoryDto;
-import com.FinalProject.exception.CategoryAlreadyExistsException;
 import com.FinalProject.exception.CategoryNotFoundException;
 import com.FinalProject.mapper.CategoryMapper;
 import com.FinalProject.model.Book;
 import com.FinalProject.model.Category;
 import com.FinalProject.repository.CategoryRepository;
-import com.FinalProject.service.BookService;
+import com.FinalProject.request.CategoryRequest;
 import com.FinalProject.service.CategoryService;
-import org.springframework.context.annotation.Lazy;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-
 @Service
+@RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
 
-    private final CategoryRepository categoryRepository;
-
     private final CategoryMapper categoryMapper;
-
-    private final BookService bookService;
-
-    public CategoryServiceImpl(CategoryRepository categoryRepository, CategoryMapper categoryMapper, @Lazy BookService bookService) {
-        this.categoryRepository = categoryRepository;
-        this.categoryMapper = categoryMapper;
-        this.bookService = bookService;
-    }
+    private final CategoryRepository categoryRepository;
 
     @Override
     public List<CategoryDto> findAllCategories() {
 
-        List<Category> categories = categoryRepository.findAll();
+        List<Category> categories = categoryRepository.findAllByOrderByIdDesc();
         return categories.stream()
                 .map(categoryMapper::categoryToCategoryDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public CategoryDto findCategoryByName(String name) {
-        Category optionalCategory = categoryRepository.findByName(name).get();
-        CategoryDto categoryDto = categoryMapper.categoryToCategoryDto(optionalCategory);
-//        List<BookDto> bookRequest = bookService.findByCategory(categoryDto.getName());
-        if (optionalCategory == null) {
-            throw new CategoryNotFoundException("No  category present with id=" + name);
-        } else {
-            return categoryDto;
-        }
+    public List<CategoryDto> findCategoryByName(String name) {
+        var categories = categoryRepository.findCategoriesByNameContainingIgnoreCase(name);
+        return categoryMapper.categoryDtoListToCategoryList(categories);
     }
 
     @Override
     public CategoryDto findCategoryById(Long id) {
         Category category = categoryRepository.findById(id).get();
-        CategoryDto categoryDto = categoryMapper.categoryToCategoryDto(category);
-        return categoryDto;
-
+        return categoryMapper.categoryToCategoryDto(category);
     }
-
 
     @Override
-    public void createCategory(CategoryDto category) {
-        Category category1 = categoryMapper.categoryDtoToCategory(category);
-        if (category1 != null) {
-            categoryRepository.save(new Category(category1.getId(), category1.getName(), category1.getBook()));
-        } else {
-            throw new CategoryAlreadyExistsException("Category already exists!");
-
-        }
+    public void createCategory(CategoryRequest categoryRequest) {
+        Category category = categoryMapper.categoryRequestToCategory(categoryRequest);
+        categoryRepository.save(category);
     }
-
 
     @Override
     public void updateCategory(Long id, CategoryDto categoryDto) {
         if (categoryRepository.findById(id).isPresent()) {
             Category existingCategory = categoryRepository.findById(id).get();
             existingCategory.setName(categoryDto.getName());
-            Category updatedCategory = categoryRepository.save(existingCategory);
+            categoryRepository.save(existingCategory);
         } else {
             System.out.println("Category is not present");
         }
@@ -89,20 +63,11 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void deleteCategory(Long id) {
-        final Category category = categoryRepository.findById(id).orElseThrow(
-                () -> new CategoryNotFoundException("Not found Category such id= " + id));
+        Category category = categoryRepository.findById(id).orElseThrow(
+                () -> new CategoryNotFoundException("Not found Category such id " + id)
+        );
         categoryRepository.deleteById(category.getId());
     }
-
-//    @Override
-//    public List<BookDto> showBooksByCategoryName(String name) {
-//        bookService.
-//    }
-
-//    @Override
-//    public CategoryDto findByName(String name) {
-//        return categoryMapper.categoryToCategoryDto(categoryRepository.findByName(name).orElseThrow(() -> new CategoryNotFoundException("Category not found")));
-//    }
 
     @Override
     public void setBookToCategory(BookRequest bookRequests, Book book) {

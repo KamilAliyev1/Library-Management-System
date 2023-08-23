@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="ISO-8859-1">
-    <title>Add New Category </title>
+    <title>Update Category </title>
     <link rel="stylesheet"
           href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
@@ -20,11 +20,13 @@
                     <h2 th:text="${category.name}" class="mb-0"></h2>
                 </div>
                 <div class="card-body">
-                    <form th:action="@{/categories}" th:object="${category}" method="POST"
+                    <form th:action="@{/categories/{id}(id=${category.id})}"
+                          th:object="${category}" method="POST"
                           enctype="multipart/form-data">
                         <div class="form-group mb-4">
                             <label for="name"> Category Name </label>
                             <input
+                                    required
                                     id="name"
                                     type="text"
                                     name="name"

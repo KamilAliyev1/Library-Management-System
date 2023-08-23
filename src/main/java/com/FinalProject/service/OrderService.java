@@ -18,4 +18,6 @@ public interface OrderService {
     void disableProgress(Long ID);
 
     List<OrderDto> getAll();
+
+    List<OrderDto> searchOrders(Long studentId, Long bookId);
 }

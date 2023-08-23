@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="ISO-8859-1">
-    <title>Add New Category </title>
+    <title>Book Management System</title>
     <link rel="stylesheet"
           href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
@@ -17,21 +17,31 @@
         <div class="container-fluid">
             <div class="card col-lg-6 col-md-6 col-sm-6 container-fluid flex justify-content-center p-4">
                 <div class="card-header rounded d-flex justify-content-center mb-3">
-                    <h2 class="mb-0"> Add New Category </h2>
+                    <h2 class="mb-0"> Add New Order </h2>
                 </div>
                 <div class="card-body">
-                    <form th:action="@{/categories}" th:object="${category}" method="POST"
-                          enctype="multipart/form-data">
+                    <form role="form" method="post" th:action="@{/orders/add}" th:object="${order}">
                         <div class="form-group mb-4">
-                            <label for="name"> Category Name </label>
-                            <input
-                                    id="name"
-                                    type="text"
-                                    name="name"
-                                    th:field="*{name}"
-                                    class="form-control"
-                                    placeholder="Enter Category Name"
-                            />
+                            <label for="student">Student</label>
+                            <select required class="form-control selectpicker" th:field="*{studentId}" id="student">
+                                <option value="">Choose Student</option>
+                                <option th:each="student : ${students}"
+                                        th:value="${student.id}"
+                                        th:text="${student.name + ' ' + student.surname}">student
+                                </option>
+
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="books">Books</label>
+                            <select multiple required class="form-control selectpicker" th:field="*{books}" id="books">
+                                <option th:each="book : ${books}"
+                                        th:value="${book.id}"
+                                        th:text="${book.name}">book
+                                </option>
+
+                            </select>
                         </div>
 
                         <div class="d-flex align-items-center justify-content-end">

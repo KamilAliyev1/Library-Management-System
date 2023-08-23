@@ -27,14 +27,49 @@
                     </div>
                 </div>
                 <div class="card-body">
+                    <div class="container-fluid">
+                        <form th:action="@{/orders/search}" method="GET">
+                            <div class="d-flex justify-content-between align-items-center gap-x-4">
+
+                                <select class="form-control mr-sm-2" id="student"
+                                        name="studentId">
+                                    <option value="">Search Order by Student</option>
+                                    <option th:each="student : ${students}"
+                                            th:value="${student.id}"
+                                            th:text="${student.name + ' ' + student.surname}"
+                                    >
+                                    </option>
+                                </select>
+
+                                <select class="form-control mr-sm-2" id="book" name="bookId">
+                                    <option value="">Search Order by Book</option>
+                                    <option th:each="book : ${books}"
+                                            th:value="${book.id}"
+                                            th:text="${book.name}">
+                                    </option>
+                                </select>
+
+                                <button class="btn btn-primary">Search</button>
+                                <button class="btn btn-done ml-2" type="button" onclick="resetForm()">Clear</button>
+                            </div>
+                        </form>
+                    </div>
                     <div th:switch="${orders}" class="my-5">
                         <div class="col-md-12">
                             <h2 th:case="null">No record found !!</h2>
                             <div th:case="*">
+                                <div class="d-flex justify-content-end align-items-center mb-3">
+                                    <button type="button" class="btn btn-primary">
+                                        Orders
+                                        <span th:text="${orders.size()}" class="badge badge-light">4</span>
+                                    </button>
+                                </div>
+
                                 <table class="table table-bordered table-hover table-responsive-md">
                                     <thead>
                                     <tr>
                                         <th>ID</th>
+                                        <th>Student FIN</th>
                                         <th>Student Name</th>
                                         <th>Books</th>
                                         <th>In Progress</th>
@@ -47,6 +82,7 @@
                                     <tbody>
                                     <tr th:each="order: ${orders}" class="col-lg-6">
                                         <td th:text="${order.id}"></td>
+                                        <td th:text="${order.studentFin}"></td>
                                         <td th:text="${order.studentFullName}"></td>
                                         <td>
                                             <p th:each="book : ${order.books}" th:text="${book}"></p>
@@ -61,21 +97,21 @@
                                             <span th:if="${order.inDelay}" class="badge-pill badge-success">Yes</span>
                                             <span th:unless="${order.inDelay}" class="badge-pill badge-danger">No</span>
                                         </td>
-                                        <td th:text="${order.createdAt}"></td>
-                                        <td th:text="${order.finishedAt}"></td>
+                                        <td th:text="${#temporals.format(order.createdAt, 'dd.MM.yyyy')}"></td>
+                                        <td th:text="${#temporals.format(order.finishedAt, 'dd.MM.yyyy')}"></td>
                                         <td>
                                             <a th:href="@{/orders/{id}/update(id=${order.id})}"
-                                               class="btn btn-primary">
+                                               class="btn btn-primary btn-sm">
                                                 <i class="bi bi-pencil"></i>
                                             </a>
 
                                             <a th:href="@{/orders/{id}/delete(id=${order.id})}"
-                                               class="btn btn-danger">
+                                               class="btn btn-danger btn-sm">
                                                 <i class="bi bi-trash"></i>
                                             </a>
 
                                             <a th:href="@{/orders/{id}/disableProgress(id=${order.id})}"
-                                               class="btn btn-warning">
+                                               class="btn btn-warning btn-sm">
                                                 <i class="bi bi-arrow-clockwise"></i>
                                             </a>
 
@@ -91,5 +127,14 @@
         </div>
     </div>
 </div>
+
+<script>
+    const resetForm = () => {
+        document.getElementById('student').value = null;
+        document.getElementById('book').value = null;
+        window.location.href = '/orders';
+    }
+</script>
+
 </body>
 </html>

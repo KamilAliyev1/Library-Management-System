@@ -32,31 +32,36 @@
                         <div class="col-md-12">
                             <h2 th:case="null">No record found !!</h2>
                             <div th:case="*">
+                                <div class="d-flex justify-content-end align-items-center mb-3">
+                                    <button type="button" class="btn btn-primary">
+                                        Students
+                                        <span th:text="${students.size()}" class="badge badge-light">4</span>
+                                    </button>
+                                </div>
+
                                 <table class="table table-bordered table-hover table-responsive-md">
                                     <thead>
                                     <tr>
-                                        <th>ID</th>
+                                        <th>Student FIN</th>
                                         <th>Name</th>
                                         <th>Surname</th>
                                         <th>Faculty</th>
-                                        <th>Student FIN</th>
                                         <th>Actions</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <tr th:each="student : ${students}">
-                                        <td th:text="${student.id}"></td>
+                                        <td th:text="${student.studentFIN}"></td>
                                         <td th:text="${student.name}"></td>
                                         <td th:text="${student.surname}"></td>
                                         <td th:text="${student.faculty}"></td>
-                                        <td th:text="${student.studentFIN}"></td>
                                         <td>
                                             <a th:href="@{/students/{id}/update(id=${student.id})}"
-                                               class="btn btn-primary">
+                                               class="btn btn-primary btn-sm">
                                                 <i class="bi bi-pencil"></i>
                                             </a>
                                             <a th:href="@{/students/{id}/delete(id=${student.id})}"
-                                               class="btn btn-danger">
+                                               class="btn btn-danger btn-sm">
                                                 <i class="bi bi-trash"></i>
                                             </a>
                                         </td>

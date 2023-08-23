@@ -22,7 +22,7 @@ public class Book {
     private String isbn;
 
     private String name;
-    private int stock;
+    private Integer stock;
 
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "author_id", referencedColumnName = "id")
