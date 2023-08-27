@@ -47,14 +47,21 @@
                         <div class="col-md-12">
                             <h2 th:case="null">No record found !!</h2>
                             <div th:case="*">
+                                <div class="d-flex justify-content-end align-items-center mb-3">
+                                    <button type="button" class="btn btn-primary">
+                                        Authors
+                                        <span th:text="${authors.size()}" class="badge badge-light">4</span>
+                                    </button>
+                                </div>
+
                                 <table class="table table-bordered table-hover table-responsive-md">
                                     <thead>
                                     <tr>
-                                        <th> Author Name</th>
-                                        <th> Author phone</th>
-                                        <th> Author email</th>
-                                        <th> Author address</th>
-                                        <th> Author birthDate</th>
+                                        <th>  Name</th>
+                                        <th>  Phone</th>
+                                        <th>  Email</th>
+                                        <th>  Address</th>
+                                        <th>  Birth Date</th>
                                         <th>Actions</th>
                                     </tr>
                                     </thead>
@@ -68,7 +75,7 @@
                                         <td th:text="${author.phone}"></td>
                                         <td th:text="${author.email}"></td>
                                         <td th:text="${author.address}"></td>
-                                        <td th:text="${author.birthDate}"></td>
+                                        <td th:text="${#temporals.format(author.birthDate, 'dd.MM.yyyy')}"></td>
                                         <td>
                                             <a th:href="@{/author/{authorId}/edit(authorId=${author.id})}"
                                                class="btn btn-primary">
