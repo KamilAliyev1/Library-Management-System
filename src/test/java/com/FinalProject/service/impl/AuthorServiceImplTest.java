@@ -60,7 +60,7 @@ class AuthorServiceImplTest {
         authorsDtoList.add(authorsDto1);
         authorsDtoList.add(authorsDto2);
 
-        Mockito.when(authorRepository.findByDeleteFalse()).thenReturn(authorsList);
+        Mockito.when(authorRepository.findAllByDeleteFalseOrderByIdDesc()).thenReturn(authorsList);
         Mockito.when(authorsMapper.fromAuthorModelToDto(authors1)).thenReturn(authorsDto1);
         Mockito.when(authorsMapper.fromAuthorModelToDto(authors2)).thenReturn(authorsDto2);
 
@@ -71,7 +71,7 @@ class AuthorServiceImplTest {
         assertEquals(result.get(0).getId(), authorsDtoList.get(0).getId());
         assertEquals(result.get(0).getFullName(), authorsDtoList.get(0).getFullName());
 
-        Mockito.verify(authorRepository, Mockito.times(1)).findByDeleteFalse();
+        Mockito.verify(authorRepository, Mockito.times(1)).findAllByDeleteFalseOrderByIdDesc();
 
         Mockito.verify(authorsMapper, Mockito.times(1)).fromAuthorModelToDto(authors1);
         Mockito.verify(authorsMapper, Mockito.times(1)).fromAuthorModelToDto(authors2);
