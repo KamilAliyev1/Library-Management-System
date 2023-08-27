@@ -25,14 +25,14 @@ public class StudentController {
         final List<StudentDto> students = studentService.getStudents();
         model.addAttribute("students", students);
         System.out.println(Arrays.asList(students));
-        return "students";
+        return "students/students";
     }
 
     @GetMapping("/add")
     public String createStudentPage(Model model) {
         CreateStudentDto createStudentDto = new CreateStudentDto();
         model.addAttribute("student", createStudentDto);
-        return "student-create";
+        return "students/student-create";
     }
 
     @PostMapping
@@ -53,7 +53,7 @@ public class StudentController {
     public String updateStudentPage(@PathVariable("id") Long id, Model model) {
         StudentDto student = studentService.getStudent(id);
         model.addAttribute("student", student);
-        return "student-update";
+        return "students/student-update";
     }
 
     @PostMapping("/{id}/update")
