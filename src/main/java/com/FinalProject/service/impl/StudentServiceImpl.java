@@ -21,7 +21,7 @@ public class StudentServiceImpl implements StudentService {
     private final StudentMapper studentMapper;
 
     public List<StudentDto> getStudents() {
-        List<Student> students = studentRepository.getStudentsByDeleteStatusFalse();
+        List<Student> students = studentRepository.findAllByDeleteStatusFalseOrderByIDDesc();
         return students.stream()
                 .map(studentMapper::mapStudentEntityToDto)
                 .collect(Collectors.toList());

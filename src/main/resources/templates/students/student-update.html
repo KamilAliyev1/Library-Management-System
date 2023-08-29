@@ -29,6 +29,7 @@
                         <div class="form-group mb-4">
                             <label for="name"> Student Name </label>
                             <input
+                                    required
                                     id="name"
                                     type="text"
                                     name="name"
@@ -41,6 +42,7 @@
                         <div class="form-group mb-4">
                             <label for="surname"> Student Surname </label>
                             <input
+                                    required
                                     id="surname"
                                     type="text"
                                     name="surname"
@@ -53,6 +55,9 @@
                         <div class="form-group mb-4">
                             <label for="studentFIN"> Student FIN </label>
                             <input
+                                    required
+                                    minlength="7"
+                                    maxlength="7"
                                     type="text"
                                     name="studentFIN"
                                     id="studentFIN"
@@ -65,6 +70,7 @@
                         <div class="form-group mb-5">
                             <label for="faculty"> Student Faculty </label>
                             <input
+                                    required
                                     type="text"
                                     id="faculty"
                                     name="faculty"
