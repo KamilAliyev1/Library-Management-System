@@ -1,6 +1,7 @@
 package com.FinalProject.service.impl;
 
 import com.FinalProject.dto.BookDto;
+import com.FinalProject.exception.BookAlreadyFoundException;
 import com.FinalProject.exception.BookNotFoundException;
 import com.FinalProject.mapper.BookMapper;
 import com.FinalProject.model.Book;
@@ -14,6 +15,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Lazy))
@@ -31,16 +33,19 @@ public class BookServiceImpl implements BookService {
     public void create(BookRequest bookRequest) {
         var book = bookMapper.mapRequestToEntity(bookRequest);
         checkBookByIsbn(book);
-        categoryService.setBookToCategory(bookRequest, book);
-        authorService.setBookToAuthor(bookRequest, book);
-        fileService.save(bookRequest.getFile());
-        bookRepository.save(book);
+
+        if (checkBookByIsbn(book).isEmpty()) {
+            categoryService.setBookToCategory(bookRequest, book);
+            authorService.setBookToAuthor(bookRequest, book);
+            fileService.save(bookRequest.getFile());
+            bookRepository.save(book);
+        } else {
+            throw new BookAlreadyFoundException("Book with isbn " + book.getIsbn() + " already exists");
+        }
     }
 
-    private void checkBookByIsbn(Book book) {
-        bookRepository.findByIsbn(book.getIsbn()).ifPresent(book1 -> {
-            throw new BookNotFoundException("Book not found with isbn:" + book1.getIsbn());
-        });
+    private Optional<Book> checkBookByIsbn(Book book) {
+        return bookRepository.findByIsbn(book.getIsbn());
     }
 
     public void update(String isbn, BookRequest bookRequest) {
