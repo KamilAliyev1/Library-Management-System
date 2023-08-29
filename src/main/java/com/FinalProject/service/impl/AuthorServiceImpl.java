@@ -27,7 +27,7 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public List<AuthorsDto> getAuthors() {
-        List<Authors> authorsList = authorRepository.findByDeleteFalse();
+        List<Authors> authorsList = authorRepository.findAllByDeleteFalseOrderByIdDesc();
         List<AuthorsDto> authorsDtoList = new ArrayList<>();
         for (Authors authors : authorsList) {
             authorsDtoList.add(authorsMapper.fromAuthorModelToDto(authors));

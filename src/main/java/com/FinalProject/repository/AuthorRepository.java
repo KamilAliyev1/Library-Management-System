@@ -8,8 +8,7 @@ import java.util.List;
 
 public interface AuthorRepository extends JpaRepository<Authors, Long> {
 
-
-    List<Authors> findByDeleteFalse();
+    List<Authors> findAllByDeleteFalseOrderByIdDesc();
 
     @Query("SELECT c from Authors c WHERE lower(c.fullName) LIKE CONCAT('%', :query, '%')")
     List<Authors> searchAuthors(String query);
