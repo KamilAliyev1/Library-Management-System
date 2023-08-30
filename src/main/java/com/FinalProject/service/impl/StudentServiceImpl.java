@@ -20,11 +20,21 @@ public class StudentServiceImpl implements StudentService {
     private final StudentRepository studentRepository;
     private final StudentMapper studentMapper;
 
+    @Override
     public List<StudentDto> getStudents() {
-        List<Student> students = studentRepository.getStudentsByDeleteStatusFalse();
+        List<Student> students = studentRepository.findAllByDeleteStatusFalseOrderByIDDesc();
         return students.stream()
                 .map(studentMapper::mapStudentEntityToDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<StudentDto> searchStudents(String name, String surname, String studentFin) {
+        return studentMapper.mapEntityListToResponseList(
+               studentRepository
+                       .findByNameContainingIgnoreCaseAndSurnameContainingIgnoreCaseAndStudentFINContainingIgnoreCase(
+                               name, surname, studentFin)
+        );
     }
 
     @Override

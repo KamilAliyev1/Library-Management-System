@@ -19,4 +19,6 @@ public interface OrderRepo extends JpaRepository<Order,Long> {
     boolean isInProgress(@Param("id") Long id);
 
     List<Order> findByStudentIDOrBooks_Id(Long studentId, Long bookId);
+
+    List<Order> findAllByOrderByIDDesc();
 }

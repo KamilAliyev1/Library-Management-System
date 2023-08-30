@@ -110,7 +110,8 @@
                                                 <i class="bi bi-trash"></i>
                                             </a>
 
-                                            <a th:href="@{/orders/{id}/disableProgress(id=${order.id})}"
+                                            <a th:if="${order.inProgress}"
+                                               th:href="@{/orders/{id}/disableProgress(id=${order.id})}"
                                                class="btn btn-warning btn-sm">
                                                 <i class="bi bi-arrow-clockwise"></i>
                                             </a>

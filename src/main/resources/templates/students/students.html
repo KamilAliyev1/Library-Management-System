@@ -28,6 +28,41 @@
                     </div>
                 </div>
                 <div class="card-body">
+                    <div class="container-fluid">
+                        <form th:action="@{/students/search}" method="GET">
+                            <div class="d-flex justify-content-between align-items-center gap-x-4">
+                                <input
+                                        name="studentFin"
+                                        id="studentFin"
+                                        th:value="${param.studentFin}"
+                                        class="form-control mr-sm-2"
+                                        type="search"
+                                        placeholder="Search Student by Student FIN"
+                                        aria-label="Search"/>
+
+                                <input
+                                        name="name"
+                                        id="name"
+                                        th:value="${param.name}"
+                                        class="form-control mr-sm-2"
+                                        type="search"
+                                        placeholder="Search Student by Name"
+                                        aria-label="Search"/>
+
+                                <input
+                                        name="surname"
+                                        id="surname"
+                                        th:value="${param.surname}"
+                                        class="form-control mr-sm-2"
+                                        type="search"
+                                        placeholder="Search Student by Surname"
+                                        aria-label="Search"/>
+                                <button class="btn btn-primary">Search</button>
+                                <button class="btn btn-done ml-2" type="button" onclick="resetForm()">Clear</button>
+                            </div>
+                        </form>
+                    </div>
+
                     <div th:switch="${students}" class="my-5">
                         <div class="col-md-12">
                             <h2 th:case="null">No record found !!</h2>
@@ -76,7 +111,13 @@
         </div>
     </div>
 </div>
-
+<script>
+    const resetForm = () => {
+        document.getElementById('name').value = '';
+        document.getElementById('surname').value = null;
+        document.getElementById('studentFin').value = null;
+        window.location.href = '/students';
+    }
+</script>
 </body>
-
 </html>

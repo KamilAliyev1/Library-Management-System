@@ -5,7 +5,6 @@ import com.FinalProject.request.BookRequest;
 import com.FinalProject.service.AuthorService;
 import com.FinalProject.service.BookService;
 import com.FinalProject.service.CategoryService;
-import com.FinalProject.service.impl.FileServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,10 +18,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class BookController {
 
-    private final AuthorService authorService;
     private final BookService bookService;
+    private final AuthorService authorService;
     private final CategoryService categoryService;
-    private final FileServiceImpl fileService;
 
     @PostMapping("/{isbn}/update")
     public String update(@PathVariable("isbn") String isbn,
@@ -40,13 +38,13 @@ public class BookController {
         model.addAttribute("book", book);
         model.addAttribute("categories", categoryService.findAllCategories());
         model.addAttribute("authors", authorService.getAuthors());
-        return "book-update";
+        return "books/book-update";
     }
 
     @PostMapping
     public String createBook(@ModelAttribute("book") BookRequest bookRequest, Model model) {
         if (bookRequest == null) {
-            return "book-create";
+            return "books/book-create";
         }
         bookService.create(bookRequest);
 
@@ -59,7 +57,7 @@ public class BookController {
         model.addAttribute("bookRequest", new BookRequest());
         model.addAttribute("categories", categoryService.findAllCategories());
         model.addAttribute("authors", authorService.getAuthors());
-        return "book-create";
+        return "books/book-create";
     }
 
     @GetMapping
@@ -68,7 +66,7 @@ public class BookController {
         model.addAttribute("books", books);
         model.addAttribute("authors", authorService.getAuthors());
         model.addAttribute("categories", categoryService.findAllCategories());
-        return "book-list";
+        return "books/book-list";
     }
 
     @GetMapping("/{isbn}/remove")
@@ -77,7 +75,6 @@ public class BookController {
         model.addAttribute("category", bookService.findAll());
         return "redirect:/book";
     }
-
 
     @GetMapping("/search")
     public String searchBooks(
@@ -92,7 +89,7 @@ public class BookController {
         model.addAttribute("authors", authorService.getAuthors());
         model.addAttribute("categories", categoryService.findAllCategories());
 
-        return "book-list";
+        return "books/book-list";
     }
 
     @GetMapping("/search/category")
@@ -103,7 +100,7 @@ public class BookController {
                         filter(bookDto -> bookDto.getCategory().contains(category))
                         .collect(Collectors.toList());
         model.addAttribute("bookList", findBooks);
-        return "book-list";
+        return "books/book-list";
     }
 
     @GetMapping("/search/author")
@@ -114,7 +111,7 @@ public class BookController {
                         filter(bookDto -> bookDto.getAuthorName().contains(author))
                         .collect(Collectors.toList());
         model.addAttribute("bookList", findBooks);
-        return "book-list";
+        return "books/book-list";
     }
 
 

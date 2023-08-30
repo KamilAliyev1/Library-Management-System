@@ -2,13 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="ISO-8859-1">
-    <title>Update Author</title>
+    <title>Add Author</title>
     <link rel="stylesheet"
           href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
           crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" th:href="@{/css/sidebar.css}" href=""/>
-    <link rel="stylesheet" th:href="@{/css/containers.css}" href="">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/containers.css}" href=""/>
 </head>
 <body>
 <div class="main">
@@ -17,14 +17,15 @@
         <div class="container-fluid">
             <div class="card col-lg-7 col-md-6 col-sm-6 container-fluid flex justify-content-center p-4">
                 <div class="card-header rounded d-flex justify-content-center mb-3">
-                    <h2 th:text="${author.fullName}" class="mb-0"></h2>
+                    <h2 class="mb-0"> Add New Author </h2>
                 </div>
                 <div class="card-body">
-                    <form role="form" method="post" th:action="@{/author/{authorId}/edit(authorId=${author.id})}"
-                          th:object="${author}">
+                    <form th:action="@{/author/new}" th:object="${author}" method="POST"
+                          enctype="multipart/form-data">
                         <div class="form-group">
                             <label> Author Name </label>
                             <input
+                                    required
                                     type="text"
                                     name="bookName"
                                     th:field="*{fullName}"
@@ -34,8 +35,9 @@
                         </div>
 
                         <div class="form-group">
-                            <label> Author birthDate </label>
+                            <label> Author Birth Date </label>
                             <input
+                                    required
                                     type="date"
                                     name="birthDate"
                                     th:field="*{birthDate}"
@@ -47,7 +49,8 @@
                         <div class="form-group">
                             <label> Author email </label>
                             <input
-                                    type="text"
+                                    required
+                                    type="email"
                                     name="author"
                                     th:field="*{email}"
                                     class="form-control"
@@ -58,6 +61,7 @@
                         <div class="form-group">
                             <label> Address </label>
                             <input
+                                    required
                                     type="text"
                                     name="address"
                                     th:field="*{address}"
@@ -69,6 +73,7 @@
                         <div class="form-group">
                             <label> Phone Number </label>
                             <input
+                                    required
                                     type="text"
                                     name="Phone Number"
                                     th:field="*{phone}"
@@ -87,7 +92,6 @@
             </div>
         </div>
     </div>
-</div>
 </div>
 </body>
 </html>

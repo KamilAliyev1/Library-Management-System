@@ -180,11 +180,18 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderDto> getAll() {
-        return orderRepo.findAll().stream().map(orderMapper::toGetDto).collect(Collectors.toList());
+        return orderRepo
+                .findAllByOrderByIDDesc()
+                .stream()
+                .map(orderMapper::toGetDto)
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<OrderDto> searchOrders(Long studentId, Long bookId) {
-        return orderMapper.mapEntityListToDtoList(orderRepo.findByStudentIDOrBooks_Id(studentId, bookId));
+        return orderMapper
+                .mapEntityListToDtoList(
+                        orderRepo.findByStudentIDOrBooks_Id(studentId, bookId)
+                );
     }
 }

@@ -21,18 +21,30 @@ public class StudentController {
     private final StudentService studentService;
 
     @GetMapping
-    public String findAll(Model model) {
+    public String getStudents(Model model) {
         final List<StudentDto> students = studentService.getStudents();
         model.addAttribute("students", students);
-        System.out.println(Arrays.asList(students));
-        return "students";
+        return "students/students";
+    }
+
+    @GetMapping("/search")
+    public String searchStudents(
+            @RequestParam(name = "name", required = false) String name,
+            @RequestParam(name = "surname", required = false) String surname,
+            @RequestParam(name = "studentFin", required = false) String studentFin,
+            Model model) {
+
+        List<StudentDto> students = studentService.searchStudents(name, surname, studentFin);
+        model.addAttribute("students", students);
+
+        return "students/students";
     }
 
     @GetMapping("/add")
     public String createStudentPage(Model model) {
         CreateStudentDto createStudentDto = new CreateStudentDto();
         model.addAttribute("student", createStudentDto);
-        return "student-create";
+        return "students/student-create";
     }
 
     @PostMapping
@@ -53,7 +65,7 @@ public class StudentController {
     public String updateStudentPage(@PathVariable("id") Long id, Model model) {
         StudentDto student = studentService.getStudent(id);
         model.addAttribute("student", student);
-        return "student-update";
+        return "students/student-update";
     }
 
     @PostMapping("/{id}/update")

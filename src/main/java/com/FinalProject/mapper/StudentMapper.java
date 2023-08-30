@@ -5,6 +5,8 @@ import com.FinalProject.dto.studentdto.StudentDto;
 import com.FinalProject.model.Student;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class StudentMapper {
     public StudentDto mapStudentEntityToDto(Student student) {
@@ -34,5 +36,12 @@ public class StudentMapper {
                 .studentFIN(studentDto.getStudentFIN())
                 .faculty(studentDto.getFaculty())
                 .build();
+    }
+
+    public List<StudentDto> mapEntityListToResponseList(List<Student> students) {
+        return students
+                .stream()
+                .map(this::mapStudentEntityToDto)
+                .toList();
     }
 }
