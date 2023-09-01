@@ -33,7 +33,7 @@ public class LogoutService implements LogoutHandler {
                 cookie.setPath("/");
                 response.addCookie(cookie);
                 try {
-                    response.sendRedirect("/login");
+                    response.sendRedirect("/");
                     return;
                 } catch (IOException e) {
                     throw new RuntimeException(e);

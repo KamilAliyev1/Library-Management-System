@@ -65,25 +65,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(userNotFound.getMessage());
     }
 
-    @ExceptionHandler(BookAlreadyFoundException.class)
-    public ResponseEntity<?> bookAlreadyFoundException(BookAlreadyFoundException e) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
-    }
-
-//    @ExceptionHandler(TokenExpiredException.class)
-//    public ResponseEntity<String> tokenExpiredException(HttpServletResponse response) {
-//        Cookie cookie = new Cookie("jwt", null);
-//        cookie.setMaxAge(0);
-//        cookie.setPath("/");
-//        response.addCookie(cookie);
-//        return ResponseEntity.ok().body("/login");
+//    @ExceptionHandler(BookAlreadyFoundException.class)
+//    public ResponseEntity<?> bookAlreadyFoundException(BookAlreadyFoundException e) {
+//        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
 //    }
 
-
-//    @ExceptionHandler(IllegalArgumentException.class)
-//    public String illegalArgumentException() {
-//        return "register";
-//    }
 
 
 }

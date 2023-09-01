@@ -12,8 +12,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSecurity
@@ -41,7 +39,7 @@ public class SecurityConfiguration {
                 .requestMatchers("/login").permitAll()
                 .requestMatchers("/").permitAll()
                 .requestMatchers("/css/**", "/js/**" ,"/images/**").permitAll()
-                .requestMatchers("src/main/resources/static/images/**").permitAll()
+                .requestMatchers("/resources/static/**").permitAll()
                 .requestMatchers("/register").permitAll()
                 .anyRequest()
                 .authenticated()
@@ -57,16 +55,6 @@ public class SecurityConfiguration {
                 .logoutSuccessHandler(((request, response, authentication) -> SecurityContextHolder.clearContext()));
 
         return http.build();
-    }
-    @Bean
-    public WebMvcConfigurer configurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**")
-                        .allowedMethods("*");
-            }
-        };
     }
 
 
