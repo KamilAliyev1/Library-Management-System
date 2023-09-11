@@ -11,7 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/book")
@@ -88,31 +87,10 @@ public class BookController {
         model.addAttribute("books", books);
         model.addAttribute("authors", authorService.getAuthors());
         model.addAttribute("categories", categoryService.findAllCategories());
-
         return "books/book-list";
     }
 
-    @GetMapping("/search/category")
-    public String findByCategory(@RequestParam String category, Model model) {
-        List<BookDto> bookList = bookService.findAll();
-        List<BookDto> findBooks =
-                bookList.stream().
-                        filter(bookDto -> bookDto.getCategory().contains(category))
-                        .collect(Collectors.toList());
-        model.addAttribute("bookList", findBooks);
-        return "books/book-list";
-    }
 
-    @GetMapping("/search/author")
-    public String findByAuthor(@RequestParam String author, Model model) {
-        List<BookDto> bookList = bookService.findAll();
-        List<BookDto> findBooks =
-                bookList.stream().
-                        filter(bookDto -> bookDto.getAuthorName().contains(author))
-                        .collect(Collectors.toList());
-        model.addAttribute("bookList", findBooks);
-        return "books/book-list";
-    }
 
 
 }
