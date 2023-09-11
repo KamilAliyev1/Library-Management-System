@@ -34,14 +34,15 @@ public class BookServiceImpl implements BookService {
     @Transactional
     public void create(BookRequest bookRequest) {
         var book = bookMapper.mapRequestToEntity(bookRequest);
-        checkBookByIsbn(book).ifPresentOrElse(book1 -> {
-            throw new BookAlreadyFoundException("Book with isbn " + book.getIsbn() + " already exists");
-        }, () -> {
-            categoryService.setBookToCategory(bookRequest, book);
-            authorService.setBookToAuthor(bookRequest, book);
-            fileService.save(bookRequest.getFile());
-            bookRepository.save(book);
-        });
+        checkBookByIsbn(book).ifPresentOrElse(
+                book1 -> {
+                    throw new BookAlreadyFoundException("Book with isbn " + book.getIsbn() + " already exists");
+                }, () -> {
+                    categoryService.setBookToCategory(bookRequest, book);
+                    authorService.setBookToAuthor(bookRequest, book);
+                    fileService.save(bookRequest.getFile());
+                    bookRepository.save(book);
+                });
     }
 
     private Optional<Book> checkBookByIsbn(Book book) {
@@ -81,6 +82,7 @@ public class BookServiceImpl implements BookService {
     public List<BookDto> searchBooks(String isbn, Long categoryId, Long authorId) {
         return bookMapper.mapEntityListToResponseList(bookRepository.searchBooks(isbn, categoryId, authorId));
     }
+
     @Override
     public List<BookDto> findAll() {
         return bookMapper.mapEntityListToResponseList(bookRepository.findAllByOrderByIdDesc());
