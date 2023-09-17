@@ -1,4 +1,4 @@
-package com.FinalProject.confiquration;
+package com.FinalProject.configuration;
 
 import com.FinalProject.exception.TokenExpiredException;
 import com.FinalProject.security.TokenRepository;

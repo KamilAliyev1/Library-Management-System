@@ -1,4 +1,4 @@
-package com.FinalProject.confiquration;
+package com.FinalProject.configuration;
 
 import com.FinalProject.repository.UserRepository;
 import com.FinalProject.security.UserNotFound;

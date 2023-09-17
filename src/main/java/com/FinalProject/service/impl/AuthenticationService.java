@@ -1,5 +1,7 @@
 package com.FinalProject.service.impl;
 
+import com.FinalProject.exception.EmailAlreadyFoundException;
+import com.FinalProject.security.AuthenticationRequest;
 import com.FinalProject.model.Role;
 import com.FinalProject.model.User;
 import com.FinalProject.repository.UserRepository;

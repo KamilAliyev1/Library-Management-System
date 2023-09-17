@@ -1,4 +1,4 @@
-package com.FinalProject.security;
+package com.FinalProject.exception;
 
 public class EmailAlreadyFoundException extends RuntimeException {
     public EmailAlreadyFoundException(String message) {
