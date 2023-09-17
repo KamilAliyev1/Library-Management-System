@@ -7,7 +7,6 @@ import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.nio.file.FileAlreadyExistsException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,30 +60,16 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getFieldError().getDefaultMessage());
     }
 
-    @ExceptionHandler(FileAlreadyExistsException.class)
-    public ResponseEntity<?> fileAlreadyExistException(FileAlreadyExistsException fileAlreadyExistsException) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(fileAlreadyExistsException.getMessage());
-    }
-
     @ExceptionHandler(UserNotFound.class)
     public ResponseEntity<?> userNotFoundException(UserNotFound userNotFound) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(userNotFound.getMessage());
     }
 
-//    @ExceptionHandler(TokenExpiredException.class)
-//    public ResponseEntity<String> tokenExpiredException(HttpServletResponse response) {
-//        Cookie cookie = new Cookie("jwt", null);
-//        cookie.setMaxAge(0);
-//        cookie.setPath("/");
-//        response.addCookie(cookie);
-//        return ResponseEntity.ok().body("/login");
+//    @ExceptionHandler(BookAlreadyFoundException.class)
+//    public ResponseEntity<?> bookAlreadyFoundException(BookAlreadyFoundException e) {
+//        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
 //    }
 
-
-//    @ExceptionHandler(IllegalArgumentException.class)
-//    public String illegalArgumentException() {
-//        return "register";
-//    }
 
 
 }
