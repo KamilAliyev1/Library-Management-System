@@ -6,9 +6,11 @@ import com.FinalProject.exception.BookNotFoundException;
 import com.FinalProject.mapper.BookMapper;
 import com.FinalProject.model.Book;
 import com.FinalProject.repository.BookRepository;
-import com.FinalProject.service.*;
 import com.FinalProject.request.BookRequest;
+import com.FinalProject.service.AuthorService;
 import com.FinalProject.service.BookService;
+import com.FinalProject.service.CategoryService;
+import com.FinalProject.service.FIleService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Lazy;
@@ -32,16 +34,15 @@ public class BookServiceImpl implements BookService {
     @Transactional
     public void create(BookRequest bookRequest) {
         var book = bookMapper.mapRequestToEntity(bookRequest);
-        checkBookByIsbn(book);
-
-        if (checkBookByIsbn(book).isEmpty()) {
-            categoryService.setBookToCategory(bookRequest, book);
-            authorService.setBookToAuthor(bookRequest, book);
-            fileService.save(bookRequest.getFile());
-            bookRepository.save(book);
-        } else {
-            throw new BookAlreadyFoundException("Book with isbn " + book.getIsbn() + " already exists");
-        }
+        checkBookByIsbn(book).ifPresentOrElse(
+                book1 -> {
+                    throw new BookAlreadyFoundException("Book with isbn " + book.getIsbn() + " already exists");
+                }, () -> {
+                    categoryService.setBookToCategory(bookRequest, book);
+                    authorService.setBookToAuthor(bookRequest, book);
+                    fileService.save(bookRequest.getFile());
+                    bookRepository.save(book);
+                });
     }
 
     private Optional<Book> checkBookByIsbn(Book book) {
@@ -49,19 +50,18 @@ public class BookServiceImpl implements BookService {
     }
 
     public void update(String isbn, BookRequest bookRequest) {
-        Book book = bookRepository
-                .findByIsbn(isbn)
-                .orElseThrow(() -> new BookNotFoundException("Book not found with isbn : " + isbn));
-
-        book.setName(bookRequest.getName());
-        book.setIsbn(bookRequest.getIsbn());
-        book.setImage(bookRequest.getFile().getOriginalFilename());
-        book.setStock(bookRequest.getStock());
-
-        categoryService.setBookToCategory(bookRequest, book);
-        authorService.setBookToAuthor(bookRequest, book);
-        fileService.save(bookRequest.getFile());
-        bookRepository.save(book);
+        bookRepository.findByIsbn(isbn).ifPresentOrElse(book -> {
+            book.setName(bookRequest.getName());
+            book.setIsbn(bookRequest.getIsbn());
+            book.setImage(bookRequest.getFile().getOriginalFilename());
+            book.setStock(bookRequest.getStock());
+            categoryService.setBookToCategory(bookRequest, book);
+            authorService.setBookToAuthor(bookRequest, book);
+            fileService.save(bookRequest.getFile());
+            bookRepository.save(book);
+        }, () -> {
+            throw new BookNotFoundException("Book not found with isbn: " + isbn);
+        });
     }
 
     @Override
@@ -69,7 +69,6 @@ public class BookServiceImpl implements BookService {
     public void delete(String isbn) {
         bookRepository.findByIsbn(isbn).ifPresentOrElse(book -> {
             bookRepository.deleteByIsbn(isbn);
-//            fileService.deleteFile(book.getImage());
         }, () -> {
             throw new BookNotFoundException("Book not found with isbn : " + isbn);
         });
@@ -77,23 +76,11 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto findByIsbn(String isbn) {
-        return bookMapper.mapEntityToResponse((
-                        bookRepository
-                                .findByIsbn(isbn)
-                                .orElseThrow(() -> new BookNotFoundException("Book not found with isbn :" + isbn))
-                )
-        );
+        return bookMapper.mapEntityToResponse((bookRepository.findByIsbn(isbn).orElseThrow(() -> new BookNotFoundException("Book not found with isbn :" + isbn))));
     }
 
     public List<BookDto> searchBooks(String isbn, Long categoryId, Long authorId) {
-        return bookMapper.mapEntityListToResponseList(
-                bookRepository.searchBooks(isbn, categoryId, authorId)
-        );
-    }
-
-    @Override
-    public List<BookDto> findByAuthor(String authorFullName) {
-        return null;
+        return bookMapper.mapEntityListToResponseList(bookRepository.searchBooks(isbn, categoryId, authorId));
     }
 
     @Override
@@ -110,4 +97,6 @@ public class BookServiceImpl implements BookService {
     public void updateStockNumbersByIdIn(List<Long> books, int i) {
         bookRepository.updateStockNumbersByIdIn(books, i);
     }
+
+
 }
