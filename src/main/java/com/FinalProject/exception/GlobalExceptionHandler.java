@@ -86,8 +86,8 @@ public class GlobalExceptionHandler {
 //    }
 
 
-//    @ExceptionHandler(IllegalArgumentException.class)
-//    public String illegalArgumentException() {
-//        return "register";
-//    }
+   @ExceptionHandler(IllegalArgumentException.class)
+   public String illegalArgumentException() {
+       return "register";
+   }
 }
