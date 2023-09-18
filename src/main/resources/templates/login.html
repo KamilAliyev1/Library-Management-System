@@ -49,6 +49,9 @@
                     class="form-control"
                     placeholder="Enter Password">
         </div>
+        <div th:if="${error != null}"  class="alert alert-danger" role="alert">
+            <p th:text="${error}" class="mb-0"></p>
+        </div>
 
         <button type="submit" class="btn btn-primary w-100 mb-4">Login</button>
 
