@@ -1,8 +1,10 @@
 package com.FinalProject.exception;
 
+import com.FinalProject.security.AuthenticationRequest;
 import com.FinalProject.security.UserNotFound;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -67,8 +69,11 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UserNotFound.class)
-    public ResponseEntity<?> userNotFoundException(UserNotFound userNotFound) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(userNotFound.getMessage());
+    public String userNotFoundException(UserNotFound userNotFound, Model model) {
+//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(userNotFound.getMessage());
+        model.addAttribute("error", userNotFound.getMessage());
+        model.addAttribute("login", new AuthenticationRequest());
+        return "login";
     }
 
 //    @ExceptionHandler(TokenExpiredException.class)
@@ -85,6 +90,4 @@ public class GlobalExceptionHandler {
 //    public String illegalArgumentException() {
 //        return "register";
 //    }
-
-
 }
