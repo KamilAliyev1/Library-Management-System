@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
@@ -34,7 +34,9 @@
                     id="email"
                     th:field="*{email}"
                     class="form-control"
-                    placeholder="Enter Email">
+                    placeholder="Enter Email"
+                    aria-label="Email"
+                    aria-describedby="email-error">
         </div>
 
         <div class="form-group">
@@ -47,32 +49,14 @@
                     id="password"
                     th:field="*{password}"
                     class="form-control"
-                    placeholder="Enter Password">
+                    placeholder="Enter Password"
+                    aria-label="Password"
+                    aria-describedby="password-error">
         </div>
-        <div th:if="${error != null}"  class="alert alert-danger" role="alert">
-            <p th:text="${error}" class="mb-0"></p>
+        <div th:if="${param.error}">
+            <p class="error">Invalid email or password. Please try again.</p>
         </div>
-
         <button type="submit" class="btn btn-primary w-100 mb-4">Login</button>
-
-        <!--        <script th:inline="javascript">-->
-        <!--            var jwtToken = [[#{token}]];-->
-
-
-        <!--            // Make an AJAX request with the JWT token in the Authorization header-->
-        <!--            var xhr = new XMLHttpRequest();-->
-        <!--            xhr.open('GET', 'http://localhost:8080/about');-->
-        <!--            xhr.setRequestHeader('Authorization', 'Bearer ' + jwtToken);-->
-        <!--            xhr.onreadystatechange = function () {-->
-        <!--                if (xhr.readyState === 4 && xhr.status === 200) {-->
-        <!--                    // Handle the response-->
-        <!--                    var response = JSON.parse(xhr.responseText);-->
-        <!--                    console.log(response);-->
-        <!--                }-->
-        <!--            };-->
-        <!--            xhr.send();-->
-        <!--        </script>-->
-
     </form>
 
     <p>Don't have an account? <a th:href="@{/register}">Register</a></p>

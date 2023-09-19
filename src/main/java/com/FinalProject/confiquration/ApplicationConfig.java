@@ -23,7 +23,6 @@ public class ApplicationConfig {
     public UserDetailsService userDetailsService() {
         return username -> repository.findByEmail(username).orElseThrow(() -> new UserNotFound("Email or password wrong"));
     }
-
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();

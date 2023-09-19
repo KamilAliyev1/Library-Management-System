@@ -23,11 +23,18 @@ public class AuthenticationController {
 
     private final AuthenticationService service;
 
+
     @GetMapping("/login")
     public String loginForm(Model model) {
         model.addAttribute("login", new AuthenticationRequest());
         return "login";
     }
+
+//    @GetMapping("/error")
+//    public String error(Model model) {
+//        model.addAttribute("loginError", true);
+//        return "redirect:login";
+//    }
 
     @GetMapping("/lms")
     public String loginLms() {
@@ -42,7 +49,6 @@ public class AuthenticationController {
         var token = service.authenticate(request);
         Cookie cookie = new Cookie("jwt", token);
         response.addCookie(cookie);
-        System.out.println(token);
         return "redirect:/contact";
     }
 

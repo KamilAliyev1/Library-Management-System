@@ -1,7 +1,6 @@
 package com.FinalProject.exception;
 
-import com.FinalProject.security.AuthenticationRequest;
-import com.FinalProject.security.UserNotFound;
+import com.FinalProject.security.EmailAlreadyFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -62,13 +61,16 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getFieldError().getDefaultMessage());
     }
 
-    @ExceptionHandler(UserNotFound.class)
-    public String userNotFoundException(UserNotFound userNotFound, Model model) {
-//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(userNotFound.getMessage());
-        model.addAttribute("error", userNotFound.getMessage());
-        model.addAttribute("login", new AuthenticationRequest());
-        return "login";
+    @ExceptionHandler(EmailAlreadyFoundException.class)
+    public ResponseEntity<?> emailAlreadyFind(Model model) {
+        model.addAttribute("");
     }
+
+//    @ExceptionHandler(AuthenticationException.class)
+//    public ResponseEntity<?> userNotFoundException() {
+//        return ResponseEntity.status(403).body("Email or password wrong");
+//    }
+
 
 //    @ExceptionHandler(BookAlreadyFoundException.class)
 //    public ResponseEntity<?> bookAlreadyFoundException(BookAlreadyFoundException e) {
@@ -76,8 +78,4 @@ public class GlobalExceptionHandler {
 //    }
 
 
-   @ExceptionHandler(IllegalArgumentException.class)
-   public String illegalArgumentException() {
-       return "register";
-   }
 }
