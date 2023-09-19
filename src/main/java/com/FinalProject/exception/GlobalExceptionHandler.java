@@ -62,9 +62,18 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(EmailAlreadyFoundException.class)
-    public ResponseEntity<?> emailAlreadyFind(Model model) {
-        model.addAttribute("");
+    public String emailAlreadyFind(Model model, EmailAlreadyFoundException e) {
+        model.addAttribute("error", e.getMessage());
+        return "register";
     }
+
+//    @ExceptionHandler(UserNotFound.class)
+//    public String userNotFoundException(UserNotFound userNotFound, Model model) {
+////        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(userNotFound.getMessage());
+//        model.addAttribute("error", userNotFound.getMessage());
+//        model.addAttribute("login", new AuthenticationRequest());
+//        return "login";
+//    }
 
 //    @ExceptionHandler(AuthenticationException.class)
 //    public ResponseEntity<?> userNotFoundException() {
