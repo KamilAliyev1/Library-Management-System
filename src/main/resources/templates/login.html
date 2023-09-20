@@ -54,7 +54,7 @@
                     aria-describedby="password-error">
         </div>
         <div th:if="${param.error}">
-            <p class="error">Invalid email or password. Please try again.</p>
+            <p class="error" style="color: red">Invalid email or password. Please try again.</p>
         </div>
         <button type="submit" class="btn btn-primary w-100 mb-4">Login</button>
     </form>

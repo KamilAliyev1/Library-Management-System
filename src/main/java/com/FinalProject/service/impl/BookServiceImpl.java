@@ -67,11 +67,14 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional
     public void delete(String isbn) {
-        bookRepository.findByIsbn(isbn).ifPresentOrElse(book -> {
-            bookRepository.deleteByIsbn(isbn);
-        }, () -> {
-            throw new BookNotFoundException("Book not found with isbn : " + isbn);
-        });
+        bookRepository.findByIsbn(isbn).
+                ifPresentOrElse
+                        (
+                                book ->
+                                        bookRepository.deleteByIsbn(isbn),
+                                () -> {
+                                    throw new BookNotFoundException("Book not found with isbn : " + isbn);
+                                });
     }
 
     @Override

@@ -43,15 +43,24 @@ public class BookController {
 
     @PostMapping
     public String createBook(@ModelAttribute("book") BookRequest bookRequest, Model model) {
-
+//        if (bookRequest == null) {
+//            return "books/book-create";
+//        }
+//        bookService.create(bookRequest);
+//        model.addAttribute("book", bookService.findAll());
+//        return "redirect:/book";
         try {
             bookService.create(bookRequest);
             model.addAttribute("book", bookService.findAll());
-            return "redirect:/books";
-        } catch (BookAlreadyFoundException e) {
-            model.addAttribute("exception", "Book already found with isbn :" + bookRequest.getIsbn());
+            return "redirect:/book";
+        } catch (BookAlreadyFoundException bookAlreadyFoundException) {
+            model.addAttribute("exception", "Book already exists in the database with isbn: " + bookRequest.getIsbn());
+            model.addAttribute("bookRequest", new BookRequest());
+            model.addAttribute("categories", categoryService.findAllCategories());
+            model.addAttribute("authors", authorService.getAuthors());
             return "books/book-create";
         }
+
     }
 
     @GetMapping("/add")

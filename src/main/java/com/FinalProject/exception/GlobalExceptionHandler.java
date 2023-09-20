@@ -1,5 +1,7 @@
 package com.FinalProject.exception;
 
+import com.FinalProject.service.AuthorService;
+import com.FinalProject.service.CategoryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
@@ -12,6 +14,15 @@ import java.util.List;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+
+    private final AuthorService authorService;
+    private final CategoryService categoryService;
+
+
+    public GlobalExceptionHandler(AuthorService authorService, CategoryService categoryService) {
+        this.authorService = authorService;
+        this.categoryService = categoryService;
+    }
 
     @ExceptionHandler(AuthorsNotFoundException.class)
     public ResponseEntity<?> authorNotFound(AuthorsNotFoundException authorsNotFoundException) {
@@ -47,7 +58,6 @@ public class GlobalExceptionHandler {
             OrderStudentUniqueException.class,
             OrderMustUpdateException.class,
             HaveAlreadyBookException.class,
-            BookAlreadyFoundException.class
     })
     public ResponseEntity<?> userExceptions(Exception userException) {
 
@@ -59,26 +69,20 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getFieldError().getDefaultMessage());
     }
 
-
-
-//    @ExceptionHandler(UserNotFound.class)
-//    public String userNotFoundException(UserNotFound userNotFound, Model model) {
-////        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(userNotFound.getMessage());
-//        model.addAttribute("error", userNotFound.getMessage());
-//        model.addAttribute("login", new AuthenticationRequest());
-//        return "login";
-//    }
-
-//    @ExceptionHandler(AuthenticationException.class)
-//    public ResponseEntity<?> userNotFoundException() {
-//        return ResponseEntity.status(403).body("Email or password wrong");
-//    }
-
-
 //    @ExceptionHandler(BookAlreadyFoundException.class)
-//    public ResponseEntity<?> bookAlreadyFoundException(BookAlreadyFoundException e) {
-//        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+//    public String bookAlreadyFoundException(BookAlreadyFoundException bookAlreadyFoundException, Model model) {
+//        model.addAttribute("exception", bookAlreadyFoundException.getMessage());
+//        model.addAttribute("bookRequest", new BookRequest());
+//        model.addAttribute("categories", categoryService.findAllCategories());
+//        model.addAttribute("authors", authorService.getAuthors());
+//        return "books/book-create";
 //    }
+
+
+
+
+
+
 
 
 }
