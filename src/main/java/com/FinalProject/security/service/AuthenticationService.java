@@ -1,10 +1,17 @@
-package com.FinalProject.service.impl;
+package com.FinalProject.security.service;
 
 import com.FinalProject.model.Role;
-import com.FinalProject.model.User;
-import com.FinalProject.repository.UserRepository;
-import com.FinalProject.security.*;
+import com.FinalProject.security.model.User;
+import com.FinalProject.security.repository.UserRepository;
+import com.FinalProject.security.exception.EmailAlreadyFoundException;
+import com.FinalProject.security.exception.UserNotFound;
+import com.FinalProject.security.model.AuthenticationRequest;
+import com.FinalProject.security.model.RegisterRequest;
+import com.FinalProject.security.model.Token;
+import com.FinalProject.security.model.TokenType;
+import com.FinalProject.security.repository.TokenRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -12,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthenticationService {
 
     private final UserRepository repository;
@@ -23,21 +31,25 @@ public class AuthenticationService {
     private final TokenRepository tokenRepository;
 
 
-    public String register(RegisterRequest request) {
-        var email = repository.findByEmail(request.getEmail());
-        if (email.isPresent())
-            throw new EmailAlreadyFoundException("Email already found " + request.getEmail());
-        var user = User.builder()
-                .firstname(request.getFirstname())
-                .lastname(request.getLastname())
-                .email(request.getEmail())
-                .password(encoder.encode(request.getPassword()))
-                .role(Role.ROLE_USER)
-                .build();
-        var savedUser = repository.save(user);
-        var jwtToken = service.generateToken(user);
-        saveUserToken(user, jwtToken);
-        return jwtToken;
+    public void register(RegisterRequest request) {
+        repository.findByEmail(request.getEmail()).ifPresentOrElse
+                (
+                        user -> {
+                            throw new EmailAlreadyFoundException("Email already found " + request.getEmail());
+                        },
+                        () -> {
+                            var user = User.builder()
+                                    .firstname(request.getFirstname())
+                                    .lastname(request.getLastname())
+                                    .email(request.getEmail())
+                                    .password(encoder.encode(request.getPassword()))
+                                    .role(Role.ROLE_USER)
+                                    .build();
+                            repository.save(user);
+                            var jwtToken = service.generateToken(user);
+                            saveUserToken(user, jwtToken);
+                        }
+                );
     }
 
     private void revokeAllUserTokens(User user) {
@@ -63,12 +75,13 @@ public class AuthenticationService {
     }
 
     public String authenticate(AuthenticationRequest request) {
+
         manager.authenticate(new UsernamePasswordAuthenticationToken(
                 request.getEmail(),
                 request.getPassword())
         );
         var user = repository.findByEmail(request.getEmail()).orElseThrow(
-                () -> new UserNotFound("Email or Password is wrong"));
+                () -> new UserNotFound("Email or password"));
         revokeAllUserTokens(user);
         var jwtToken = service.generateToken(user);
         saveUserToken(user, jwtToken);

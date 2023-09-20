@@ -6,7 +6,11 @@ server:
       force: true
       enabled: true
 
+
+
+
 spring:
+
   application:
     name: auth-service
   datasource:

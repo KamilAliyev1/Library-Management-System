@@ -1,4 +1,4 @@
-package com.FinalProject.exception;
+package com.FinalProject.security.exception;
 
 public class TokenExpiredException extends RuntimeException {
 

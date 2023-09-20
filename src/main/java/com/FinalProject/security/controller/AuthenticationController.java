@@ -1,8 +1,9 @@
-package com.FinalProject.controller;
+package com.FinalProject.security.controller;
 
-import com.FinalProject.security.AuthenticationRequest;
-import com.FinalProject.security.RegisterRequest;
-import com.FinalProject.service.impl.AuthenticationService;
+import com.FinalProject.security.model.AuthenticationRequest;
+import com.FinalProject.security.exception.EmailAlreadyFoundException;
+import com.FinalProject.security.model.RegisterRequest;
+import com.FinalProject.security.service.AuthenticationService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -23,11 +24,18 @@ public class AuthenticationController {
 
     private final AuthenticationService service;
 
+
     @GetMapping("/login")
     public String loginForm(Model model) {
         model.addAttribute("login", new AuthenticationRequest());
         return "login";
     }
+
+//    @GetMapping("/error")
+//    public String error(Model model) {
+//        model.addAttribute("loginError", true);
+//        return "redirect:login";
+//    }
 
     @GetMapping("/lms")
     public String loginLms() {
@@ -42,18 +50,19 @@ public class AuthenticationController {
         var token = service.authenticate(request);
         Cookie cookie = new Cookie("jwt", token);
         response.addCookie(cookie);
-        System.out.println(token);
         return "redirect:/contact";
     }
 
 
     @PostMapping("/register")
-    public String register(@ModelAttribute("register") RegisterRequest request) {
-        if (request == null) {
+    public String register(@ModelAttribute("register") RegisterRequest request, Model model) {
+        try {
+            service.register(request);
+            return "redirect:/login";
+        } catch (EmailAlreadyFoundException e) {
+            model.addAttribute("exception", "Email already exists in the database");
             return "register";
         }
-        service.register(request);
-        return "redirect:/login";
     }
 
 

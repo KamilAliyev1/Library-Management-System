@@ -1,7 +1,7 @@
-package com.FinalProject.confiquration;
+package com.FinalProject.security.confiquration;
 
-import com.FinalProject.repository.UserRepository;
-import com.FinalProject.security.UserNotFound;
+import com.FinalProject.security.repository.UserRepository;
+import com.FinalProject.security.exception.UserNotFound;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,7 +23,6 @@ public class ApplicationConfig {
     public UserDetailsService userDetailsService() {
         return username -> repository.findByEmail(username).orElseThrow(() -> new UserNotFound("Email or password wrong"));
     }
-
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
