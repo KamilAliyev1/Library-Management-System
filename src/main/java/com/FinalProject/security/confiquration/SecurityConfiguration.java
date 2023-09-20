@@ -1,4 +1,4 @@
-package com.FinalProject.confiquration;
+package com.FinalProject.security.confiquration;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

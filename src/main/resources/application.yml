@@ -7,11 +7,8 @@ server:
       enabled: true
 
 
-logging:
-  level:
-    org:
-      springframework:
-        security: TRACE
+
+
 spring:
 
   application:

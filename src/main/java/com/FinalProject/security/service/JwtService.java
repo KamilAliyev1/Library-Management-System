@@ -1,6 +1,6 @@
-package com.FinalProject.service.impl;
+package com.FinalProject.security.service;
 
-import com.FinalProject.exception.TokenExpiredException;
+import com.FinalProject.security.exception.TokenExpiredException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;

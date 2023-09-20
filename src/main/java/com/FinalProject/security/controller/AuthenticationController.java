@@ -1,8 +1,9 @@
-package com.FinalProject.controller;
+package com.FinalProject.security.controller;
 
-import com.FinalProject.security.AuthenticationRequest;
-import com.FinalProject.security.RegisterRequest;
-import com.FinalProject.service.impl.AuthenticationService;
+import com.FinalProject.security.model.AuthenticationRequest;
+import com.FinalProject.security.exception.EmailAlreadyFoundException;
+import com.FinalProject.security.model.RegisterRequest;
+import com.FinalProject.security.service.AuthenticationService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -54,12 +55,14 @@ public class AuthenticationController {
 
 
     @PostMapping("/register")
-    public String register(@ModelAttribute("register") RegisterRequest request) {
-        if (request == null) {
+    public String register(@ModelAttribute("register") RegisterRequest request, Model model) {
+        try {
+            service.register(request);
+            return "redirect:/login";
+        } catch (EmailAlreadyFoundException e) {
+            model.addAttribute("exception", "Email already exists in the database");
             return "register";
         }
-        service.register(request);
-        return "redirect:/login";
     }
 
 

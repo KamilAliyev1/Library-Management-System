@@ -1,9 +1,9 @@
-package com.FinalProject.confiquration;
+package com.FinalProject.security.confiquration;
 
-import com.FinalProject.exception.TokenExpiredException;
-import com.FinalProject.security.TokenRepository;
-import com.FinalProject.security.UserNotFound;
-import com.FinalProject.service.impl.JwtService;
+import com.FinalProject.security.exception.TokenExpiredException;
+import com.FinalProject.security.repository.TokenRepository;
+import com.FinalProject.security.exception.UserNotFound;
+import com.FinalProject.security.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;

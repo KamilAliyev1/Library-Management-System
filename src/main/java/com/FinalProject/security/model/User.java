@@ -1,8 +1,9 @@
-package com.FinalProject.model;
+package com.FinalProject.security.model;
 
 
 
-import com.FinalProject.security.Token;
+import com.FinalProject.model.Role;
+import com.FinalProject.security.model.Token;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;

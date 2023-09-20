@@ -44,11 +44,11 @@
             <input type="password" minlength="8" name="password" id="password" th:field="*{password}"
                    class="form-control" required>
         </div>
-
-        <button type="submit" class="btn btn-primary w-100">Register</button>
-        <div th:if="${param.error}">
-            <p class="error">Email cannot same.</p>
+        <div th:if="${exception}" class="alert alert-danger">
+            <p th:text="${exception}"></p>
         </div>
+        <button type="submit" class="btn btn-primary w-100">Register</button>
+
     </form>
 </div>
 

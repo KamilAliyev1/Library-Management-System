@@ -1,4 +1,4 @@
-package com.FinalProject.security;
+package com.FinalProject.security.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

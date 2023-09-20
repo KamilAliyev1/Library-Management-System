@@ -1,4 +1,4 @@
-package com.FinalProject.security;
+package com.FinalProject.security.model;
 
 
 import jakarta.validation.constraints.Email;

@@ -1,9 +1,7 @@
 package com.FinalProject.exception;
 
-import com.FinalProject.security.EmailAlreadyFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -61,11 +59,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getFieldError().getDefaultMessage());
     }
 
-    @ExceptionHandler(EmailAlreadyFoundException.class)
-    public String emailAlreadyFind(Model model, EmailAlreadyFoundException e) {
-        model.addAttribute("error", e.getMessage());
-        return "register";
-    }
+
 
 //    @ExceptionHandler(UserNotFound.class)
 //    public String userNotFoundException(UserNotFound userNotFound, Model model) {

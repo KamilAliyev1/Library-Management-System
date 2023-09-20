@@ -1,6 +1,7 @@
 package com.FinalProject.controller;
 
 import com.FinalProject.dto.BookDto;
+import com.FinalProject.exception.BookAlreadyFoundException;
 import com.FinalProject.request.BookRequest;
 import com.FinalProject.service.AuthorService;
 import com.FinalProject.service.BookService;
@@ -42,13 +43,15 @@ public class BookController {
 
     @PostMapping
     public String createBook(@ModelAttribute("book") BookRequest bookRequest, Model model) {
-        if (bookRequest == null) {
+
+        try {
+            bookService.create(bookRequest);
+            model.addAttribute("book", bookService.findAll());
+            return "redirect:/books";
+        } catch (BookAlreadyFoundException e) {
+            model.addAttribute("exception", "Book already found with isbn :" + bookRequest.getIsbn());
             return "books/book-create";
         }
-        bookService.create(bookRequest);
-
-        model.addAttribute("book", bookService.findAll());
-        return "redirect:/book";
     }
 
     @GetMapping("/add")
@@ -89,8 +92,6 @@ public class BookController {
         model.addAttribute("categories", categoryService.findAllCategories());
         return "books/book-list";
     }
-
-
 
 
 }

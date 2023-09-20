@@ -1,7 +1,6 @@
-package com.FinalProject.security;
+package com.FinalProject.security.model;
 
 
-import com.FinalProject.model.User;
 import jakarta.persistence.*;
 import lombok.*;
 
