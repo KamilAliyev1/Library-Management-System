@@ -6,17 +6,13 @@ server:
       force: true
       enabled: true
 
-
-
-
 spring:
-
   application:
     name: auth-service
   datasource:
-    username: ${DB_USERNAME:postgres}
-    password: ${DB_PASSWORD:postgres}
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/library-management-system}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:root}
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/finalproject}
   jpa:
     show-sql: true
     database-platform: ${DB_PLATFORM:org.hibernate.dialect.PostgreSQLDialect}

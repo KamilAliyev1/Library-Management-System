@@ -131,6 +131,7 @@ public class OrderServiceImpl implements OrderService {
         var newOrder = orderMapper.setDtoChangesToEntity(dto, order);
 
         newOrder.setBooks(dtoBooks); // I set this in here .Because DTO's Books can be contain null variable
+        newOrder.setStudent(student);
 
         newOrder = orderRepo.saveAndFlush(newOrder);
 
