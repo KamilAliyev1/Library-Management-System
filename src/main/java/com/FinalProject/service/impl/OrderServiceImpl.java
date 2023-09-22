@@ -2,7 +2,7 @@ package com.FinalProject.service.impl;
 
 import com.FinalProject.dto.OrderDto;
 import com.FinalProject.dto.OrderRequest;
-import com.FinalProject.exception.NotChangeableException;
+import com.FinalProject.exception.NotDeletableException;
 import com.FinalProject.exception.OrderNotFoundException;
 import com.FinalProject.exception.StudentNotFoundException;
 import com.FinalProject.mapper.OrderMapper;
@@ -141,7 +141,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void delete(Long ID) {
 
-        if (orderRepo.isInProgress(ID)) throw new NotChangeableException("still in progress");
+        if (orderRepo.isInProgress(ID)) throw new NotDeletableException("still in progress");
 
         orderRepo.deleteById(ID);
     }

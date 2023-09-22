@@ -49,6 +49,9 @@
                                 Submit
                             </button>
                         </div>
+                        <div th:if="${exception!=null}" class="alert alert-danger">
+                            <p th:text="${exception}"></p>
+                        </div>
                     </form>
                 </div>
             </div>
