@@ -40,7 +40,7 @@ public class OrderValidator {
 
     public void validateBooks(List<Long> books) {
         if (!bookService.areAllBooksInStock(books))
-            throw new StockNotEnoughException();
+            throw new StockNotEnoughException("stock not enough");
     }
 
     public void validateOrderForUpdate(Order order) {
