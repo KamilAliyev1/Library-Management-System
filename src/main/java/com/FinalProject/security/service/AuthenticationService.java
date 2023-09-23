@@ -83,7 +83,8 @@ public class AuthenticationService {
                 request.getPassword())
         );
         var user = repository.findByEmail(request.getEmail()).orElseThrow(
-                () -> new UserNotFound("Email or password"));
+                () -> new UserNotFound("Email or password wrong"));
+
 //        user.setIsActive(true);
 //        userService.getUserImage(user);
         revokeAllUserTokens(user);

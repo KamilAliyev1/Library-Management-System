@@ -1,32 +1,24 @@
 package com.FinalProject.exception;
 
-import com.FinalProject.service.*;
+import com.FinalProject.security.exception.EmailAlreadyFoundException;
+import com.FinalProject.security.exception.UserNotFound;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.ArrayList;
 import java.util.List;
+
 @RequiredArgsConstructor
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    private final StudentService studentService;
-    private final OrderService orderService;
-
-    private final BookService bookService;
-    private final AuthorService authorService;
-    private final CategoryService categoryService;
-
-
-//    public GlobalExceptionHandler(AuthorService authorService, CategoryService categoryService) {
-//        this.authorService = authorService;
-//        this.categoryService = categoryService;
-//    }
 
     @ExceptionHandler(AuthorsNotFoundException.class)
     public ResponseEntity<?> authorNotFound(AuthorsNotFoundException authorsNotFoundException) {
@@ -69,6 +61,58 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getFieldError().getDefaultMessage());
     }
 
+    @ExceptionHandler({
+            UsernameNotFoundException.class,
+            UserNotFound.class,
+            EmailAlreadyFoundException.class,
+            AuthenticationException.class})
+    public String userExceptions(Exception userException, HttpServletRequest request) {
+        String referer = request.getHeader("Referer");
+        request.getSession().setAttribute("exception", userException.getMessage());
+        return "redirect:" + referer;
+    }
+
+    @ExceptionHandler({
+            CategoryAlreadyExistsException.class,
+            CategoryNotFoundException.class,
+    })
+    public String categoryExceptions(Exception userException, HttpServletRequest request) {
+        String referer = request.getHeader("Referer");
+        request.getSession().setAttribute("exception", userException.getMessage());
+        return "redirect:" + referer;
+    }
+
+    @ExceptionHandler({
+            StudentNotFoundException.class,
+            StudentAlreadyExistsException.class
+    })
+    public String studentException(Exception userException, HttpServletRequest request) {
+        String referer = request.getHeader("Referer");
+        request.getSession().setAttribute("exception", userException.getMessage());
+        return "redirect:" + referer;
+    }
+
+    @ExceptionHandler({
+            AuthorsNotFoundException.class,
+    })
+    public String authorException(Exception userException, HttpServletRequest request) {
+        String referer = request.getHeader("Referer");
+        request.getSession().setAttribute("exception", userException.getMessage());
+        return "redirect:" + referer;
+    }
+
+
+    @ExceptionHandler({
+            BookAlreadyFoundException.class,
+            BookNotFoundException.class,
+    }
+    )
+    public String bookExceptions(Exception userException, HttpServletRequest request) {
+        String referer = request.getHeader("Referer");
+        request.getSession().setAttribute("exception", userException.getMessage());
+        return "redirect:" + referer;
+    }
+
 //    @ExceptionHandler(BookAlreadyFoundException.class)
 //    public String bookAlreadyFoundException(BookAlreadyFoundException bookAlreadyFoundException, Model model) {
 //        model.addAttribute("exception", bookAlreadyFoundException.getMessage());
@@ -86,16 +130,11 @@ public class GlobalExceptionHandler {
             NotDeletableException.class
     }
     )
-    public String orderUpdateExceptions(Exception userException, HttpServletRequest request){
+    public String orderUpdateExceptions(Exception userException, HttpServletRequest request) {
         String referer = request.getHeader("Referer");
-        request.getSession().setAttribute("exception",userException.getMessage());
-        return "redirect:"+ referer;
+        request.getSession().setAttribute("exception", userException.getMessage());
+        return "redirect:" + referer;
     }
-
-
-
-
-
 
 
 }
