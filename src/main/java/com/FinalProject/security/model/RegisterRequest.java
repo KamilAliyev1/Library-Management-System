@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @NoArgsConstructor
@@ -24,4 +25,5 @@ public class RegisterRequest {
     @NotBlank(message = "password must not be null")
     private String password;
     private Role role;
+    private MultipartFile file;
 }

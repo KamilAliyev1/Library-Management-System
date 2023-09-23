@@ -7,6 +7,7 @@ import com.FinalProject.service.AuthorService;
 import com.FinalProject.service.BookService;
 import com.FinalProject.service.CategoryService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,11 +17,13 @@ import java.util.List;
 @Controller
 @RequestMapping("/book")
 @RequiredArgsConstructor
+@Slf4j
 public class BookController {
 
     private final BookService bookService;
     private final AuthorService authorService;
     private final CategoryService categoryService;
+//    private final UserService userService;
 
     @PostMapping("/{isbn}/update")
     public String update(@PathVariable("isbn") String isbn,
@@ -72,12 +75,14 @@ public class BookController {
     }
 
     @GetMapping
-    public String findAll(Model model) {
+    public String findAll(Model model ) {
         List<BookDto> books = bookService.findAll();
         model.addAttribute("books", books);
         model.addAttribute("authors", authorService.getAuthors());
         model.addAttribute("categories", categoryService.findAllCategories());
+
         return "books/book-list";
+
     }
 
     @GetMapping("/{isbn}/remove")

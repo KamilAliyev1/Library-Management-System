@@ -1,9 +1,7 @@
 package com.FinalProject.security.model;
 
 
-
 import com.FinalProject.model.Role;
-import com.FinalProject.security.model.Token;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -36,6 +34,8 @@ public class User implements UserDetails {
     private Role role;
     @OneToMany(mappedBy = "user")
     private List<Token> tokens;
+    private String image;
+    private Boolean isActive;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

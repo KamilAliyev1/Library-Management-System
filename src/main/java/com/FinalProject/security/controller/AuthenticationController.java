@@ -1,7 +1,7 @@
 package com.FinalProject.security.controller;
 
-import com.FinalProject.security.model.AuthenticationRequest;
 import com.FinalProject.security.exception.EmailAlreadyFoundException;
+import com.FinalProject.security.model.AuthenticationRequest;
 import com.FinalProject.security.model.RegisterRequest;
 import com.FinalProject.security.service.AuthenticationService;
 import jakarta.servlet.http.Cookie;
@@ -31,11 +31,6 @@ public class AuthenticationController {
         return "login";
     }
 
-//    @GetMapping("/error")
-//    public String error(Model model) {
-//        model.addAttribute("loginError", true);
-//        return "redirect:login";
-//    }
 
     @GetMapping("/lms")
     public String loginLms() {
@@ -48,8 +43,7 @@ public class AuthenticationController {
         if (request == null)
             return "login";
         var token = service.authenticate(request);
-        Cookie cookie = new Cookie("jwt", token);
-        response.addCookie(cookie);
+        response.addCookie(new Cookie("jwt", token));
         return "redirect:/contact";
     }
 
