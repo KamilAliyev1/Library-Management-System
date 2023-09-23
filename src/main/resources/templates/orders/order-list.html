@@ -64,7 +64,9 @@
                                         <span th:text="${orders.size()}" class="badge badge-light">4</span>
                                     </button>
                                 </div>
-
+                                <div th:if="${exception!=null}" class="alert alert-danger">
+                                    <p th:text="${exception}"></p>
+                                </div>
                                 <table class="table table-bordered table-hover table-responsive-md">
                                     <thead>
                                     <tr>
