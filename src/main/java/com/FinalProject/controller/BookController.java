@@ -23,7 +23,6 @@ public class BookController {
     private final BookService bookService;
     private final AuthorService authorService;
     private final CategoryService categoryService;
-//    private final UserService userService;
 
     @PostMapping("/{isbn}/update")
     public String update(@PathVariable("isbn") String isbn,
@@ -75,7 +74,8 @@ public class BookController {
     }
 
     @GetMapping
-    public String findAll(Model model ) {
+    public String findAll(Model model) {
+
         List<BookDto> books = bookService.findAll();
         model.addAttribute("books", books);
         model.addAttribute("authors", authorService.getAuthors());

@@ -23,6 +23,8 @@ public class CategoryController {
 
     @GetMapping
     public String findAll(Model model) {
+
+
         List<CategoryDto> categories = categoryService.findAllCategories();
         model.addAttribute("categories", categories);
         return "categories/category-list";

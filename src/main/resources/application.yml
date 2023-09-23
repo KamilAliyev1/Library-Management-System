@@ -6,8 +6,10 @@ server:
       force: true
       enabled: true
 
-
-
+logging:
+  level:
+    org.springframework.security:
+      DEBUG
 spring:
 
   application:
@@ -17,7 +19,7 @@ spring:
     password: ${DB_PASSWORD:postgres}
     url: ${DB_URL:jdbc:postgresql://localhost:5432/library-management-system}
   jpa:
-    show-sql: true
+    show-sql: false
     database-platform: ${DB_PLATFORM:org.hibernate.dialect.PostgreSQLDialect}
     generate-ddl: true
     hibernate:

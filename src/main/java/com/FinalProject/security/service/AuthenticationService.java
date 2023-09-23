@@ -45,7 +45,6 @@ public class AuthenticationService {
                                     .password(encoder.encode(request.getPassword()))
                                     .role(Role.ROLE_USER)
                                     .image(request.getFile().getOriginalFilename())
-                                    .isActive(false)
                                     .build();
                             fIleService.save(request.getFile());
                             repository.save(user);

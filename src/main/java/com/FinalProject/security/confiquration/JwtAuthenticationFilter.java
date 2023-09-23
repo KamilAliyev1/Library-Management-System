@@ -1,8 +1,9 @@
 package com.FinalProject.security.confiquration;
 
 import com.FinalProject.security.exception.TokenExpiredException;
-import com.FinalProject.security.repository.TokenRepository;
 import com.FinalProject.security.exception.UserNotFound;
+import com.FinalProject.security.model.User;
+import com.FinalProject.security.repository.TokenRepository;
 import com.FinalProject.security.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -81,6 +82,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         new WebAuthenticationDetailsSource().buildDetails(request)
                 );
                 SecurityContextHolder.getContext().setAuthentication(authToken);
+                User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                request.getSession().setAttribute("username", user.getFirstname());
+                request.getSession().setAttribute("lastname", user.getLastname());
+                request.getSession().setAttribute("picture",user.getImage());
             }
         }
         filterChain.doFilter(request, response);
