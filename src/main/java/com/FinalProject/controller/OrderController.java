@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.FinalProject.exception.ExceptionHandler.setExceptionMessage;
+
 
 @RequiredArgsConstructor
 @Controller
@@ -27,7 +29,7 @@ public class OrderController {
     private final StudentService studentService;
 
     @GetMapping("/add")
-    String addPage(Model model,HttpServletRequest request) {
+    String addPage(Model model, HttpServletRequest request) {
         var order = new OrderRequest();
         List<StudentDto> students = studentService.getStudents();
         List<BookDto> books = bookService.findAll();
@@ -35,7 +37,7 @@ public class OrderController {
         model.addAttribute("order", order);
         model.addAttribute("books", books);
         model.addAttribute("students", students);
-        setExceptionMessage(model,request);
+        setExceptionMessage(model, request);
         return "orders/order-create";
     }
 
@@ -68,7 +70,7 @@ public class OrderController {
     }
 
     @GetMapping
-    String getAll(Model model,HttpServletRequest request) {
+    String getAll(Model model, HttpServletRequest request) {
         List<BookDto> books = bookService.findAll();
         List<OrderDto> orders = orderService.getAll();
         List<StudentDto> students = studentService.getStudents();
@@ -76,7 +78,7 @@ public class OrderController {
         model.addAttribute("books", books);
         model.addAttribute("orders", orders);
         model.addAttribute("students", students);
-        setExceptionMessage(model,request);
+        setExceptionMessage(model, request);
         return "orders/order-list";
     }
 
@@ -104,13 +106,9 @@ public class OrderController {
         model.addAttribute("order", order);
         model.addAttribute("books", books);
         model.addAttribute("students", students);
-        setExceptionMessage(model,request);
+        setExceptionMessage(model, request);
         return "orders/order-update";
     }
 
-    void setExceptionMessage(Model model,HttpServletRequest request){
-        model.addAttribute("exception",request.getSession().getAttribute("exception"));
-        request.getSession().setAttribute("exception",null);
-    }
 
 }

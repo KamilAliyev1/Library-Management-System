@@ -56,7 +56,7 @@
                     placeholder="Enter User Picture"
             />
         </div>
-        <div th:if="${exception}" class="alert alert-danger">
+        <div th:if="${exception!=null}" class="alert alert-danger">
             <p th:text="${exception}"></p>
         </div>
         <button type="submit" class="btn btn-primary w-100">Register</button>
