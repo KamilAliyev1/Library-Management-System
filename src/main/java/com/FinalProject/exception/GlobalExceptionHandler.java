@@ -12,40 +12,37 @@ import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @RequiredArgsConstructor
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
 
-    @ExceptionHandler(AuthorsNotFoundException.class)
-    public ResponseEntity<?> authorNotFound(AuthorsNotFoundException authorsNotFoundException) {
-        List<String> detail = new ArrayList<>();
-        detail.add(authorsNotFoundException.getMessage());
+//    @ExceptionHandler(AuthorsNotFoundException.class)
+//    public ResponseEntity<?> authorNotFound(AuthorsNotFoundException authorsNotFoundException) {
+//        List<String> detail = new ArrayList<>();
+//        detail.add(authorsNotFoundException.getMessage());
+//
+//        ErrorResponse errorResponse = new ErrorResponse("Author not Found !", detail);
+//        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+//    }
 
-        ErrorResponse errorResponse = new ErrorResponse("Author not Found !", detail);
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-    }
+//    @ExceptionHandler(CategoryNotFoundException.class)
+//    public ResponseEntity<?> categoryNotFound(CategoryNotFoundException categoryNotFoundException) {
+//        List<String> detail = new ArrayList<>();
+//        detail.add(categoryNotFoundException.getMessage());
+//
+//        ErrorResponse errorResponse = new ErrorResponse("Category not Found !", detail);
+//        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+//    }
 
-    @ExceptionHandler(CategoryNotFoundException.class)
-    public ResponseEntity<?> categoryNotFound(CategoryNotFoundException categoryNotFoundException) {
-        List<String> detail = new ArrayList<>();
-        detail.add(categoryNotFoundException.getMessage());
-
-        ErrorResponse errorResponse = new ErrorResponse("Category not Found !", detail);
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(CategoryAlreadyExistsException.class)
-    public ResponseEntity<?> categoryAlreadyExists(CategoryAlreadyExistsException categoryAlreadyExistsException) {
-        List<String> detail = new ArrayList<>();
-        detail.add(categoryAlreadyExistsException.getMessage());
-
-        ErrorResponse errorResponse = new ErrorResponse("Category Already Exists !", detail);
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-    }
+//    @ExceptionHandler(CategoryAlreadyExistsException.class)
+//    public ResponseEntity<?> categoryAlreadyExists(CategoryAlreadyExistsException categoryAlreadyExistsException) {
+//        List<String> detail = new ArrayList<>();
+//        detail.add(categoryAlreadyExistsException.getMessage());
+//
+//        ErrorResponse errorResponse = new ErrorResponse("Category Already Exists !", detail);
+//        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+//    }
 
     @ExceptionHandler({
             OrderNotFoundException.class
@@ -62,72 +59,22 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({
-            UsernameNotFoundException.class,
-            UserNotFound.class,
-            EmailAlreadyFoundException.class,
-            AuthenticationException.class})
-    public String userExceptions(Exception userException, HttpServletRequest request) {
-        String referer = request.getHeader("Referer");
-        request.getSession().setAttribute("exception", userException.getMessage());
-        return "redirect:" + referer;
-    }
-
-    @ExceptionHandler({
-            CategoryAlreadyExistsException.class,
-            CategoryNotFoundException.class,
-    })
-    public String categoryExceptions(Exception userException, HttpServletRequest request) {
-        String referer = request.getHeader("Referer");
-        request.getSession().setAttribute("exception", userException.getMessage());
-        return "redirect:" + referer;
-    }
-
-    @ExceptionHandler({
-            StudentNotFoundException.class,
-            StudentAlreadyExistsException.class
-    })
-    public String studentException(Exception userException, HttpServletRequest request) {
-        String referer = request.getHeader("Referer");
-        request.getSession().setAttribute("exception", userException.getMessage());
-        return "redirect:" + referer;
-    }
-
-    @ExceptionHandler({
-            AuthorsNotFoundException.class,
-    })
-    public String authorException(Exception userException, HttpServletRequest request) {
-        String referer = request.getHeader("Referer");
-        request.getSession().setAttribute("exception", userException.getMessage());
-        return "redirect:" + referer;
-    }
-
-
-    @ExceptionHandler({
-            BookAlreadyFoundException.class,
-            BookNotFoundException.class,
-    }
-    )
-    public String bookExceptions(Exception userException, HttpServletRequest request) {
-        String referer = request.getHeader("Referer");
-        request.getSession().setAttribute("exception", userException.getMessage());
-        return "redirect:" + referer;
-    }
-
-//    @ExceptionHandler(BookAlreadyFoundException.class)
-//    public String bookAlreadyFoundException(BookAlreadyFoundException bookAlreadyFoundException, Model model) {
-//        model.addAttribute("exception", bookAlreadyFoundException.getMessage());
-//        model.addAttribute("bookRequest", new BookRequest());
-//        model.addAttribute("categories", categoryService.findAllCategories());
-//        model.addAttribute("authors", authorService.getAuthors());
-//        return "books/book-create";
-//    }
-
-    @ExceptionHandler({
             NotChangeableException.class,
             HaveAlreadyBookException.class,
             OrderMustUpdateException.class,
             StockNotEnoughException.class,
-            NotDeletableException.class
+            NotDeletableException.class,
+            AuthorsNotFoundException.class,
+            CategoryNotFoundException.class,
+            CategoryAlreadyExistsException.class,
+            UsernameNotFoundException.class,
+            UserNotFound.class,
+            EmailAlreadyFoundException.class,
+            AuthenticationException.class,
+            StudentNotFoundException.class,
+            StudentAlreadyExistsException.class,
+            BookAlreadyFoundException.class,
+            BookNotFoundException.class
     }
     )
     public String orderUpdateExceptions(Exception userException, HttpServletRequest request) {
