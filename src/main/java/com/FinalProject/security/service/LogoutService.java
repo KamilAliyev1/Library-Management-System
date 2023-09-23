@@ -1,7 +1,7 @@
 package com.FinalProject.security.service;
 
 import com.FinalProject.security.repository.TokenRepository;
-import com.FinalProject.security.service.JwtService;
+import com.FinalProject.security.repository.UserRepository;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,6 +18,7 @@ public class LogoutService implements LogoutHandler {
 
     private final TokenRepository tokenRepository;
     private final JwtService service;
+    private final UserRepository userRepository;
 
     @Override
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {

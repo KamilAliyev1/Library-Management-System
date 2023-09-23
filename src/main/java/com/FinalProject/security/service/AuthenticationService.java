@@ -1,15 +1,12 @@
 package com.FinalProject.security.service;
 
 import com.FinalProject.model.Role;
-import com.FinalProject.security.model.User;
-import com.FinalProject.security.repository.UserRepository;
 import com.FinalProject.security.exception.EmailAlreadyFoundException;
 import com.FinalProject.security.exception.UserNotFound;
-import com.FinalProject.security.model.AuthenticationRequest;
-import com.FinalProject.security.model.RegisterRequest;
-import com.FinalProject.security.model.Token;
-import com.FinalProject.security.model.TokenType;
+import com.FinalProject.security.model.*;
 import com.FinalProject.security.repository.TokenRepository;
+import com.FinalProject.security.repository.UserRepository;
+import com.FinalProject.service.FIleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,6 +26,9 @@ public class AuthenticationService {
 
     private final AuthenticationManager manager;
     private final TokenRepository tokenRepository;
+    private final FIleService fIleService;
+
+//    private final UserService userService;
 
 
     public void register(RegisterRequest request) {
@@ -44,7 +44,9 @@ public class AuthenticationService {
                                     .email(request.getEmail())
                                     .password(encoder.encode(request.getPassword()))
                                     .role(Role.ROLE_USER)
+                                    .image(request.getFile().getOriginalFilename())
                                     .build();
+                            fIleService.save(request.getFile());
                             repository.save(user);
                             var jwtToken = service.generateToken(user);
                             saveUserToken(user, jwtToken);
@@ -82,7 +84,10 @@ public class AuthenticationService {
         );
         var user = repository.findByEmail(request.getEmail()).orElseThrow(
                 () -> new UserNotFound("Email or password"));
+//        user.setIsActive(true);
+//        userService.getUserImage(user);
         revokeAllUserTokens(user);
+
         var jwtToken = service.generateToken(user);
         saveUserToken(user, jwtToken);
         return jwtToken;
