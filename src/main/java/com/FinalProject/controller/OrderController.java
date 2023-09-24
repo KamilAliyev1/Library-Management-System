@@ -94,7 +94,7 @@ public class OrderController {
         var order = orderService.update(id, dto);
         model.addAttribute("order", order);
 
-        return "orders/order-update";
+        return "redirect:/orders/"+id+"/update";
     }
 
     @GetMapping("/{id}/update")
