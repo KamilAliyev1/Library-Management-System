@@ -17,32 +17,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class GlobalExceptionHandler {
 
 
-//    @ExceptionHandler(AuthorsNotFoundException.class)
-//    public ResponseEntity<?> authorNotFound(AuthorsNotFoundException authorsNotFoundException) {
-//        List<String> detail = new ArrayList<>();
-//        detail.add(authorsNotFoundException.getMessage());
-//
-//        ErrorResponse errorResponse = new ErrorResponse("Author not Found !", detail);
-//        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-//    }
 
-//    @ExceptionHandler(CategoryNotFoundException.class)
-//    public ResponseEntity<?> categoryNotFound(CategoryNotFoundException categoryNotFoundException) {
-//        List<String> detail = new ArrayList<>();
-//        detail.add(categoryNotFoundException.getMessage());
-//
-//        ErrorResponse errorResponse = new ErrorResponse("Category not Found !", detail);
-//        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-//    }
-
-//    @ExceptionHandler(CategoryAlreadyExistsException.class)
-//    public ResponseEntity<?> categoryAlreadyExists(CategoryAlreadyExistsException categoryAlreadyExistsException) {
-//        List<String> detail = new ArrayList<>();
-//        detail.add(categoryAlreadyExistsException.getMessage());
-//
-//        ErrorResponse errorResponse = new ErrorResponse("Category Already Exists !", detail);
-//        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-//    }
 
     @ExceptionHandler({
             OrderNotFoundException.class
@@ -73,7 +48,8 @@ public class GlobalExceptionHandler {
             StudentNotFoundException.class,
             StudentAlreadyExistsException.class,
             BookAlreadyFoundException.class,
-            BookNotFoundException.class
+            BookNotFoundException.class,
+            IllegalArgumentException.class
     })
     public String orderUpdateExceptions(Exception userException, HttpServletRequest request) {
         String referer = request.getHeader("Referer");

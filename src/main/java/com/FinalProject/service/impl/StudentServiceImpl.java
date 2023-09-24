@@ -80,4 +80,11 @@ public class StudentServiceImpl implements StudentService {
                 .findById(id)
                 .orElseThrow(() -> new StudentNotFoundException("Student don't find with id: " + id));
     }
+
+    @Override
+    public Student findById(Long id) {
+        return studentRepository
+                .findById(id)
+                .orElseThrow(() -> new StudentNotFoundException("Student don't find with id: " + id));
+    }
 }

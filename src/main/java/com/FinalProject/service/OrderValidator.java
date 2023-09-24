@@ -7,7 +7,6 @@ import com.FinalProject.exception.StockNotEnoughException;
 import com.FinalProject.model.Book;
 import com.FinalProject.model.Order;
 import com.FinalProject.model.Student;
-import com.FinalProject.service.impl.BookServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderValidator {
 
-    private final BookServiceImpl bookService;
+    private final BookService bookService;
 
     public void validateBooksConfusionExceptOrder(Student student, List<Book> books, Order order) {
 
@@ -26,11 +25,13 @@ public class OrderValidator {
                 .getOrders()
                 .stream()
                 .filter(t -> !t.equals(order))
+                .filter(Order::getInProgress)
                 .flatMap(t -> t.getBooks().stream())
                 .toList();
 
-        if (books.stream().anyMatch(previousBooks::contains))
-            throw new HaveAlreadyBookException("Student have this book in previous orders");
+        for (var i:books) {
+            if(previousBooks.contains(i))throw new HaveAlreadyBookException(String.format("Student have %s book in previous orders",bookService.findById(i.getId()).getName()));
+        }
     }
 
     public void validateNewOrderPermission(Student student) {
@@ -47,7 +48,7 @@ public class OrderValidator {
 
         if (!order.getInProgress()) throw new NotChangeableException("Cannot be changeable");
 
-        if (!order.getCreatedAt().equals(LocalDate.now())) throw new NotChangeableException("Create new order");
+        if (!order.getCreatedAt().equals(LocalDate.now())) throw new NotChangeableException("This order locked.Please create new order");
     }
 }
 
