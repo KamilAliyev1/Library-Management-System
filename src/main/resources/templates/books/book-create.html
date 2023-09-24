@@ -99,14 +99,14 @@
                                     placeholder="Enter Book Picture"/>
                         </div>
 
-                        <div th:if="${exception!=null}" class="alert alert-danger">
+                        <div th:if="${exception != null}" class="alert alert-danger">
                             <p th:text="${exception}"></p>
                         </div>
+
                         <div class="d-flex align-items-center justify-content-end">
                             <button onclick="validateForm()" type="submit" class="btn btn-primary w-100">
                                 Submit
                             </button>
-
                         </div>
                     </form>
                 </div>

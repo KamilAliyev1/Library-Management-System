@@ -5,6 +5,7 @@ import com.FinalProject.dto.studentdto.StudentDto;
 import com.FinalProject.dto.studentdto.UpdateStudentDto;
 import com.FinalProject.service.StudentService;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -12,6 +13,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static com.FinalProject.exception.ExceptionHandler.setExceptionMessage;
 
 @Controller
 @RequestMapping("/students")
@@ -40,7 +43,8 @@ public class StudentController {
     }
 
     @GetMapping("/add")
-    public String createStudentPage(Model model) {
+    public String createStudentPage(Model model, HttpServletRequest request) {
+        setExceptionMessage(model, request);
         CreateStudentDto createStudentDto = new CreateStudentDto();
         model.addAttribute("student", createStudentDto);
         return "students/student-create";
@@ -61,7 +65,8 @@ public class StudentController {
     }
 
     @GetMapping("/{id}/update")
-    public String updateStudentPage(@PathVariable("id") Long id, Model model) {
+    public String updateStudentPage(@PathVariable("id") Long id, Model model, HttpServletRequest request) {
+        setExceptionMessage(model, request);
         StudentDto student = studentService.getStudent(id);
         model.addAttribute("student", student);
         return "students/student-update";
