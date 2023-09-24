@@ -17,8 +17,8 @@ import java.util.List;
 public class OrderRequest {
 
         @NotNull
-        public Long studentId;
+        private Long studentId;
 
         @NotEmpty
-        public List<Long> books = new LinkedList<>();
+        private List<Long> books = new LinkedList<>();
 }

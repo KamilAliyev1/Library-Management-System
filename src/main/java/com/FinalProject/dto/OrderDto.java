@@ -11,13 +11,13 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class OrderDto {
-    Long id;
-    Long studentId;
-    String studentFullName;
-    String studentFin;
-    List<String> books;
-    Boolean inProgress;
-    LocalDate createdAt;
-    LocalDate finishedAt;
-    Boolean inDelay;
+    private Long id;
+    private Long studentId;
+    private String studentFullName;
+    private String studentFin;
+    private List<String> books;
+    private Boolean inProgress;
+    private LocalDate createdAt;
+    private LocalDate finishedAt;
+    private Boolean inDelay;
 }

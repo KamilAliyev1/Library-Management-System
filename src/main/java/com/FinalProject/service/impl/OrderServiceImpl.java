@@ -9,9 +9,10 @@ import com.FinalProject.mapper.OrderMapper;
 import com.FinalProject.model.Book;
 import com.FinalProject.model.Order;
 import com.FinalProject.repository.OrderRepo;
-import com.FinalProject.repository.StudentRepository;
+import com.FinalProject.service.BookService;
 import com.FinalProject.service.OrderService;
 import com.FinalProject.service.OrderValidator;
+import com.FinalProject.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -29,20 +30,18 @@ import java.util.stream.Collectors;
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepo orderRepo;
-    private final StudentRepository studentRepository;
+    private final StudentService studentService;
     private final OrderMapper orderMapper;
-    private final BookServiceImpl bookService;
+    private final BookService bookService;
     private final OrderValidator orderValidator;
 
     @Transactional
     @Override
     public void add(OrderRequest dto) {
 
-        var student = studentRepository
-                .findById(dto.studentId)
-                .orElseThrow(() -> new StudentNotFoundException("Student don't find with id: " + dto.studentId));
+        var student = studentService.findById(dto.getStudentId());
 
-        if (student == null) throw new StudentNotFoundException();
+        if (student == null) throw new StudentNotFoundException("student not found with id: "+dto.getStudentId());
 
         Order order = orderMapper.toEntity(dto);
 
@@ -85,11 +84,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDto update(Long id, OrderRequest dto) {
 
-        var student = studentRepository
-                .findById(dto.studentId)
-                .orElseThrow(() -> new StudentNotFoundException("Student don't find with id: " + dto.studentId));
+        var student = studentService.findById(dto.getStudentId());
 
-        if (student == null) throw new StudentNotFoundException();
+        if (student == null) throw new StudentNotFoundException("student not found with id: "+dto.getStudentId());
 
         Order order = orderRepo.findById(id).orElseThrow(
                 () -> new OrderNotFoundException(
