@@ -28,7 +28,6 @@ public class AuthenticationService {
     private final TokenRepository tokenRepository;
     private final FIleService fIleService;
 
-//    private final UserService userService;
 
 
     public void register(RegisterRequest request) {
@@ -85,8 +84,7 @@ public class AuthenticationService {
         var user = repository.findByEmail(request.getEmail()).orElseThrow(
                 () -> new UserNotFound("Email or password wrong"));
 
-//        user.setIsActive(true);
-//        userService.getUserImage(user);
+
         revokeAllUserTokens(user);
 
         var jwtToken = service.generateToken(user);

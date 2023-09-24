@@ -12,40 +12,37 @@ import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @RequiredArgsConstructor
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
 
-    @ExceptionHandler(AuthorsNotFoundException.class)
-    public ResponseEntity<?> authorNotFound(AuthorsNotFoundException authorsNotFoundException) {
-        List<String> detail = new ArrayList<>();
-        detail.add(authorsNotFoundException.getMessage());
-
-        ErrorResponse errorResponse = new ErrorResponse("Author not Found !", detail);
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(CategoryNotFoundException.class)
-    public ResponseEntity<?> categoryNotFound(CategoryNotFoundException categoryNotFoundException) {
-        List<String> detail = new ArrayList<>();
-        detail.add(categoryNotFoundException.getMessage());
-
-        ErrorResponse errorResponse = new ErrorResponse("Category not Found !", detail);
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(CategoryAlreadyExistsException.class)
-    public ResponseEntity<?> categoryAlreadyExists(CategoryAlreadyExistsException categoryAlreadyExistsException) {
-        List<String> detail = new ArrayList<>();
-        detail.add(categoryAlreadyExistsException.getMessage());
-
-        ErrorResponse errorResponse = new ErrorResponse("Category Already Exists !", detail);
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-    }
+//    @ExceptionHandler(AuthorsNotFoundException.class)
+//    public ResponseEntity<?> authorNotFound(AuthorsNotFoundException authorsNotFoundException) {
+//        List<String> detail = new ArrayList<>();
+//        detail.add(authorsNotFoundException.getMessage());
+//
+//        ErrorResponse errorResponse = new ErrorResponse("Author not Found !", detail);
+//        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+//    }
+//
+//    @ExceptionHandler(CategoryNotFoundException.class)
+//    public ResponseEntity<?> categoryNotFound(CategoryNotFoundException categoryNotFoundException) {
+//        List<String> detail = new ArrayList<>();
+//        detail.add(categoryNotFoundException.getMessage());
+//
+//        ErrorResponse errorResponse = new ErrorResponse("Category not Found !", detail);
+//        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+//    }
+//
+//    @ExceptionHandler(CategoryAlreadyExistsException.class)
+//    public ResponseEntity<?> categoryAlreadyExists(CategoryAlreadyExistsException categoryAlreadyExistsException) {
+//        List<String> detail = new ArrayList<>();
+//        detail.add(categoryAlreadyExistsException.getMessage());
+//
+//        ErrorResponse errorResponse = new ErrorResponse("Category Already Exists !", detail);
+//        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+//    }
 
     @ExceptionHandler({
             OrderNotFoundException.class
@@ -65,7 +62,8 @@ public class GlobalExceptionHandler {
             UsernameNotFoundException.class,
             UserNotFound.class,
             EmailAlreadyFoundException.class,
-            AuthenticationException.class})
+            AuthenticationException.class,
+            IllegalArgumentException.class})
     public String userExceptions(Exception userException, HttpServletRequest request) {
         String referer = request.getHeader("Referer");
         request.getSession().setAttribute("exception", userException.getMessage());
