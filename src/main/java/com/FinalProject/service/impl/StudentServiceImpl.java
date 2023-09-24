@@ -3,6 +3,7 @@ package com.FinalProject.service.impl;
 import com.FinalProject.dto.studentdto.CreateStudentDto;
 import com.FinalProject.dto.studentdto.StudentDto;
 import com.FinalProject.dto.studentdto.UpdateStudentDto;
+import com.FinalProject.exception.StudentAlreadyExistsException;
 import com.FinalProject.exception.StudentNotFoundException;
 import com.FinalProject.mapper.StudentMapper;
 import com.FinalProject.model.Student;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,17 +33,23 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public List<StudentDto> searchStudents(String name, String surname, String studentFin) {
         return studentMapper.mapEntityListToResponseList(
-               studentRepository
-                       .findByNameContainingIgnoreCaseAndSurnameContainingIgnoreCaseAndStudentFINContainingIgnoreCase(
-                               name, surname, studentFin)
+                studentRepository
+                        .findByNameContainingIgnoreCaseAndSurnameContainingIgnoreCaseAndStudentFINContainingIgnoreCase(
+                                name, surname, studentFin)
         );
     }
 
     @Override
     public void createStudent(CreateStudentDto studentDto) {
-        Student student = studentMapper.mapCreateAuthorDtoToEntity(studentDto);
-        student.setDeleteStatus(false);
-        studentRepository.save(student);
+        Optional<Student> studentOptional = studentRepository.findByStudentFIN(studentDto.getStudentFIN());
+
+        studentOptional.ifPresentOrElse(std -> {
+            throw new StudentAlreadyExistsException("Student with FIN code " + studentDto.getStudentFIN() + " already exists!");
+        }, () -> {
+            Student student = studentMapper.mapCreateAuthorDtoToEntity(studentDto);
+            student.setDeleteStatus(false);
+            studentRepository.save(student);
+        });
     }
 
     @Override

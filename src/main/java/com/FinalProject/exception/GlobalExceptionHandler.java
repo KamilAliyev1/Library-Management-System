@@ -48,7 +48,6 @@ public class GlobalExceptionHandler {
             OrderNotFoundException.class
     })
     public ResponseEntity<?> userExceptions(Exception userException) {
-
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(userException.getMessage());
     }
 
@@ -75,13 +74,10 @@ public class GlobalExceptionHandler {
             StudentAlreadyExistsException.class,
             BookAlreadyFoundException.class,
             BookNotFoundException.class
-    }
-    )
+    })
     public String orderUpdateExceptions(Exception userException, HttpServletRequest request) {
         String referer = request.getHeader("Referer");
         request.getSession().setAttribute("exception", userException.getMessage());
         return "redirect:" + referer;
     }
-
-
 }
