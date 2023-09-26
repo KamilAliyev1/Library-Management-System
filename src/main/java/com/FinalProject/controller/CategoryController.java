@@ -6,12 +6,15 @@ import com.FinalProject.request.CategoryRequest;
 import com.FinalProject.service.BookService;
 import com.FinalProject.service.CategoryService;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static com.FinalProject.exception.ExceptionHandler.setExceptionMessage;
 
 @Controller
 @RequiredArgsConstructor
@@ -23,8 +26,6 @@ public class CategoryController {
 
     @GetMapping
     public String findAll(Model model) {
-
-
         List<CategoryDto> categories = categoryService.findAllCategories();
         model.addAttribute("categories", categories);
         return "categories/category-list";
@@ -47,7 +48,8 @@ public class CategoryController {
     }
 
     @GetMapping("/new")
-    public String categoryForm(Model model) {
+    public String categoryForm(Model model, HttpServletRequest request) {
+        setExceptionMessage(model, request);
         System.out.println("categoryForm");
         var category = new CategoryRequest();
         model.addAttribute("category", category);
@@ -62,7 +64,8 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}/update")
-    public String showUpdateForm(@PathVariable("id") Long id, Model model) {
+    public String showUpdateForm(@PathVariable("id") Long id, Model model, HttpServletRequest request) {
+        setExceptionMessage(model, request);
         final CategoryDto category = categoryService.findCategoryById(id);
         model.addAttribute("category", category);
         return "categories/category-update";
