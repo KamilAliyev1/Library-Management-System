@@ -29,7 +29,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="container-fluid">
+                    <div class="container-fluid" style="display: flex">
                         <form th:action="@{/categories/search}">
                             <div class="d-flex justify-content-between align-items-center">
                                 <input
@@ -44,9 +44,10 @@
                                 <button class="btn btn-done ml-2" type="button" onclick="resetForm()">Clear</button>
                             </div>
                         </form>
-                        <br>
+
+
                         <form th:action="@{categories/search/books}">
-                            <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex justify-content-between align-items-center" style="margin-left: 70px;">
                                 <select class="form-control mr-sm-2" id="category" name="categoryId">
                                     <option value="">Search Book by Category</option>
                                     <option th:each="category : ${categories}"
@@ -77,12 +78,14 @@
                                 <table class="table table-bordered table-hover table-responsive-md">
                                     <thead>
                                     <tr>
+                                        <th> ID</th>
                                         <th> Category Name</th>
                                         <th>Actions</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <tr th:each="category: ${categories}" class="col-lg-6">
+                                        <td th:text="${category.id}"></td>
                                         <td th:text="${category.name}"></td>
                                         <td class="w-25">
                                             <a th:href="@{/categories/{id}/update(id=${category.id})}"
@@ -114,6 +117,8 @@
         document.getElementById('category').value = null;
         window.location.href = '/categories';
     }
+
+
 </script>
 </body>
 </html>
