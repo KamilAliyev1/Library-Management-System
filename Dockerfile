@@ -14,7 +14,7 @@ COPY settings.gradle .
 COPY src src
 
 # Copy the built JAR to the container
-COPY build/libs/FinalProject-0.0.1-SNAPSHOT-plain.jar FinalProject.jar
+COPY build/libs/FinalProject-0.0.1-SNAPSHOT.jar FinalProject.jar
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
