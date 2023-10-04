@@ -46,7 +46,7 @@ public class OrderValidator {
 
     public void validateOrderForUpdate(Order order) {
 
-        if (!order.getInProgress()) throw new NotChangeableException("Cannot be changeable");
+        if (!order.getInProgress()) throw new NotChangeableException("Cannot be changed");
 
         if (!order.getCreatedAt().equals(LocalDate.now())) throw new NotChangeableException("This order locked.Please create new order");
     }

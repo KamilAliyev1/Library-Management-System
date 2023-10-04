@@ -8,10 +8,8 @@ import com.FinalProject.model.Student;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
@@ -67,15 +65,6 @@ public class OrderMapper {
                 .toList();
     }
 
-    public List<Long> map(Set<Book> books) {
-        List<Long> temp = books == null || books.isEmpty() ? new LinkedList<>() : books.stream().map(Book::getId).collect(Collectors.toCollection(LinkedList::new));
-        var size = temp.size();
-        for (int i = 0; i < 15 - size; i++) {
-            temp.add(null);
-        }
-
-        return temp;
-    }
 
     private Long orderStudentID(Order order) {
         if (order == null) {

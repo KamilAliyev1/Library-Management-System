@@ -63,7 +63,7 @@ public class OrderServiceImpl implements OrderService {
 
         orderValidator.validateBooks(books);
 
-        order = orderRepo.saveAndFlush(order);
+        orderRepo.saveAndFlush(order);
 
         bookService.updateStockNumbersByIdIn(books, -1);
     }
