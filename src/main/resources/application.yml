@@ -20,6 +20,7 @@ spring:
     password: ${DB_PASSWORD:root}
     url: ${DB_URL:jdbc:postgresql://localhost:5432/finalproject}
 
+
   jpa:
     show-sql: false
     database-platform: ${DB_PLATFORM:org.hibernate.dialect.PostgreSQLDialect}
