@@ -40,7 +40,8 @@ public class CategoryController {
     }
 
     @GetMapping("/search/books")
-    public String findByCategory(Long categoryId, Model model) {
+    public String findByCategory(Long categoryId, Model model,HttpServletRequest request) {
+        setExceptionMessage(model, request);
         List<BookDto> books = bookService.searchBooks(null, categoryId, null);
         model.addAttribute("books", books);
 
@@ -49,8 +50,8 @@ public class CategoryController {
 
     @GetMapping("/new")
     public String categoryForm(Model model, HttpServletRequest request) {
+//        System.out.println("categoryForm");
         setExceptionMessage(model, request);
-        System.out.println("categoryForm");
         var category = new CategoryRequest();
         model.addAttribute("category", category);
         return "categories/category-create";
@@ -58,7 +59,7 @@ public class CategoryController {
 
     @PostMapping
     public String createCategory(@ModelAttribute("category") CategoryRequest category) {
-        System.out.println("CATEGORY: " + category.toString());
+//        System.out.println("CATEGORY: " + category.toString());
         categoryService.createCategory(category);
         return "redirect:/categories";
     }
@@ -78,7 +79,7 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}/remove")
-    public String deleteCategory(@PathVariable Long id, Model model) {
+    public String deleteCategory(@PathVariable("id") Long id, Model model) {
         categoryService.deleteCategory(id);
         model.addAttribute("category", categoryService.findAllCategories());
         return "redirect:/categories";

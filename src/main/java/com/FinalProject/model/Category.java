@@ -19,7 +19,7 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", length = 50, unique = true)
+    @Column(nullable = false)
     private String name;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "category",orphanRemoval = true)
     private Set<Book> book = new HashSet<>();

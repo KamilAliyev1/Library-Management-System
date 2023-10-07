@@ -35,11 +35,16 @@
                             />
                         </div>
 
+                        <div th:if="${exception != null}" class="alert alert-danger">
+                            <p th:text="${exception}"></p>
+                        </div>
+
                         <div class="d-flex align-items-center justify-content-end">
                             <button type="submit" class="btn btn-primary w-100">
                                 Submit
                             </button>
                         </div>
+
                     </form>
                 </div>
             </div>
@@ -47,5 +52,22 @@
         </div>
     </div>
 </div>
+
+<!--<script>-->
+<!--    function validateForm() {-->
+<!--        let isbn = document.getElementById("isbn");-->
+<!--        let isbnError = document.getElementById("isbnError");-->
+
+<!--        let isbnValue = isbn.value;-->
+<!--        let inputValueLength = isbnValue.length;-->
+
+<!--        if (inputValueLength !== 13)-->
+<!--            isbnError.textContent = "ISBN must be exactly 13 digits.";-->
+<!--        else if (isbnValue < 0 || isbnValue > 9999999999999)-->
+<!--            isbnError.textContent = "ISBN must be between 0 and 9999999999999.";-->
+<!--        else-->
+<!--            isbnError.textContent = "";-->
+<!--    }-->
+<!--</script>-->
 </body>
 </html>
