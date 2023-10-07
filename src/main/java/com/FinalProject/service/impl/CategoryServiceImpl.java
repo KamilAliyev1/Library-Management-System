@@ -3,6 +3,7 @@ package com.FinalProject.service.impl;
 import com.FinalProject.dto.CategoryDto;
 import com.FinalProject.exception.CategoryAlreadyExistsException;
 import com.FinalProject.exception.CategoryNotFoundException;
+import com.FinalProject.exception.StudentNotFoundException;
 import com.FinalProject.mapper.CategoryMapper;
 import com.FinalProject.model.Book;
 import com.FinalProject.model.Category;
@@ -41,8 +42,12 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto findCategoryById(Long id) {
-        Category category = categoryRepository.findById(id).get();
+//        Category category = categoryRepository.findById(id).get();
+        Category category = categoryRepository
+                .findById(id)
+                .orElseThrow(() -> new CategoryNotFoundException("Category don't find with id: " + id));
         return categoryMapper.categoryToCategoryDto(category);
+
     }
 
     @Override

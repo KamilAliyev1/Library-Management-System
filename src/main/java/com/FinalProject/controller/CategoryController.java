@@ -40,7 +40,8 @@ public class CategoryController {
     }
 
     @GetMapping("/search/books")
-    public String findByCategory(Long categoryId, Model model) {
+    public String findByCategory(Long categoryId, Model model,HttpServletRequest request) {
+        setExceptionMessage(model, request);
         List<BookDto> books = bookService.searchBooks(null, categoryId, null);
         model.addAttribute("books", books);
 
@@ -49,7 +50,7 @@ public class CategoryController {
 
     @GetMapping("/new")
     public String categoryForm(Model model, HttpServletRequest request) {
-        System.out.println("categoryForm");
+//        System.out.println("categoryForm");
         setExceptionMessage(model, request);
         var category = new CategoryRequest();
         model.addAttribute("category", category);
