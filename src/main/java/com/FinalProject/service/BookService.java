@@ -20,7 +20,7 @@ public interface BookService {
 
     List<BookDto> findAll();
 
-    boolean areAllBooksInStock(List<Long> id);
+    void areAllBooksInStock(List<Long> id);
 
     void updateStockNumbersByIdIn(List<Long> ids, int amount);
 
