@@ -68,15 +68,16 @@ public class BookController {
     }
 
     @GetMapping
-    public String findAll(Model model) {
+    public String findAll(Model model, HttpServletRequest request) {
 
         List<BookDto> books = bookService.findAll();
         model.addAttribute("books", books);
         model.addAttribute("authors", authorService.getAuthors());
         model.addAttribute("categories", categoryService.findAllCategories());
+        setExceptionMessage(model, request);
+
 
         return "books/book-list";
-
     }
 
     @GetMapping("/{isbn}/remove")
@@ -92,8 +93,7 @@ public class BookController {
             @RequestParam(name = "isbn", required = false) String isbn,
             @RequestParam(name = "categoryId", required = false) Long categoryId,
             @RequestParam(name = "authorId", required = false) Long authorId,
-            Model model, HttpServletRequest request) {
-        setExceptionMessage(model, request);
+            Model model) {
         List<BookDto> books = bookService.searchBooks(isbn, categoryId, authorId);
         model.addAttribute("books", books);
         model.addAttribute("authors", authorService.getAuthors());

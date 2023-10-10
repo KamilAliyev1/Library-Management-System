@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -47,7 +48,7 @@ public class FileServiceImpl implements FIleService {
                 e.printStackTrace();
             }
         } else {
-            throw new IllegalArgumentException("Only PNG files are allowed");
+            throw new IllegalArgumentException("Only PNG,JPEG,GIF files are allowed");
         }
 
     }
@@ -64,7 +65,11 @@ public class FileServiceImpl implements FIleService {
 
     @Override
     public boolean isPng(MultipartFile file) {
-        return file.getContentType().equals("image/png");
+        List<String> allowedFormats = List.of("image/jpeg", "image/png", "image/gif");
+        for (String format : allowedFormats) {
+            return file.getContentType().equals(format);
+        }
+        return false;
     }
 
 }

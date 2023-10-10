@@ -64,6 +64,10 @@
                             </div>
                         </form>
                     </div>
+
+                    <div th:if="${exception != null}" class="alert alert-danger">
+                        <p th:text="${exception}"></p>
+                    </div>
                     <div th:switch="${books}" class="my-5">
                         <div class="col-md-12">
                             <h2 th:case="null">No record found !!</h2>

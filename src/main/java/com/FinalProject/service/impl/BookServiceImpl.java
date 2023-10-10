@@ -13,6 +13,7 @@ import com.FinalProject.service.CategoryService;
 import com.FinalProject.service.FIleService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Lazy))
+@Slf4j
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
@@ -30,6 +32,7 @@ public class BookServiceImpl implements BookService {
     private final BookMapper bookMapper;
     @Lazy
     private final AuthorService authorService;
+
 
     @Transactional
     public void create(BookRequest bookRequest) {
@@ -72,6 +75,7 @@ public class BookServiceImpl implements BookService {
                         (
                                 book ->
                                         bookRepository.deleteByIsbn(isbn),
+
                                 () -> {
                                     throw new BookNotFoundException("Book not found with isbn : " + isbn);
                                 });
@@ -102,8 +106,8 @@ public class BookServiceImpl implements BookService {
     }
 
 
-    public Book findById(Long id){
-        return bookRepository.findById(id).orElseThrow(()->new BookNotFoundException("book not founded with id:"+id));
+    public Book findById(Long id) {
+        return bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException("book not founded with id:" + id));
     }
 
 }
