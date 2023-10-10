@@ -40,6 +40,7 @@ public class OrderValidator {
 
     public void validateBooks(List<Long> books) {
         bookService.areAllBooksInStock(books);
+        bookService.checkBooksIsDeleted(books);
     }
 
     public void validateOrderForUpdate(Order order) {

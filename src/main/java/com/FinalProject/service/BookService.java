@@ -26,5 +26,6 @@ public interface BookService {
 
     Book findById(Long id);
 
+    void checkBooksIsDeleted(List<Long> ids);
 
 }

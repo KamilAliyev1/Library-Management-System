@@ -55,6 +55,7 @@ public class BookServiceImpl implements BookService {
 
     public void update(String isbn, BookRequest bookRequest) {
         bookRepository.findByIsbn(isbn).ifPresentOrElse(book -> {
+            if(book.getDeleteStatus()) throw new BookNotFoundException("Book not found with isbn: " + isbn);
             book.setName(bookRequest.getName());
             book.setIsbn(bookRequest.getIsbn());
             book.setImage(bookRequest.getFile().getOriginalFilename());
@@ -74,8 +75,10 @@ public class BookServiceImpl implements BookService {
         bookRepository.findByIsbn(isbn).
                 ifPresentOrElse
                         (
-                                book ->
-                                        bookRepository.deleteByIsbn(isbn),
+                                book ->{
+                                        book.setDeleteStatus(true);
+                                        bookRepository.save(book);
+                                },
 
                                 () -> {
                                     throw new BookNotFoundException("Book not found with isbn : " + isbn);
@@ -88,12 +91,12 @@ public class BookServiceImpl implements BookService {
     }
 
     public List<BookDto> searchBooks(String isbn, Long categoryId, Long authorId) {
-        return bookMapper.mapEntityListToResponseList(bookRepository.searchBooks(isbn, categoryId, authorId));
+        return bookMapper.mapEntityListToResponseList(bookRepository.searchBooks(isbn, categoryId, authorId).stream().filter(t->!t.getDeleteStatus()).toList());
     }
 
     @Override
     public List<BookDto> findAll() {
-        return bookMapper.mapEntityListToResponseList(bookRepository.findAllByOrderByIdDesc());
+        return bookMapper.mapEntityListToResponseList(bookRepository.findAllByOrderByIdDesc().stream().filter(t->!t.getDeleteStatus()).toList());
     }
 
     @Override
@@ -123,6 +126,12 @@ public class BookServiceImpl implements BookService {
         return bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException("book not founded with id:" + id));
     }
 
+    public void checkBooksIsDeleted(List<Long> ids){
+        List<Book> books = bookRepository.findAllById(ids);
+        for (var i:books) {
+            if(i.getDeleteStatus())throw new BookNotFoundException("book not founded with id:" + i.getId());
+        }
+    }
 
 
 }
