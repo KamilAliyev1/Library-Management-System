@@ -35,13 +35,15 @@ public class OrderServiceImpl implements OrderService {
     private final BookService bookService;
     private final OrderValidator orderValidator;
 
+
     @Transactional
     @Override
     public void add(OrderRequest dto) {
 
         var student = studentService.findById(dto.getStudentId());
 
-        if (student == null || student.getDeleteStatus()) throw new StudentNotFoundException("student not found with id: "+dto.getStudentId());
+        if (student == null || student.getDeleteStatus())
+            throw new StudentNotFoundException("student not found with id: " + dto.getStudentId());
 
         Order order = orderMapper.toEntity(dto);
 
@@ -86,7 +88,8 @@ public class OrderServiceImpl implements OrderService {
 
         var student = studentService.findById(dto.getStudentId());
 
-        if (student == null || student.getDeleteStatus()) throw new StudentNotFoundException("student not found with id: "+dto.getStudentId());
+        if (student == null || student.getDeleteStatus())
+            throw new StudentNotFoundException("student not found with id: " + dto.getStudentId());
 
         Order order = orderRepo.findById(id).orElseThrow(
                 () -> new OrderNotFoundException(
@@ -193,4 +196,8 @@ public class OrderServiceImpl implements OrderService {
                         orderRepo.findByStudentIDOrBooks_Id(studentId, bookId)
                 );
     }
+
+
+
+
 }
