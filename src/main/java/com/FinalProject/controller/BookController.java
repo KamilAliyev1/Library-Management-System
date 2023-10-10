@@ -68,15 +68,11 @@ public class BookController {
     }
 
     @GetMapping
-    public String findAll(Model model, HttpServletRequest request) {
-
+    public String findAll(Model model) {
         List<BookDto> books = bookService.findAll();
         model.addAttribute("books", books);
         model.addAttribute("authors", authorService.getAuthors());
         model.addAttribute("categories", categoryService.findAllCategories());
-        setExceptionMessage(model, request);
-
-
         return "books/book-list";
     }
 
