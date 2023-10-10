@@ -66,10 +66,7 @@ public class FileServiceImpl implements FIleService {
     @Override
     public boolean isPng(MultipartFile file) {
         List<String> allowedFormats = List.of("image/jpeg", "image/png", "image/gif");
-        for (String format : allowedFormats) {
-            return file.getContentType().equals(format);
-        }
-        return false;
+        return allowedFormats.contains(file.getContentType());
     }
 
 }
