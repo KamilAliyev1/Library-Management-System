@@ -3,6 +3,7 @@ package com.FinalProject.service.impl;
 import com.FinalProject.dto.BookDto;
 import com.FinalProject.exception.BookAlreadyFoundException;
 import com.FinalProject.exception.BookNotFoundException;
+import com.FinalProject.exception.StockNotEnoughException;
 import com.FinalProject.mapper.BookMapper;
 import com.FinalProject.model.Book;
 import com.FinalProject.repository.BookRepository;
@@ -96,8 +97,20 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public boolean areAllBooksInStock(List<Long> id) {
-        return bookRepository.areAllBooksInStock(id);
+    public void areAllBooksInStock(List<Long> id) {
+        List<Book> books = bookRepository.findAllById(id);
+        if(id.size()!=books.size()){
+            for (int i = 0; i < id.size(); i++) {
+                if(
+                        !books.contains(
+                        Book.builder().id(id.get(i)).build()
+                )
+                )throw new BookNotFoundException("book not founded with id:"+id.get(i));
+            }
+        }
+        for (var i:books) {
+            if(i.getStock()==0)throw new StockNotEnoughException("There is not enough stock for the book: "+i.getName());
+        }
     }
 
     @Override

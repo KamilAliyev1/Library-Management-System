@@ -3,7 +3,6 @@ package com.FinalProject.service;
 import com.FinalProject.exception.HaveAlreadyBookException;
 import com.FinalProject.exception.NotChangeableException;
 import com.FinalProject.exception.OrderMustUpdateException;
-import com.FinalProject.exception.StockNotEnoughException;
 import com.FinalProject.model.Book;
 import com.FinalProject.model.Order;
 import com.FinalProject.model.Student;
@@ -40,8 +39,7 @@ public class OrderValidator {
     }
 
     public void validateBooks(List<Long> books) {
-        if (!bookService.areAllBooksInStock(books))
-            throw new StockNotEnoughException("stock not enough");
+        bookService.areAllBooksInStock(books);
     }
 
     public void validateOrderForUpdate(Order order) {
