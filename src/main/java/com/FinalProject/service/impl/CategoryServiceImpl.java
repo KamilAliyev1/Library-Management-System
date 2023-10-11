@@ -1,12 +1,13 @@
 package com.FinalProject.service.impl;
 
 import com.FinalProject.dto.CategoryDto;
+import com.FinalProject.exception.BooksExistsWithThisCategoryException;
 import com.FinalProject.exception.CategoryAlreadyExistsException;
 import com.FinalProject.exception.CategoryNotFoundException;
-import com.FinalProject.exception.StudentNotFoundException;
 import com.FinalProject.mapper.CategoryMapper;
 import com.FinalProject.model.Book;
 import com.FinalProject.model.Category;
+import com.FinalProject.repository.BookRepository;
 import com.FinalProject.repository.CategoryRepository;
 import com.FinalProject.request.BookRequest;
 import com.FinalProject.request.CategoryRequest;
@@ -24,6 +25,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryMapper categoryMapper;
     private final CategoryRepository categoryRepository;
+    private final BookRepository bookRepository;
 
     @Override
     public List<CategoryDto> findAllCategories() {
@@ -36,7 +38,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryDto> findCategoryByName(String name) {
-        var categories = categoryRepository.findCategoriesByNameContainingIgnoreCase(name);
+        List<Category> categories = categoryRepository.findCategoriesByNameContainingIgnoreCase(name);
         return categoryMapper.categoryDtoListToCategoryList(categories);
     }
 
@@ -45,15 +47,18 @@ public class CategoryServiceImpl implements CategoryService {
 //        Category category = categoryRepository.findById(id).get();
         Category category = categoryRepository
                 .findById(id)
-                .orElseThrow(() -> new CategoryNotFoundException("Category don't find with id: " + id));
+                .orElseThrow(() -> new CategoryNotFoundException("Category is not found with id: " + id));
         return categoryMapper.categoryToCategoryDto(category);
 
     }
 
     @Override
     public void createCategory(CategoryRequest categoryRequest) {
-        Optional<Category> categoryRepositoryOptional = categoryRepository.findCategoriesByName(categoryRequest.getName());
-        categoryRepositoryOptional.ifPresentOrElse(ctg -> {
+        List<Category> categories = categoryRepository.findCategoriesByNameContainingIgnoreCase(categoryRequest.getName());
+        Optional<Category> optional = categories.size() == 0 ?
+                Optional.empty() :
+                Optional.of(categories.get(0));
+        optional.ifPresentOrElse(ctg -> {
             throw new CategoryAlreadyExistsException("Category with name  " + categoryRequest.getName() + " already exists!");
         }, () -> {
             Category category = categoryMapper.categoryRequestToCategory(categoryRequest);
@@ -63,21 +68,41 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void updateCategory(Long id, CategoryDto categoryDto) {
-        Category category = fetchStudentIfExists(id);
+        Category category = fetchCategoryIfExists(id);
         category.setName(categoryDto.getName());
         categoryRepository.save(category);
     }
 
-    public Category fetchStudentIfExists(Long id) {
+    public Category fetchCategoryIfExists(Long id) {
         return categoryRepository
                 .findById(id)
                 .orElseThrow(() -> new CategoryNotFoundException("Category don't find with id: " + id));
     }
 
+//    public boolean fetchBooksIfExists(Category category) {
+//        String name = category.getName();
+//        List<Book> books = bookRepository.findByCategory(name);
+//        Optional<Book> optional = books.size() == 0 ?
+//                Optional.empty() :
+//                Optional.of(books.get(0));
+//        return optional.isPresent();
+//    }
+
     @Override
     public void deleteCategory(Long id) {
-        Category category = fetchStudentIfExists(id);
-        categoryRepository.deleteById(id);
+        Category category = fetchCategoryIfExists(id);
+        String name = category.getName();
+        List<Book> books = bookRepository.findByCategory(name);
+        Optional<Book> optional = books.size() == 0 ?
+                Optional.empty() :
+                Optional.of(books.get(0));
+
+        optional.ifPresentOrElse(opt -> {
+            throw new BooksExistsWithThisCategoryException("Book with name  " + name + "  exists!");
+        }, () -> {
+
+            categoryRepository.deleteById(id);
+        });
     }
 
     @Override

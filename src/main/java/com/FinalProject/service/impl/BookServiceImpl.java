@@ -49,6 +49,7 @@ public class BookServiceImpl implements BookService {
         return bookRepository.findByIsbn(book.getIsbn());
     }
 
+
     public void update(String isbn, BookRequest bookRequest) {
         bookRepository.findByIsbn(isbn).ifPresentOrElse(book -> {
             book.setName(bookRequest.getName());
@@ -102,8 +103,8 @@ public class BookServiceImpl implements BookService {
     }
 
 
-    public Book findById(Long id){
-        return bookRepository.findById(id).orElseThrow(()->new BookNotFoundException("book not founded with id:"+id));
+    public Book findById(Long id) {
+        return bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException("book not founded with id:" + id));
     }
 
 }
