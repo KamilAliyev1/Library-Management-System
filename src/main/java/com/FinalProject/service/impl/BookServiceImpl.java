@@ -55,7 +55,6 @@ public class BookServiceImpl implements BookService {
 
     public void update(String isbn, BookRequest bookRequest) {
         bookRepository.findByIsbn(isbn).ifPresentOrElse(book -> {
-            if(book.getDeleteStatus()) throw new BookNotFoundException("Book not found with isbn: " + isbn);
             book.setName(bookRequest.getName());
             book.setIsbn(bookRequest.getIsbn());
             book.setImage(bookRequest.getFile().getOriginalFilename());
@@ -75,9 +74,9 @@ public class BookServiceImpl implements BookService {
         bookRepository.findByIsbn(isbn).
                 ifPresentOrElse
                         (
-                                book ->{
-                                        book.setDeleteStatus(true);
-                                        bookRepository.save(book);
+                                book -> {
+                                    book.setDeleteStatus(true);
+                                    bookRepository.save(book);
                                 },
 
                                 () -> {
@@ -91,28 +90,29 @@ public class BookServiceImpl implements BookService {
     }
 
     public List<BookDto> searchBooks(String isbn, Long categoryId, Long authorId) {
-        return bookMapper.mapEntityListToResponseList(bookRepository.searchBooks(isbn, categoryId, authorId).stream().filter(t->!t.getDeleteStatus()).toList());
+        return bookMapper.mapEntityListToResponseList(bookRepository.searchBooks(isbn, categoryId, authorId).stream().filter(t -> !t.getDeleteStatus()).toList());
     }
 
     @Override
     public List<BookDto> findAll() {
-        return bookMapper.mapEntityListToResponseList(bookRepository.findAllByOrderByIdDesc().stream().filter(t->!t.getDeleteStatus()).toList());
+        return bookMapper.mapEntityListToResponseList(bookRepository.findAllByOrderByIdDesc().stream().filter(t -> !t.getDeleteStatus()).toList());
     }
 
     @Override
     public void areAllBooksInStock(List<Long> id) {
         List<Book> books = bookRepository.findAllById(id);
-        if(id.size()!=books.size()){
+        if (id.size() != books.size()) {
             for (int i = 0; i < id.size(); i++) {
-                if(
+                if (
                         !books.contains(
-                        Book.builder().id(id.get(i)).build()
-                )
-                )throw new BookNotFoundException("book not founded with id:"+id.get(i));
+                                Book.builder().id(id.get(i)).build()
+                        )
+                ) throw new BookNotFoundException("book not founded with id:" + id.get(i));
             }
         }
-        for (var i:books) {
-            if(i.getStock()==0)throw new StockNotEnoughException("There is not enough stock for the book: "+i.getName());
+        for (var i : books) {
+            if (i.getStock() == 0)
+                throw new StockNotEnoughException("There is not enough stock for the book: " + i.getName());
         }
     }
 
@@ -126,10 +126,10 @@ public class BookServiceImpl implements BookService {
         return bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException("book not founded with id:" + id));
     }
 
-    public void checkBooksIsDeleted(List<Long> ids){
+    public void checkBooksIsDeleted(List<Long> ids) {
         List<Book> books = bookRepository.findAllById(ids);
-        for (var i:books) {
-            if(i.getDeleteStatus())throw new BookNotFoundException("book not founded with id:" + i.getId());
+        for (var i : books) {
+            if (i.getDeleteStatus()) throw new BookNotFoundException("book not founded with id:" + i.getId());
         }
     }
 
