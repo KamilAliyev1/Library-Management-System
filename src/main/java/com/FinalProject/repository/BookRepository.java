@@ -37,6 +37,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     List<Book> findByAuthor(Authors author);
 
+    @Query("select b from Book b where b.deleteStatus=false AND b.isbn IN :isbn")
     Optional<Book> findByIsbn(String isbn);
 
     @Modifying
@@ -44,9 +45,9 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     int updateStockNumbersByIdIn(@Param("ids") List<Long> ids, int i);
 
     @Query("SELECT b FROM Book b " +
-            "WHERE (:isbn IS NULL OR LOWER(b.isbn) LIKE %:isbn%) " +
-            "AND (:categoryId IS NULL OR b.category.id = :categoryId) " +
-            "AND (:authorId IS NULL OR b.author.id = :authorId)")
+           "WHERE (:isbn IS NULL OR LOWER(b.isbn) LIKE %:isbn%) " +
+           "AND (:categoryId IS NULL OR b.category.id = :categoryId) " +
+           "AND (:authorId IS NULL OR b.author.id = :authorId)")
     List<Book> searchBooks(
             @Param("isbn") String isbn,
             @Param("categoryId") Long categoryId,
