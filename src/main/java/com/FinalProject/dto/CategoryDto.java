@@ -18,4 +18,6 @@ public class CategoryDto {
     private String name;
 
     private Set<Book> books = new HashSet<>();
+
+    private boolean deleteStatus;
 }
