@@ -13,7 +13,6 @@ import java.util.Set;
 @Builder
 @Entity
 @Table(name = "categories")
-
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,5 +23,4 @@ public class Category {
     private Set<Book> book = new HashSet<>();
     @Column(nullable = false)
     private boolean deleteStatus;
-
 }

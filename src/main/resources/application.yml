@@ -16,16 +16,9 @@ spring:
   application:
     name: auth-service
   datasource:
-<<<<<<< HEAD
     username: ${DB_USERNAME:root}
     password: ${DB_PASSWORD:root}
     url: ${DB_URL:jdbc:postgresql://localhost:5432/postgres}
-
-=======
-    username: ${DB_USERNAME:postgres}
-    password: ${DB_PASSWORD:postgres}
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/library-management-system}
->>>>>>> f1755765bf8b8588a063de01ebc65e9263979fc1
 
   jpa:
     show-sql: false
