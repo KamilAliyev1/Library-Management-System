@@ -24,4 +24,5 @@ public class Category {
     private Set<Book> book = new HashSet<>();
     @Column(nullable = false)
     private boolean deleteStatus;
+
 }
