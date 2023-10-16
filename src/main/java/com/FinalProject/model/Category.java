@@ -21,7 +21,8 @@ public class Category {
 
     @Column(nullable = false)
     private String name;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "category",orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "category", orphanRemoval = true)
     private Set<Book> book = new HashSet<>();
-
+    @Column(nullable = false)
+    private boolean deleteStatus;
 }

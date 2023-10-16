@@ -90,19 +90,23 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void deleteCategory(Long id) {
-        Category category = fetchCategoryIfExists(id);
-        String name = category.getName();
-        List<Book> books = bookRepository.findByCategory(name);
-        Optional<Book> optional = books.size() == 0 ?
-                Optional.empty() :
-                Optional.of(books.get(0));
+//        Category category = fetchCategoryIfExists(id);
+//        String name = category.getName();
+//        List<Book> books = bookRepository.findByCategory(name);
+//        Optional<Book> optional = books.size() == 0 ?
+//                Optional.empty() :
+//                Optional.of(books.get(0));
+//
+//        optional.ifPresentOrElse(opt -> {
+//            throw new BooksExistsWithThisCategoryException("Book with name  " + name + "  exists!");
+//        }, () -> {
+//
+//            categoryRepository.deleteById(id);
+//        });
 
-        optional.ifPresentOrElse(opt -> {
-            throw new BooksExistsWithThisCategoryException("Book with name  " + name + "  exists!");
-        }, () -> {
-
-            categoryRepository.deleteById(id);
-        });
+        Category category=fetchCategoryIfExists(id);
+        category.setDeleteStatus(true);
+        categoryRepository.save(category);
     }
 
     @Override

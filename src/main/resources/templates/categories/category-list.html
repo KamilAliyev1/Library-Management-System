@@ -48,7 +48,9 @@
 
                         <form th:action="@{categories/search/books}">
                             <div class="d-flex justify-content-between align-items-center" style="margin-left: 70px;">
+<!--                                <h2 th:case="null">No record found !!</h2>-->
                                 <select class="form-control mr-sm-2" id="category" name="categoryId">
+<!--                                   <h2 th:case="null">No record found !!</h2>-->
                                     <option value="">Search Book by Category</option>
                                     <option th:each="category : ${categories}"
                                             th:value="${category.id}"
@@ -87,7 +89,9 @@
                                     <tr th:each="category: ${categories}" class="col-lg-6">
                                         <td th:text="${category.id}"></td>
                                         <td th:text="${category.name}"></td>
+
                                         <td class="w-25">
+
                                             <a th:href="@{/categories/{id}/update(id=${category.id})}"
                                                class="btn btn-primary btn-sm">
                                                 <i class="bi bi-pencil"></i>
@@ -114,9 +118,12 @@
     }
 
     const resetSearchByCategoryForm = () => {
-        document.getElementById('category').value = null;
+        document.getElementById('id').value = null;
         window.location.href = '/categories';
     }
+
+
+
 
 
 </script>
