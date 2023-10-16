@@ -3,6 +3,7 @@ package com.FinalProject.service.impl;
 import com.FinalProject.dto.BookDto;
 import com.FinalProject.exception.BookAlreadyFoundException;
 import com.FinalProject.exception.BookNotFoundException;
+import com.FinalProject.exception.StockNotEnoughException;
 import com.FinalProject.mapper.BookMapper;
 import com.FinalProject.model.Book;
 import com.FinalProject.repository.BookRepository;
@@ -13,6 +14,7 @@ import com.FinalProject.service.CategoryService;
 import com.FinalProject.service.FIleService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Lazy))
+@Slf4j
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
@@ -30,6 +33,7 @@ public class BookServiceImpl implements BookService {
     private final BookMapper bookMapper;
     @Lazy
     private final AuthorService authorService;
+
 
     @Transactional
     public void create(BookRequest bookRequest) {
@@ -71,8 +75,11 @@ public class BookServiceImpl implements BookService {
         bookRepository.findByIsbn(isbn).
                 ifPresentOrElse
                         (
-                                book ->
-                                        bookRepository.deleteByIsbn(isbn),
+                                book -> {
+                                    book.setDeleteStatus(true);
+                                    bookRepository.save(book);
+                                },
+
                                 () -> {
                                     throw new BookNotFoundException("Book not found with isbn : " + isbn);
                                 });
@@ -84,17 +91,30 @@ public class BookServiceImpl implements BookService {
     }
 
     public List<BookDto> searchBooks(String isbn, Long categoryId, Long authorId) {
-        return bookMapper.mapEntityListToResponseList(bookRepository.searchBooks(isbn, categoryId, authorId));
+        return bookMapper.mapEntityListToResponseList(bookRepository.searchBooks(isbn, categoryId, authorId).stream().filter(t -> !t.getDeleteStatus()).toList());
     }
 
     @Override
     public List<BookDto> findAll() {
-        return bookMapper.mapEntityListToResponseList(bookRepository.findAllByOrderByIdDesc());
+        return bookMapper.mapEntityListToResponseList(bookRepository.findAllByOrderByIdDesc().stream().filter(t -> !t.getDeleteStatus()).toList());
     }
 
     @Override
-    public boolean areAllBooksInStock(List<Long> id) {
-        return bookRepository.areAllBooksInStock(id);
+    public void areAllBooksInStock(List<Long> id) {
+        List<Book> books = bookRepository.findAllById(id);
+        if (id.size() != books.size()) {
+            for (int i = 0; i < id.size(); i++) {
+                if (
+                        !books.contains(
+                                Book.builder().id(id.get(i)).build()
+                        )
+                ) throw new BookNotFoundException("book not founded with id:" + id.get(i));
+            }
+        }
+        for (var i : books) {
+            if (i.getStock() == 0)
+                throw new StockNotEnoughException("There is not enough stock for the book: " + i.getName());
+        }
     }
 
     @Override
@@ -106,5 +126,13 @@ public class BookServiceImpl implements BookService {
     public Book findById(Long id) {
         return bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException("book not founded with id:" + id));
     }
+
+    public void checkBooksIsDeleted(List<Long> ids) {
+        List<Book> books = bookRepository.findAllById(ids);
+        for (var i : books) {
+            if (i.getDeleteStatus()) throw new BookNotFoundException("book not founded with id:" + i.getId());
+        }
+    }
+
 
 }

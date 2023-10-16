@@ -7,18 +7,18 @@ server:
       enabled: true
 
 
-logging:
-  level:
-    org.springframework.security:
-      DEBUG
+#logging:
+#  level:
+#    org.springframework.security:
+#      TRACE
 
 spring:
   application:
     name: auth-service
   datasource:
     username: ${DB_USERNAME:postgres}
-    password: ${DB_PASSWORD:636847482008t}
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/finalproject}
+    password: ${DB_PASSWORD:postgres}
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/library-management-system}
 
 
   jpa:

@@ -47,6 +47,7 @@ public class BookMapper {
                 .name(bookRequest.getName())
                 .stock(bookRequest.getStock())
                 .image(bookRequest.getFile().getOriginalFilename())
+                .deleteStatus(false)
                 .build();
     }
 }
