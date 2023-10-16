@@ -24,6 +24,8 @@ public class Book {
     private String name;
     private Integer stock;
 
+    private Boolean deleteStatus;
+
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "author_id", referencedColumnName = "id")
     private Authors author;
@@ -41,4 +43,5 @@ public class Book {
         this.author = author;
         this.category = category;
     }
+
 }
