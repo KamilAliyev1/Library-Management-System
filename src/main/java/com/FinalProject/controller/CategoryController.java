@@ -40,9 +40,9 @@ public class CategoryController {
     }
 
     @GetMapping("/search/books")
-    public String findBooksByCategory(Long categoryId, Model model) {
-//        setExceptionMessage(model, request);
-        List<BookDto> books = bookService.searchBooks(null, categoryId, null);
+    public String findBooksByCategory(Long categoryId, Model model,HttpServletRequest request) {
+        setExceptionMessage(model, request);
+        List<BookDto> books = categoryService.searchBooks(null, categoryId, null);
         model.addAttribute("books", books);
         return "categories/category-book-list";
     }
