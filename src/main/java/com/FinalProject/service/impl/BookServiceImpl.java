@@ -130,9 +130,12 @@ public class BookServiceImpl implements BookService {
     public void checkBooksIsDeleted(List<Long> ids) {
         List<Book> books = bookRepository.findAllById(ids);
         for (var i : books) {
-            if (i.getDeleteStatus()) throw new BookNotFoundException("book not founded with id:" + i.getId());
+            if (i.getDeleteStatus()) throw new BookNotFoundException("book not founded with name:" + i.getName());
         }
     }
 
-
+    @Override
+    public List<BookDto> getAllBooks() {
+        return bookMapper.mapEntityListToResponseList(bookRepository.findAllByOrderByIdDesc());
+    }
 }
