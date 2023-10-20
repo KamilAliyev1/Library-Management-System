@@ -36,7 +36,6 @@ public class SecurityConfiguration {
                 .requestMatchers("https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css").permitAll()
                 .requestMatchers("https://fonts.googleapis.com/css?family=Raleway&display=swap").permitAll()
                 .requestMatchers("/img/**", "/images/**").permitAll()
-                .requestMatchers("/lms").permitAll()
                 .requestMatchers("/login").permitAll()
                 .requestMatchers("/").permitAll()
                 .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()

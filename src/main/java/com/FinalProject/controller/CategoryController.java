@@ -2,7 +2,7 @@ package com.FinalProject.controller;
 
 import com.FinalProject.dto.BookDto;
 import com.FinalProject.dto.CategoryDto;
-import com.FinalProject.request.CategoryRequest;
+import com.FinalProject.dto.CategoryRequest;
 import com.FinalProject.service.BookService;
 import com.FinalProject.service.CategoryService;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;

@@ -2,8 +2,8 @@ package com.FinalProject.service;
 
 import com.FinalProject.dto.CategoryDto;
 import com.FinalProject.model.Book;
-import com.FinalProject.request.BookRequest;
-import com.FinalProject.request.CategoryRequest;
+import com.FinalProject.dto.BookRequest;
+import com.FinalProject.dto.CategoryRequest;
 
 import java.util.List;
 

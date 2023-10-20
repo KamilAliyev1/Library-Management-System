@@ -1,18 +1,15 @@
 package com.FinalProject.service.impl;
 
-import com.FinalProject.dto.BookDto;
+import com.FinalProject.dto.BookRequest;
 import com.FinalProject.dto.CategoryDto;
-import com.FinalProject.exception.BookNotFoundException;
-import com.FinalProject.exception.BooksExistsWithThisCategoryException;
+import com.FinalProject.dto.CategoryRequest;
 import com.FinalProject.exception.CategoryAlreadyExistsException;
 import com.FinalProject.exception.CategoryNotFoundException;
-import com.FinalProject.mapper.BookMapper;
 import com.FinalProject.mapper.CategoryMapper;
 import com.FinalProject.model.Book;
 import com.FinalProject.model.Category;
+import com.FinalProject.repository.BookRepository;
 import com.FinalProject.repository.CategoryRepository;
-import com.FinalProject.request.BookRequest;
-import com.FinalProject.request.CategoryRequest;
 import com.FinalProject.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,12 +24,12 @@ public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryMapper categoryMapper;
     private final CategoryRepository categoryRepository;
-    private final BookMapper bookMapper;
+    private final BookRepository bookRepository;
 
     @Override
     public List<CategoryDto> findAllCategories() {
 
-        List<Category> categories = categoryRepository.findAllByDeleteStatusIsFalseOrderByIdDesc();
+        List<Category> categories = categoryRepository.findAllByOrderByIdDesc();
         return categories.stream()
                 .map(categoryMapper::categoryToCategoryDto)
                 .collect(Collectors.toList());
@@ -106,21 +103,10 @@ public class CategoryServiceImpl implements CategoryService {
 //            categoryRepository.deleteById(id);
 //        });
 
-        Category category = fetchCategoryIfExists(id);
+        Category category=fetchCategoryIfExists(id);
         category.setDeleteStatus(true);
         categoryRepository.save(category);
     }
-
-//    @Override
-//    public List<BookDto> findAllBooksByCategoryName(String string) {
-//        List<Book> books = categoryRepository.findBooksByCategoryNameContainingIgnoreCase(string);
-////        List<Optional<Book>> convertedList = (List<Optional<Book>>) books.stream().map((o) -> Optional.of(o));
-//        Optional<Book> optional = books.size() == 0 ?
-//                Optional.empty() :
-//                Optional.of(books.get(0));
-//        optional.orElseThrow(Book);
-//        return bookMapper.mapEntityListToResponseList(books);
-//    }
 
     @Override
     public void setBookToCategory(BookRequest bookRequests, Book book) {

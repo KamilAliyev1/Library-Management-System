@@ -30,6 +30,21 @@ public class AuthenticationService {
 
 
 
+
+    public String authenticate(AuthenticationRequest request) {
+        manager.authenticate(new UsernamePasswordAuthenticationToken(
+                request.getEmail(),
+                request.getPassword())
+        );
+        var user = repository.findByEmail(request.getEmail()).orElseThrow(
+                () -> new UserNotFound("Email or password wrong"));
+        revokeAllUserTokens(user);
+        var jwtToken = service.generateToken(user);
+        saveUserToken(user, jwtToken);
+        return jwtToken;
+    }
+
+
     public void register(RegisterRequest request) {
         repository.findByEmail(request.getEmail()).ifPresentOrElse
                 (
@@ -75,17 +90,6 @@ public class AuthenticationService {
         tokenRepository.save(token);
     }
 
-    public String authenticate(AuthenticationRequest request) {
-        manager.authenticate(new UsernamePasswordAuthenticationToken(
-                request.getEmail(),
-                request.getPassword())
-        );
-        var user = repository.findByEmail(request.getEmail()).orElseThrow(
-                () -> new UserNotFound("Email or password wrong"));
-        revokeAllUserTokens(user);
-        var jwtToken = service.generateToken(user);
-        saveUserToken(user, jwtToken);
-        return jwtToken;
-    }
+
 
 }

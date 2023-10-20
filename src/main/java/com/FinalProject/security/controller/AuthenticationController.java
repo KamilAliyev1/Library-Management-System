@@ -35,16 +35,9 @@ public class AuthenticationController {
     }
 
 
-    @GetMapping("/lms")
-    public String loginLms() {
-        return "redirect:login";
-    }
-
     @PostMapping("/login")
-    public String login(
-            @ModelAttribute("login") AuthenticationRequest request, HttpServletResponse response) {
-        if (request == null)
-            return "login";
+    public String login(@ModelAttribute("login") AuthenticationRequest request, HttpServletResponse response) {
+        if (request == null) return "login";
         var token = service.authenticate(request);
         response.addCookie(new Cookie("jwt", token));
         return "redirect:/contact";
