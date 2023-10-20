@@ -101,7 +101,7 @@ public class OrderController {
     String updatePage(@PathVariable Long id, Model model, HttpServletRequest request) {
         OrderDto order = orderService.get(id);
         List<StudentDto> students = studentService.getStudents();
-        List<BookDto> books = bookService.findAll();
+        List<BookDto> books = bookService.getAllBooks();
 
         model.addAttribute("order", order);
         model.addAttribute("books", books);

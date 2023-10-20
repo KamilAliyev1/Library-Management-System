@@ -28,4 +28,6 @@ public interface BookService {
 
     void checkBooksIsDeleted(List<Long> ids);
 
+    List<BookDto> getAllBooks();
+
 }

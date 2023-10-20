@@ -22,7 +22,7 @@ spring:
     database-platform: ${DB_PLATFORM:org.hibernate.dialect.PostgreSQLDialect}
     generate-ddl: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
 
   # MySQL8Dialect
   thymeleaf: # Thymeleaf
