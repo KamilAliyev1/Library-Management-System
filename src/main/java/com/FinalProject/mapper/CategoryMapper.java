@@ -2,7 +2,7 @@ package com.FinalProject.mapper;
 
 import com.FinalProject.dto.CategoryDto;
 import com.FinalProject.model.Category;
-import com.FinalProject.request.CategoryRequest;
+import com.FinalProject.dto.CategoryRequest;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

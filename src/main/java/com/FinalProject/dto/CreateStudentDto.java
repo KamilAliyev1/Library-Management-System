@@ -1,4 +1,4 @@
-package com.FinalProject.dto.studentdto;
+package com.FinalProject.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

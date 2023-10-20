@@ -1,11 +1,12 @@
 package com.FinalProject.controller;
 
 import com.FinalProject.dto.BookDto;
-import com.FinalProject.request.BookRequest;
+import com.FinalProject.dto.BookRequest;
 import com.FinalProject.service.AuthorService;
 import com.FinalProject.service.BookService;
 import com.FinalProject.service.CategoryService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -27,17 +28,13 @@ public class BookController {
     private final CategoryService categoryService;
 
     @PostMapping("/{isbn}/update")
-    public String update(@PathVariable("isbn") String isbn,
-                         @ModelAttribute("bookRequest") BookRequest bookRequest) {
+    public String update(@PathVariable("isbn") String isbn, @Valid @ModelAttribute("bookRequest") BookRequest bookRequest) {
         bookService.update(isbn, bookRequest);
         return "redirect:/book";
     }
 
     @GetMapping("/{isbn}/update")
-    public String updatePage(
-            @PathVariable("isbn") String isbn,
-            @ModelAttribute("bookRequest") BookRequest bookRequest,
-            Model model, HttpServletRequest request) {
+    public String updatePage(@PathVariable("isbn") String isbn,@Valid @ModelAttribute("bookRequest") BookRequest bookRequest, Model model, HttpServletRequest request) {
         setExceptionMessage(model, request);
         BookDto book = bookService.findByIsbn(isbn);
         model.addAttribute("book", book);
@@ -47,7 +44,7 @@ public class BookController {
     }
 
     @PostMapping
-    public String createBook(@ModelAttribute("book") BookRequest bookRequest, Model model) {
+    public String createBook(@Valid @ModelAttribute("book") BookRequest bookRequest, Model model) {
 
         if (bookRequest == null) {
             return "books/book-create";
@@ -85,11 +82,7 @@ public class BookController {
     }
 
     @GetMapping("/search")
-    public String searchBooks(
-            @RequestParam(name = "isbn", required = false) String isbn,
-            @RequestParam(name = "categoryId", required = false) Long categoryId,
-            @RequestParam(name = "authorId", required = false) Long authorId,
-            Model model) {
+    public String searchBooks(@RequestParam(name = "isbn", required = false) String isbn, @RequestParam(name = "categoryId", required = false) Long categoryId, @RequestParam(name = "authorId", required = false) Long authorId, Model model) {
         List<BookDto> books = bookService.searchBooks(isbn, categoryId, authorId);
         model.addAttribute("books", books);
         model.addAttribute("authors", authorService.getAuthors());

@@ -1,8 +1,8 @@
 package com.FinalProject.service.impl;
 
-import com.FinalProject.dto.studentdto.CreateStudentDto;
-import com.FinalProject.dto.studentdto.StudentDto;
-import com.FinalProject.dto.studentdto.UpdateStudentDto;
+import com.FinalProject.dto.CreateStudentDto;
+import com.FinalProject.dto.StudentDto;
+import com.FinalProject.dto.UpdateStudentDto;
 import com.FinalProject.exception.StudentAlreadyExistsException;
 import com.FinalProject.exception.StudentNotFoundException;
 import com.FinalProject.mapper.StudentMapper;

@@ -54,35 +54,3 @@ public interface BookRepository extends JpaRepository<Book, Long> {
             @Param("authorId") Long authorId);
 }
 
-/* 1)SELECT CASE
-    WHEN COUNT(b)!=COUNT(ids) THEN 'false'
-    ELSE 'true'
-    FROM books
-    WHERE id in ids
-
-
-    2)select case
-    when count(s)>0 Then false
-    else true
-    from books
-    where id in ids and stock = 0
-
-
-   SELECT CASE
-    WHEN
-    (SELECT CASE
-    WHEN COUNT(b)<>COUNT(d) THEN false
-    ELSE true END
-    FROM b left join :id d on b.id in d
-    WHERE b.id in :id)
-    AND
-    (select case
-    when count(b)>0 THEN false
-    else true END
-    from b
-    where b.id in :id and b.stock = 0)
-    THEN true
-    ELSE false
-    END
-    FROM Book b;
-*/

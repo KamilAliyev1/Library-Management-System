@@ -1,8 +1,8 @@
 package com.FinalProject.controller;
 
-import com.FinalProject.dto.studentdto.CreateStudentDto;
-import com.FinalProject.dto.studentdto.StudentDto;
-import com.FinalProject.dto.studentdto.UpdateStudentDto;
+import com.FinalProject.dto.CreateStudentDto;
+import com.FinalProject.dto.StudentDto;
+import com.FinalProject.dto.UpdateStudentDto;
 import com.FinalProject.service.StudentService;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.servlet.http.HttpServletRequest;

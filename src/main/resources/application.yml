@@ -7,21 +7,18 @@ server:
       enabled: true
 
 
-#logging:
-#  level:
-#    org.springframework.security:
-#      TRACE
+
 
 spring:
   application:
     name: auth-service
   datasource:
-    username: ${DB_USERNAME:root}
-    password: ${DB_PASSWORD:root}
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/postgres}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/library-management-system}
 
   jpa:
-    show-sql: false
+    show-sql: true
     database-platform: ${DB_PLATFORM:org.hibernate.dialect.PostgreSQLDialect}
     generate-ddl: true
     hibernate:

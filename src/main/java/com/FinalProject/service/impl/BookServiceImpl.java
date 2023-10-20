@@ -1,13 +1,13 @@
 package com.FinalProject.service.impl;
 
 import com.FinalProject.dto.BookDto;
+import com.FinalProject.dto.BookRequest;
 import com.FinalProject.exception.BookAlreadyFoundException;
 import com.FinalProject.exception.BookNotFoundException;
 import com.FinalProject.exception.StockNotEnoughException;
 import com.FinalProject.mapper.BookMapper;
 import com.FinalProject.model.Book;
 import com.FinalProject.repository.BookRepository;
-import com.FinalProject.request.BookRequest;
 import com.FinalProject.service.AuthorService;
 import com.FinalProject.service.BookService;
 import com.FinalProject.service.CategoryService;
@@ -49,15 +49,19 @@ public class BookServiceImpl implements BookService {
                 });
     }
 
+
     private Optional<Book> checkBookByIsbn(Book book) {
         return bookRepository.findByIsbn(book.getIsbn());
     }
 
 
+
+
+
     public void update(String isbn, BookRequest bookRequest) {
         bookRepository.findByIsbn(isbn).ifPresentOrElse(book -> {
             book.setName(bookRequest.getName());
-            book.setIsbn(bookRequest.getIsbn());
+            book.setIsbn((bookRequest.getIsbn()));
             book.setImage(bookRequest.getFile().getOriginalFilename());
             book.setStock(bookRequest.getStock());
             categoryService.setBookToCategory(bookRequest, book);

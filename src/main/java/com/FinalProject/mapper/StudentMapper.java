@@ -1,7 +1,7 @@
 package com.FinalProject.mapper;
 
-import com.FinalProject.dto.studentdto.CreateStudentDto;
-import com.FinalProject.dto.studentdto.StudentDto;
+import com.FinalProject.dto.CreateStudentDto;
+import com.FinalProject.dto.StudentDto;
 import com.FinalProject.model.Student;
 import org.springframework.stereotype.Component;
 

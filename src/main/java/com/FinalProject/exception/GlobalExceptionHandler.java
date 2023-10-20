@@ -4,6 +4,7 @@ import com.FinalProject.security.exception.EmailAlreadyFoundException;
 import com.FinalProject.security.exception.UserNotFound;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
@@ -15,8 +16,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @RequiredArgsConstructor
 @ControllerAdvice
 public class GlobalExceptionHandler {
-
-
 
 
     @ExceptionHandler({
@@ -31,6 +30,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> validationException(BindException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getFieldError().getDefaultMessage());
     }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public String updateException(HttpServletRequest request) {
+        String referer = request.getHeader("Referer");
+        request.getSession().setAttribute("exception", "Book already found with isbn ");
+        return "redirect:" + referer;
+    }
+
 
     @ExceptionHandler({
             NotChangeableException.class,
@@ -49,7 +56,7 @@ public class GlobalExceptionHandler {
             StudentAlreadyExistsException.class,
             BookAlreadyFoundException.class,
             BookNotFoundException.class,
-            IllegalArgumentException.class
+            IllegalArgumentException.class,
     })
     public String orderUpdateExceptions(Exception userException, HttpServletRequest request) {
         String referer = request.getHeader("Referer");

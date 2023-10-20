@@ -1,7 +1,8 @@
 package com.FinalProject.service.impl;
 
+import com.FinalProject.dto.BookRequest;
 import com.FinalProject.dto.CategoryDto;
-import com.FinalProject.exception.BooksExistsWithThisCategoryException;
+import com.FinalProject.dto.CategoryRequest;
 import com.FinalProject.exception.CategoryAlreadyExistsException;
 import com.FinalProject.exception.CategoryNotFoundException;
 import com.FinalProject.mapper.CategoryMapper;
@@ -9,8 +10,6 @@ import com.FinalProject.model.Book;
 import com.FinalProject.model.Category;
 import com.FinalProject.repository.BookRepository;
 import com.FinalProject.repository.CategoryRepository;
-import com.FinalProject.request.BookRequest;
-import com.FinalProject.request.CategoryRequest;
 import com.FinalProject.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

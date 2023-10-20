@@ -2,7 +2,7 @@ package com.FinalProject.mapper;
 
 import com.FinalProject.dto.BookDto;
 import com.FinalProject.model.Book;
-import com.FinalProject.request.BookRequest;
+import com.FinalProject.dto.BookRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

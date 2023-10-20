@@ -2,7 +2,7 @@ package com.FinalProject.service.impl;
 
 import com.FinalProject.dto.AuthorsDto;
 import com.FinalProject.dto.BookDto;
-import com.FinalProject.request.BookRequest;
+import com.FinalProject.dto.BookRequest;
 import com.FinalProject.exception.AuthorsNotFoundException;
 import com.FinalProject.mapper.AuthorsMapper;
 import com.FinalProject.model.Authors;
