@@ -40,8 +40,8 @@ public class CategoryController {
     }
 
     @GetMapping("/search/books")
-    public String findBooksByCategory(Long categoryId, Model model) {
-//        setExceptionMessage(model, request);
+    public String findBooksByCategory(Long categoryId, Model model, HttpServletRequest request) {
+        setExceptionMessage(model, request);
         List<BookDto> books = bookService.searchBooks(null, categoryId, null);
         model.addAttribute("books", books);
         return "categories/category-book-list";
